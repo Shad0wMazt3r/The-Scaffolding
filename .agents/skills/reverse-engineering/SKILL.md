@@ -1,7 +1,7 @@
 ---
 name: reverse-engineering
 description: Progress binary analysis from sample intake through static, anti-analysis, unpacking, dynamic tracing, VM reverse engineering, and symbolic review.
-dependencies: []
+dependencies: [agent-setup]
 files:
   - 01-baseline-and-initial-triage.md
   - 02-static-disassembly-and-decompilation.md
@@ -15,5 +15,7 @@ files:
   - 10-dotnet-jvm-scripting-language-re.md
 ---
 
-Load files sequentially on activation: see iles list above.
+Load files sequentially on activation: see files list above.
 Only load the next file when the current file's steps are complete or explicitly requested. Do not preload all files at once.
+
+

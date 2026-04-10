@@ -1,7 +1,7 @@
 ---
 name: network
 description: Assess network assets with non-destructive service mapping, auth posture checks, directory exposure reviews, remote access, and evidence-linked pivoting.
-dependencies: []
+dependencies: [agent-setup]
 files:
   - 01-environment.md
   - 02-services-and-authentication.md
@@ -10,5 +10,7 @@ files:
   - 05-pivoting-automation-and-evidence.md
 ---
 
-Load files sequentially on activation: see iles list above.
+Load files sequentially on activation: see files list above.
 Only load the next file when the current file's steps are complete or explicitly requested. Do not preload all files at once.
+
+
