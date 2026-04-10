@@ -1,7 +1,7 @@
 ---
 name: web
 description: Execute web-application assessment from setup and recon through injection, access control, auth/session issues, API, and SSRF chains.
-dependencies: [agent-setup]
+dependencies: [agent-setup, agent-calibration]
 files:
   - 01-prerequisites-and-environment.md
   - 02-injection.md
@@ -17,5 +17,6 @@ files:
 
 Load files sequentially on activation: see files list above.
 Only load the next file when the current file's steps are complete or explicitly requested. Do not preload all files at once.
+
 
 

@@ -1,7 +1,7 @@
 ---
 name: pwn
 description: Advance pwn workflows from environment setup into stack, heap, format-string, UAF, integer, TOCTOU, kernel, and shellcode exploitation.
-dependencies: [agent-setup]
+dependencies: [agent-setup, agent-calibration]
 files:
   - 01-environment-baseline.md
   - 02-stack-based-overflows.md
@@ -19,5 +19,6 @@ files:
 
 Load files sequentially on activation: see files list above.
 Only load the next file when the current file's steps are complete or explicitly requested. Do not preload all files at once.
+
 
 

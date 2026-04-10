@@ -1,7 +1,7 @@
 ---
 name: crypto
 description: Triage cryptographic artifacts from encoding and classical ciphers through RSA, EC, symmetric, hash, protocol, RNG, custom, and zero-knowledge attacks.
-dependencies: [agent-setup]
+dependencies: [agent-setup, agent-calibration]
 files:
   - 01-workspace-baseline.md
   - 02-classical-and-encoding.md
@@ -17,5 +17,6 @@ files:
 
 Load files sequentially on activation: see files list above.
 Only load the next file when the current file's steps are complete or explicitly requested. Do not preload all files at once.
+
 
 

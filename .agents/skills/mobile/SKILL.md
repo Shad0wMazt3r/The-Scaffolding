@@ -1,7 +1,7 @@
 ---
 name: mobile
 description: Drive mobile app testing from static extraction through TLS bypass, storage abuse, intent/WebView abuse, runtime hooks, and backend pivoting.
-dependencies: [agent-setup]
+dependencies: [agent-setup, agent-calibration]
 files:
   - 01-baseline-and-setup.md
   - 02-static-analysis-and-reverse-engineering.md
@@ -19,5 +19,6 @@ files:
 
 Load files sequentially on activation: see files list above.
 Only load the next file when the current file's steps are complete or explicitly requested. Do not preload all files at once.
+
 
 
