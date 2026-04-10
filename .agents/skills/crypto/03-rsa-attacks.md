@@ -1,0 +1,23 @@
+## RSA Attacks
+- Preconditions
+  - * -> [Condition: Artifact includes PEM, DER, `(n,e)`, multiple public keys, or textbook RSA ciphertext] -> Action: record modulus bit length, exponent, prime-shape hints, ciphertext count, shared modulus reuse, and padding mode.
+  - * -> [Condition: Unknown padding] -> Action: treat “successful decryption” claims as invalid until padding and message structure are separately confirmed.
+- Parameter fingerprinting
+  - * -> [Condition: Small `e`, many recipients, or identical plaintext suspicion] -> Action: flag broadcast/common-structure risk.
+  - * -> [Condition: Near-square modulus or suspiciously similar keys] -> Action: flag Fermat/common-factor batch checks.
+  - * -> [Condition: Partial private material or masked bits leak] -> Action: prepare a Sage notebook for lattice and small-root validation.
+- State machine
+  - * -> [Condition: Public key or `(n,e)` available] -> Action: use RsaCtfTool auto-analysis as the **Primary Probe** for weak-key classification and fast-path detection. [github](https://github.com/RsaCtfTool/RsaCtfTool)
+  - * -> [Condition: Primary Probe yields no decisive path] -> Action: **Dead End Pivot 1** to batch GCD across all moduli; **Dead End Pivot 2** to close-prime geometry checks; **Dead End Pivot 3** to partial-information/lattice feasibility review.
+  - * -> [Condition: Small-private-exponent hypotheses fail] -> Action: pivot from Wiener-style reasoning to broader lattice-based validation rather than deeper brute force.
+- Data chaining
+  - * -> [Condition: Batch GCD reveals one shared factor] -> Action: factor all affected keys, map key reuse, then correlate decrypted artifacts or signatures to a common operator or challenge stage.
+  - * -> [Condition: Partial bit leak appears in logs or key masks] -> Action: convert the leak into a bounded polynomial model, validate candidate roots against the public key, then use only recovered metadata to unlock the next artifact.
+- Simple triage one-liners
+  - * -> [Condition: Need modulus profile] -> Action: `bits, small_e = n.bit_length(), e in {3,5,17,257,65537}`
+  - * -> [Condition: Need common-factor scan pairwise on a small set] -> Action: `import math; hits=[(i,j,math.gcd(N[i],N[j])) for i in range(len(N)) for j in range(i+1,len(N)) if math.gcd(N[i],N[j])>1]`
+- Complexity and tool choice
+  - * -> [Condition: Parsing keys, batch GCD, and orchestration dominate] -> Action: use Python.
+  - * -> [Condition: Coppersmith-style small roots, lattice reduction, or algebraic relation attacks dominate] -> Action: use SageMath.
+  - * -> [Condition: Large-scale factoring is the only remaining angle] -> Action: treat runtime as infeasible unless challenge design clearly embeds a weak structure.
+

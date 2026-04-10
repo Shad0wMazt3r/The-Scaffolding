@@ -1,0 +1,22 @@
+## Elliptic Curve Attacks
+- Preconditions
+  - * -> [Condition: Challenge exposes curve name, point coordinates, signatures, or custom EC arithmetic] -> Action: verify field prime, curve equation, group order, cofactor, point validation rules, and whether points are checked on receipt.
+  - * -> [Condition: Repeated or biased nonces suspected in ECDSA/DSA-like signatures] -> Action: collect all signatures, message hashes, and nonce-side-channel observations before testing any recovery hypothesis.
+- Parameter fingerprinting
+  - * -> [Condition: Named curve with small factors in subgroup order] -> Action: flag Pohlig-Hellman feasibility.
+  - * -> [Condition: Embedding degree or pairing-friendly behavior looks abnormal] -> Action: flag MOV-style reduction review.
+  - * -> [Condition: Server accepts attacker-supplied points] -> Action: flag invalid-curve and small-subgroup validation failures.
+- State machine
+  - * -> [Condition: Signature corpus available] -> Action: start with nonce-correlation and duplicate-`r` analysis as the **Primary Probe**.
+  - * -> [Condition: No duplicate nonce signal] -> Action: **Dead End Pivot 1** to partial-bias/HNP feasibility; **Dead End Pivot 2** to subgroup/order validation; **Dead End Pivot 3** to invalid-point acceptance testing.
+  - * -> [Condition: Standard DLP path stalls] -> Action: pivot to group-structure decomposition before considering generic discrete-log effort.
+- Data chaining
+  - * -> [Condition: Partial nonce leakage is supported] -> Action: feed leaked bits into a lattice model, validate candidate private keys against the public point, then use the verified key only to confirm artifact access in the lab.
+  - * -> [Condition: Invalid-curve acceptance is confirmed] -> Action: enumerate accepted subgroup orders, log residue leaks, and chain residues into CRT-style reconstruction of the secret scalar.
+- Simple triage one-liners
+  - * -> [Condition: Need duplicate-`r` detection] -> Action: `dups=[r for r in rs if rs.count(r)>1]`
+  - * -> [Condition: Need on-curve validation] -> Action: `assert (y*y - (x*x*x + a*x + b)) % p == 0`
+- Complexity and tool choice
+  - * -> [Condition: Finite-field arithmetic and point validation dominate] -> Action: Python is fine.
+  - * -> [Condition: Lattices, subgroup decomposition, or pairings dominate] -> Action: SageMath is the right environment.
+

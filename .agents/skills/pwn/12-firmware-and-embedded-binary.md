@@ -1,0 +1,22 @@
+## Firmware & Embedded Binary Analysis
+
+- Primary Probe:
+  - * -> [Condition: Target is a firmware image or foreign-arch userland blob] -> Action: unpack the image, identify CPU/ABI, extract rootfs, locate update/parsing/network entrypoints, and run foreign binaries with QEMU-user or whole systems with QEMU-system.
+- Dead End Pivots:
+  - * -> [Condition: Native execution fails] -> Action: rebuild the runtime with extracted libraries and launch via QEMU using the firmware rootfs as the loader path.
+  - * -> [Condition: Parser exposure is unclear] -> Action: fuzz individual parsers and RPC handlers in isolation before emulating the entire appliance.
+  - * -> [Condition: No symbols and stripped code] -> Action: recover strings, syscalls, IPC endpoints, and configuration semantics first, then anchor Ghidra analysis around those artifacts.
+- Data Chaining:
+  - * -> [Condition: Foreign-arch parser overflow is found] -> Action: first prove control under QEMU-user, then re-test on the fuller emulated appliance because memory maps, ASLR, and watchdog behavior often diverge.
+  - * -> [Condition: Web UI or management daemon feeds a native helper] -> Action: treat the helper binary as the real pwn target and use the web stack only as the delivery vehicle.
+  - * -> [Condition: Persistence or boot trust is weak] -> Action: a one-time code-exec may be less valuable than config, init script, or update-chain control.
+- Emulation note:
+  - AFL++ QEMU mode supports instrumented binary-only fuzzing, and its persistent mode is available for x86/x86_64, arm, and aarch64, which is useful when source is absent and fork overhead dominates. [github](https://github.com/AFLplusplus/AFLplusplus/blob/stable/qemu_mode/README.md)
+- Simple automation:
+  - `qemu-arm -L ./squashfs-root ./usr/bin/httpd`
+  - `AFL_QEMU_PERSISTENT_ADDR=0x401234 afl-fuzz -Q -i seeds -o findings -- ./target @@`
+- Script Definition Block:
+  - **Input Data:** firmware image, extracted rootfs path, architecture guess, daemon start scripts, candidate ports/protocols.
+  - **Core Processing Logic:** unpack and fingerprint filesystems; identify init chain and network daemons; resolve interpreter/loader dependencies; generate QEMU launch wrappers; isolate parsers into fuzzable harnesses; correlate crashes back to offsets in stripped binaries.
+  - **Dependencies:** binwalk, unsquashfs/cramfs tools, qemu-user/qemu-system, pwntools, AFL++.
+  - **Expected Output Format:** directory manifest plus a YAML file containing `arch`, `loader`, `rootfs`, `entry_services`, `fuzz_targets`, `repro_commands`, `likely_memory_corruption_sites`.
