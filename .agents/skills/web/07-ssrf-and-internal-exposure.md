@@ -8,6 +8,14 @@
   - `->` **[Dead End: Redirect following disabled]** → SSRF via DNS: `http://localtest.me/` (resolves to 127.0.0.1); `http://1.1.1.1.nip.io` variants
   - `->` **[Data Chaining]** IMDSv1 IAM creds → AWS CLI lateral movement → S3 bucket listing → PII exfiltration or EC2 instance takeover [ieeexplore.ieee](https://ieeexplore.ieee.org/document/11415292/)
 
+### Spring Boot Actuator Exposure (Heapdump/Env)
+
+- `->` **[Primary Probe]** On Java/Spring targets (JSESSIONID, `/login` redirects, Spring headers), probe unauthenticated actuator paths: `/actuator`, `/actuator/heapdump`, `/actuator/env`, `/actuator/configprops`, `/actuator/mappings`
+  - `->` **[Signal: `/actuator` returns 200 with `_links`]** → follow listed endpoints directly; do not assume auth just because app routes redirect
+  - `->` **[Signal: `/actuator/heapdump` returns `200` + `application/octet-stream`]** → download once, extract printable strings, search for prior HTTP bodies, `username=<...>&password=<hash>`, CSRF/session tokens, internal routes, and flag-like markers
+  - `->` **[Dead End: `/actuator/env` blocked but heapdump open]** → prioritize heapdump triage; env lockout does not imply heapdump lockout
+  - `->` **[Data Chaining]** Heapdump credential artifacts → authenticated admin route (`/admin/dashboard` or equivalent) → flag/secret retrieval
+
 **Internal Port Scanning via SSRF:**
 ```bash
 # One-liner: Generate SSRF port-scan payload list

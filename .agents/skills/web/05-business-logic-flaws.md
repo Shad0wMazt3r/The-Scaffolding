@@ -1,6 +1,7 @@
 ## Business Logic Flaws
 
 - `->` **[Primary Probe]** Map the full application workflow for multi-step processes (checkout, password reset, account upgrade); manually attempt to skip, reorder, or replay individual steps [ieeexplore.ieee](https://ieeexplore.ieee.org/document/11405427/)
+  - `->` **[Condition: One-shot workflow primitives]** → Identify endpoints that intentionally change global state on first use (`/api/password` style leak-once toggles, single-view secrets); treat restart/state reset as part of exploit design.
   - `->` **[Condition: Skip-step accepted]** → Escalate: access step N+2 without completing N+1 (e.g., confirm order without payment)
   - `->` **[Condition: Price manipulation]** → Intercept quantity/price fields:
     - Negative quantity: `{"qty": -1}` → negative charge / credit addition
@@ -11,6 +12,7 @@
     engine.queue(target.req, gate='race'); [x50]; engine.openGate('race')
     ```
   - `->` **[Dead End: Race window too small]** → Apply Nagle's algorithm bypass: use HTTP/2 single-packet attack (all requests in one TCP segment)
+  - `->` **[Condition: Workflow depends on PRNG sequencing]** → Capture enough outputs to recover state, predict future values, then inject payloads that rely on predicted protocol artifacts (IDs, boundaries, nonces).
   - `->` **[Data Chaining]** Duplicate coupon application → free credits → use credits to trigger premium SSRF-capable functionality
 
 ***

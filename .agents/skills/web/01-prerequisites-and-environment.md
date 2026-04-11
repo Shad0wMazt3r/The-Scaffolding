@@ -68,5 +68,10 @@ sudo update-ca-certificates
 - Configure **AuthMatrix** extension for multi-role privilege mapping
 - Maintain separate Burp projects per role: `admin.burp`, `user.burp`, `guest.burp`
 
+### Local Mirror Validation (CTF-first)
+- Before local exploitation runs, ensure target ports do not collide with existing tooling (MCP servers, proxies, local APIs); remap compose ports immediately if needed.
+- Mark one-shot endpoints and reset conditions up front (e.g., password leak-once endpoints) and plan restart points before brute-force/long exploit chains.
+- For RNG/state recovery attacks, keep request ordering deterministic and avoid background traffic that consumes extra PRNG outputs.
+
 ***
 

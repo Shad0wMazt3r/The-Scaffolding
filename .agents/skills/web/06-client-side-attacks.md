@@ -6,7 +6,15 @@
   - `->` **[Signal: Payload fires in browser]** → Escalate to account takeover: exfiltrate cookies, forge authenticated requests, install persistent keylogger in DOM
   - `->` **[Dead End: HTML entities encoded]** → Test DOM-based XSS: grep JS source for sinks: `document.write`, `innerHTML`, `eval`, `location.href`; trace sources: `location.hash`, `document.referrer`, `postMessage`
   - `->` **[Dead End: CSP blocks inline execution]** → CSP bypass via JSONP endpoint: `<script src="/api/callback?cb=alert(1)">`, or use trusted CDN whitelisted in CSP (`angular.min.js` for `ng-app` injection)
-  - `->` **[Dead End: Strict CSP with nonce]** → XSS via file upload (SVG): `<svg onload="alert(document.domain)"/>` served from same origin
+- `->` **[Dead End: Strict CSP with nonce]** → XSS via file upload (SVG): `<svg onload="alert(document.domain)"/>` served from same origin
+
+### MIME / Signed-Content Parser Confusion
+
+- `->` **[Primary Probe]** When apps parse email/MIME in one component and verify signatures in another, diff both interpretations (`parsed.from`, `parsed.subject`, `parsed.html` vs verified payload body).
+  - `->` **[Signal: Header/body interpretation mismatch]** → Attempt MIME boundary collision and header injection to make trusted UI render attacker-controlled HTML while preserving signature checks on different bytes.
+  - `->` **[Signal: QP/Base64 decode path present]** → Encode payload via quoted-printable/base64 so parser-decoded HTML executes while naive filters miss raw source.
+  - `->` **[Dead End: UI uses Shadow DOM]** → Do not assume safety; script execution can still run inside attached shadow trees if unsafe HTML is inserted.
+  - `->` **[Data Chaining]** XSS in authenticated browser context → exfiltrate local/session tokens → trigger privileged internal API actions as victim.
 
 **WAF Evasion Patterns:**
 - Tag obfuscation: `<ScRiPt>`, `<img/src=x onerror=alert(1)>`

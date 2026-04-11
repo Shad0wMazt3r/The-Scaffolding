@@ -21,6 +21,9 @@
 ### Session Management
 
 - `->` **[Primary Probe]** Analyze session token entropy: collect 100 tokens, run `echo <tok> | base64 -d | xxd` and measure uniqueness; test predictability with **Sequencer** in Burp
+  - `->` **[Primary Probe]** If login/register JS hashes password client-side into a hidden field, treat the submitted hash as credential-equivalent; attempt controlled replay using captured request bodies, proxy history, logs, or memory artifacts
+  - `->` **[Signal: Form has plaintext input + hidden `password` field populated in JS]** → replay the exact transmitted hash with valid CSRF/session context; test for direct post-auth redirects (`/admin/dashboard`, role pages)
+  - `->` **[Dead End: Replay fails despite same hash]** → verify CSRF/session binding and origin host; retry with fresh login page + same hash in one cookie jar
   - `->` **[Signal: Low entropy / sequential]** → Brute-force active sessions via Intruder with valid token prefix + incremented suffix
   - `->` **[Dead End: Tokens opaque/random]** → Test fixation: set `Cookie: session=attacker123` before login; if server accepts it post-auth → fixation
   - `->` **[Dead End: No fixation]** → Test session persistence after password reset and logout; look for non-httponly cookies readable via DOM XSS
