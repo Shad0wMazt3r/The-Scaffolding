@@ -3,11 +3,21 @@
 
 ## Agent-Agnostic Offensive Orchestration
 
-The Scaffolding is a framework designed to automatically solve Capture The Flag (CTF) challenges and hunt for bugs, by bridging the gaps between high-level security reasoning and deterministic execution. By utilizing the Model Context Protocol (MCP) and a persistent self-improving agent documentation, it enables autonomous agents to solve complex, multi-stage CTF challenges and perform deep-dive bug bounty research. You can use the setup to plug and play into any of your AI agents (Claude Code, Github Copilot, Codex, Gemini, OpenCode etc.)
+The Scaffolding is an open framework for autonomously solving CTF challenges and conducting bug bounty research. It bridges high-level security reasoning with deterministic execution by combining the Model Context Protocol (MCP) with a persistent, self-improving agent knowledge base.
 
-## Overview
+**Plug it into any AI agent: Claude Code, GitHub Copilot, Codex, Gemini, OpenCode, and others, with minimal configuration.**
 
-This project provides a structured framework for security researchers to organize and execute CTF challenges and bug bounty assessments using AI-assisted workflows.
+## What It Does
+
+Most AI agents fail at offensive security tasks because they lack structured recon, get overwhelmed by noise, and lose context across long sessions. The Scaffolding solves this by providing:
+
+- **Structured skill loading**: agents load only the skills relevant to the current challenge type (web, pwn, crypto, etc.), keeping context clean
+- **LatticeMind integration**:  automated scanning with confidence-scored findings, so the agent reasons over signal not noise
+- **Kali MCP integration**:  direct access to standard security tooling without manual setup
+- **Persistent notes**: session state is externalized, preventing context rot on long solves
+- **Self-improving documentation**: solve outcomes feed back into skill files, making the harness better over time
+
+## Demo
 
 The following is a demo of an agent using The Scaffolding to solve a hard web challenge.
 
@@ -17,17 +27,29 @@ https://github.com/user-attachments/assets/5774267e-0e5c-414b-99d3-1b9de2bc0444
 
 <img width="865" height="873" alt="Screenshot 2026-04-11 021928" src="https://github.com/user-attachments/assets/03f7bd4d-addc-467b-abda-a074f03db30c" />
 
+The agent sits at the center of three tool layers:
+
+- **LatticeMind** — runs targeted scans, scores findings by confidence, surfaces candidates for the agent to reason through
+- **Kali MCP** — executes standard security tools on demand
+- **GitHub MCP** — searches for exploits, PoCs, and reference implementations
+
+The bootstrap skill loads domain-specific knowledge at session start. Notes persist session state and feed back into skills after each solve.
 
 ## Get Started
 
-Get started with this project by following these steps:
+**Prerequisites**
+- Docker
+- An AI agent with MCP support
+
+**Setup**
 
 1. Clone this repository
-2. Set up [Lattice Mind](https://github.com/Shad0wMazt3r/Lattice-Mind) on docker
-3. Run the MCP server with `docker compose up --profile=dev`
-4. Add MCP to your agent's configuration
-5. Similarly, add [Kali MCP](https://github.com/k3nn3dy-ai/kali-mcp) and run it on a different port (Recommended:8137)
+2. Set up [LatticeMind](https://github.com/Shad0wMazt3r/Lattice-Mind) and run it on Docker
+3. Run the MCP server: `docker compose up --profile=dev`
+4. Add the MCP server to your agent's configuration
+5. Set up [Kali MCP](https://github.com/k3nn3dy-ai/kali-mcp) on a separate port (recommended: `8137`)
 6. Start your agent and load the `bug-hunt-framework` instructions
+
 
 ## Project Structure
 
@@ -37,34 +59,37 @@ Get started with this project by following these steps:
 ├── .cursor/              # Cursor IDE configuration
 ├── .gemini/              # Gemini CLI configuration
 ├── .github/              # GitHub integration
-├── .opencode/           # OpenCode agent configuration
-├── kali-mcp/            # Kali Linux MCP server integration
-├── AGENTS.md            # Shared agent instructions
-├── HUMAN.md             # Human-facing documentation
+├── .opencode/            # OpenCode agent configuration
+├── kali-mcp/             # Kali Linux MCP server integration
+├── AGENTS.md             # Shared agent instructions
+├── HUMAN.md              # Human-facing documentation
 └── README.md
 ```
 
 ## Skills
 
-The harness includes specialized skills for different security domains:
+Domain-specific skill files are loaded by the agent based on challenge type. Each skill encodes recon patterns, attack chains, and lessons learned from past solves.
 
-- **agent-setup**: Tool readiness and dependency checks
-- **agent-calibration**: Workflow optimization and feedback
-- **crypto**: Cryptographic challenges (encoding, RSA, EC, hashes)
-- **forensics**: File, memory, network, and multimedia forensics
-- **mobile**: Mobile application security testing
-- **network**: Network reconnaissance and assessment
-- **pwn**: Binary exploitation (stack, heap, format strings)
-- **recon**: Target reconnaissance and discovery
-- **reverse-engineering**: Binary analysis and RE
-- **web**: Web application security testing
+| Skill | Coverage |
+|---|---|
+| `agent-setup` | Tool readiness and dependency checks |
+| `agent-calibration` | Workflow optimization and feedback |
+| `crypto` | Encoding, RSA, elliptic curve, hash attacks |
+| `forensics` | File, memory, network, and multimedia analysis |
+| `mobile` | Mobile application security testing |
+| `network` | Reconnaissance and network assessment |
+| `pwn` | Stack, heap, and format string exploitation |
+| `recon` | Target discovery and reconnaissance |
+| `reverse-engineering` | Binary analysis and RE |
+| `web` | Web application security testing |
 
-## Usage
+---
 
-This harness is designed to be used with most AI agent out of the box. The Scaffolding is designed to be token friendly and the setup could be run locally as well as on the cloud depending on your needs. Each skill can be activated as needed during different phases of a CTF or bug bounty assessment.
+## Design Philosophy
+
+The Scaffolding is token-efficient by design. Skills are loaded selectively, notes externalize state rather than consuming context, and LatticeMind's confidence scoring prevents the agent from reasoning over irrelevant findings. It runs fully locally or on cloud infrastructure depending on your setup.
 
 
-## Notes
+## Responsible Use
 
-- This project uses AI coding tools for research and educational purposes
-- All assessments should only target systems you are authorized to test
+This project is intended for security research and education. Only use it against systems you are authorized to test.
