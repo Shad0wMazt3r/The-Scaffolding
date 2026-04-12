@@ -11,7 +11,7 @@ This project provides a structured framework for security researchers to organiz
 
 The following is a demo of an agent using The Scaffolding to solve a hard web challenge.
 
-<video src="demo/demo.mp4" width="320" height="240" controls></video>
+<video src="<video controls src="https://github.com/Shad0wMazt3r/ctf-bug-bounty-agent-skills/raw/refs/heads/main/demo/demo.mp4" title="demo/demo.mp4"></video>
 
 
 ## Project Structure
