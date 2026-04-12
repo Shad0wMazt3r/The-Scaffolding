@@ -18,6 +18,17 @@ https://github.com/user-attachments/assets/5774267e-0e5c-414b-99d3-1b9de2bc0444
 <img width="865" height="873" alt="Screenshot 2026-04-11 021928" src="https://github.com/user-attachments/assets/03f7bd4d-addc-467b-abda-a074f03db30c" />
 
 
+## Get Started
+
+Get started with this project by following these steps:
+
+1. Clone this repository
+2. Set up [Lattice Mind](https://github.com/Shad0wMazt3r/Lattice-Mind) on docker
+3. Run the MCP server with `docker compose up --profile=dev`
+4. Add MCP to your agent's configuration
+5. Similarly, add [Kali MCP](https://github.com/k3nn3dy-ai/kali-mcp) and run it on a different port (Recommended:8137)
+6. Start your agent and load the `bug-hunt-framework` instructions
+
 ## Project Structure
 
 ```
@@ -50,11 +61,8 @@ The harness includes specialized skills for different security domains:
 
 ## Usage
 
-This harness is designed to be used with most . Each skill can be activated as needed during different phases of a CTF or bug bounty assessment.
+This harness is designed to be used with most AI agent out of the box. The Scaffolding is designed to be token friendly and the setup could be run locally as well as on the cloud depending on your needs. Each skill can be activated as needed during different phases of a CTF or bug bounty assessment.
 
-## kali-mcp
-
-The `kali-mcp/` subdirectory contains a Model Context Protocol server for Kali Linux tools, enabling AI-assisted execution of security tools within the harness.
 
 ## Notes
 
