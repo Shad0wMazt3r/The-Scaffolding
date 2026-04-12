@@ -11,11 +11,11 @@ This project provides a structured framework for security researchers to organiz
 
 The following is a demo of an agent using The Scaffolding to solve a hard web challenge.
 
-
-
 https://github.com/user-attachments/assets/5774267e-0e5c-414b-99d3-1b9de2bc0444
 
+## Architecture
 
+<img width="865" height="873" alt="Screenshot 2026-04-11 021928" src="https://github.com/user-attachments/assets/03f7bd4d-addc-467b-abda-a074f03db30c" />
 
 
 ## Project Structure
