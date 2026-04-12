@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "lattice-mind": {
+      "url": "http://localhost:8000/mcp",
+      "headers": {
+        "Authorization": "Bearer 1234"
+      }
+    },
+    "kali-mcp-server": {
+      "transport": "sse",
+      "url": "http://localhost:8137/sse"
+    }
+  }
+}
