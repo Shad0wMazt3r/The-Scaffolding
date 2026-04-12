@@ -11,8 +11,7 @@ This project provides a structured framework for security researchers to organiz
 
 The following is a demo of an agent using The Scaffolding to solve a hard web challenge.
 
-
-![Demo](demo/demo.mp4)
+<video src="demo/demo.mp4" width="320" height="240" controls></video>
 
 
 ## Project Structure
