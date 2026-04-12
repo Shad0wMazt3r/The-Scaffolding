@@ -1,4 +1,16 @@
 {
   "contextFileName": "AGENTS.md",
-  "contextFileMaxSize": 32768
+  "contextFileMaxSize": 32768,
+   "mcpServers": {
+    "lattice-mind": {
+      "httpUrl": "http://localhost:8000/mcp",
+      "headers": {
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwYmVyaSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MzI4MTE0OH0.riAZ-FIwc53djvYfp12jm6iGuub4Omud37COOC7dKQk",
+        "Content-Type": "application/json"
+      }
+    },
+    "kali-mcp-server": {
+      "url": "http://localhost:8137/sse"
+    }
+  }
 }
