@@ -10,7 +10,9 @@ The Scaffolding is a framework designed to automatically solve Capture The Flag 
 This project provides a structured framework for security researchers to organize and execute CTF challenges and bug bounty assessments using AI-assisted workflows.
 
 The following is a demo of an agent using The Scaffolding to solve a hard web challenge.
-![](demo/demo.mp4)
+
+
+![Demo](demo/demo.mp4)
 
 
 ## Project Structure
