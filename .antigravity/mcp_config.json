@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "lattice-mind": {
+      "serverUrl": "http://localhost:8000/mcp",
+      "headers": {
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwYmVyaSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MzI4MTE0OH0.riAZ-FIwc53djvYfp12jm6iGuub4Omud37COOC7dKQk",
+        "Content-Type": "application/json"
+      }
+    },
+    "kali-mcp-server": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "http://localhost:8137/sse"]
+    }
+  }
+}
