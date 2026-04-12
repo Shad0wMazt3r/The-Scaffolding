@@ -93,3 +93,8 @@ The Scaffolding is token-efficient by design. Skills are loaded selectively, not
 ## Responsible Use
 
 This project is intended for security research and education. Only use it against systems you are authorized to test.
+
+### Acknowledgements
+- [k3nn3dy-ai](https://github.com/k3nn3dy-ai) for [Kali MCP](https://github.com/k3nn3dy-ai/kali-mcp) — 
+  an essential part of this harness that provides direct access to Kali 
+  Linux security tooling through the Model Context Protocol.
