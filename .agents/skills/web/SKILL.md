@@ -13,6 +13,7 @@ files:
   - 08-insecure-deserialization.md
   - 09-api-specific-vulnerabilities.md
   - 10-cross-class-data-chaining-map.md
+  - 11-appsec-source-code-review.md
 ---
 
 Load files sequentially on activation: see files list above.
