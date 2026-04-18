@@ -1,0 +1,36 @@
+{
+  "commands": {
+    "baseline": {
+      "cmd": [
+        "C:\\Users\\er123\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tools/skills/baseline_metrics.py",
+        "--output",
+        "C:\\Users\\er123\\AppData\\Local\\Temp\\tmp2rfc0aoa-skill-current.json"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "Wrote baseline metrics to C:\\Users\\er123\\AppData\\Local\\Temp\\tmp2rfc0aoa-skill-current.json"
+    },
+    "validation": {
+      "cmd": [
+        "C:\\Users\\er123\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tools/skills/validate_skills.py",
+        "--report",
+        "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\reports\\skill-validation.json"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "Validation complete: errors=0 warnings=91 report=C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\reports\\skill-validation.json"
+    }
+  },
+  "failed_checks": [],
+  "metrics": {
+    "formatting_artifact_files": 0,
+    "largest_file_tokens_delta_percent": 0.0,
+    "router_instruction_drift": 0,
+    "total_approx_tokens_delta_percent": 0.0,
+    "unresolved_footnote_files": 0,
+    "validation_errors": 0
+  },
+  "pass": true
+}

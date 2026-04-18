@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "phase": 5,
+  "checks": {
+    "validation_errors_must_equal": 0,
+    "max_unresolved_footnote_files": 0,
+    "max_formatting_artifact_files": 0,
+    "max_router_instruction_drift": 0
+  },
+  "regression_limits": {
+    "total_approx_tokens_delta_max_percent": 5.0,
+    "largest_file_tokens_delta_max_percent": 10.0
+  },
+  "smoke_eval_prompts": [
+    {
+      "phase": "recon",
+      "prompt_id": "recon-basic-loop",
+      "expects_markers": [
+        "Primary",
+        "Dead End",
+        "Data Chaining"
+      ]
+    },
+    {
+      "phase": "web",
+      "prompt_id": "web-authz-triage",
+      "expects_markers": [
+        "Primary",
+        "Dead End",
+        "Data Chaining"
+      ]
+    },
+    {
+      "phase": "forensics",
+      "prompt_id": "forensics-pcap-pivot",
+      "expects_markers": [
+        "Primary",
+        "Dead End",
+        "Data Chaining"
+      ]
+    }
+  ]
+}

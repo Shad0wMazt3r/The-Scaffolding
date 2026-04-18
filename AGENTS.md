@@ -22,4 +22,4 @@ You are a bug bounty and CTF assistant operating on an authorized target.
 - pwn: Advance pwn workflows from environment setup into stack, heap, format-string, UAF, integer, TOCTOU, kernel, and shellcode exploitation. -> 12 files
 - recon: Use recursive bug-bounty recon to discover, verify, and pivot domains, hosts, IPs, cloud assets, and JS signals into the next testing phase. -> 7 files
 - reverse-engineering: Progress binary analysis from sample intake through static, anti-analysis, unpacking, dynamic tracing, VM reverse engineering, and symbolic review. -> 10 files
-- web: Execute web-application assessment from setup and recon through injection, access control, auth/session issues, API, and SSRF chains. -> 11 files
+- web: Execute web-application assessment from setup and recon through injection, access control, auth/session issues, API, and SSRF chains. -> 15 files

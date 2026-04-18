@@ -1,0 +1,455 @@
+{
+  "errors": [],
+  "scope": {
+    "manifest_count": 10,
+    "ttp_count": 84
+  },
+  "summary": {
+    "errors": 0,
+    "warnings": 91
+  },
+  "warnings": [
+    {
+      "links": 0,
+      "path": ".agents/skills/agent-calibration/01-runbook.md",
+      "type": "missing_external_link"
+    },
+    {
+      "path": ".agents/skills/agent-calibration/01-runbook.md",
+      "type": "missing_primary_marker"
+    },
+    {
+      "marker": "Dead End",
+      "path": ".agents/skills/agent-calibration/01-runbook.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/agent-calibration/01-runbook.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/agent-calibration/02-calibration-log.md",
+      "type": "missing_external_link"
+    },
+    {
+      "path": ".agents/skills/agent-calibration/02-calibration-log.md",
+      "type": "missing_primary_marker"
+    },
+    {
+      "marker": "Dead End",
+      "path": ".agents/skills/agent-calibration/02-calibration-log.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/agent-calibration/02-calibration-log.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/agent-setup/01-agent-bootstrap.md",
+      "type": "missing_external_link"
+    },
+    {
+      "path": ".agents/skills/agent-setup/01-agent-bootstrap.md",
+      "type": "missing_primary_marker"
+    },
+    {
+      "marker": "Dead End",
+      "path": ".agents/skills/agent-setup/01-agent-bootstrap.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/agent-setup/01-agent-bootstrap.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "path": ".agents/skills/crypto/01-workspace-baseline.md",
+      "type": "missing_primary_marker"
+    },
+    {
+      "marker": "Dead End",
+      "path": ".agents/skills/crypto/01-workspace-baseline.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/crypto/01-workspace-baseline.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/crypto/02-classical-and-encoding.md",
+      "type": "missing_external_link"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/crypto/02-classical-and-encoding.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/crypto/03-rsa-attacks.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/crypto/04-elliptic-curve-attacks.md",
+      "type": "missing_external_link"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/crypto/04-elliptic-curve-attacks.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/crypto/05-symmetric-attacks.md",
+      "type": "missing_external_link"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/crypto/05-symmetric-attacks.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/crypto/06-hash-attacks.md",
+      "type": "missing_external_link"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/crypto/06-hash-attacks.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/crypto/07-protocol-attacks.md",
+      "type": "missing_external_link"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/crypto/07-protocol-attacks.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/crypto/08-lcg-and-prng-attacks.md",
+      "type": "missing_external_link"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/crypto/08-lcg-and-prng-attacks.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/crypto/09-custom-and-unknown-cipher-analysis.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/crypto/10-zero-knowledge-and-commitment.md",
+      "type": "missing_external_link"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/crypto/10-zero-knowledge-and-commitment.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "path": ".agents/skills/forensics/01-environment-and-tooling.md",
+      "type": "missing_primary_marker"
+    },
+    {
+      "marker": "Dead End",
+      "path": ".agents/skills/forensics/01-environment-and-tooling.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/forensics/01-environment-and-tooling.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/forensics/02-disk-image-analysis.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/forensics/06-file-format-polyglot-analysis.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/forensics/07-log-artifact-analysis.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/forensics/08-multimedia-forensics.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/forensics/09-cryptographic-artifact-recovery.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/forensics/10-timeline-reconstruction-and-correlation.md",
+      "type": "missing_external_link"
+    },
+    {
+      "path": ".agents/skills/mobile/01-baseline-and-setup.md",
+      "type": "missing_primary_marker"
+    },
+    {
+      "marker": "Dead End",
+      "path": ".agents/skills/mobile/01-baseline-and-setup.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/mobile/01-baseline-and-setup.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "path": ".agents/skills/mobile/02-static-analysis-and-reverse-engineering.md",
+      "type": "missing_primary_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/mobile/08-authentication-and-session-handling.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/mobile/09-api-and-backend-abuse.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/mobile/10-biometrics-and-passcode-bypass.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/network/01-environment.md",
+      "type": "missing_external_link"
+    },
+    {
+      "path": ".agents/skills/network/01-environment.md",
+      "type": "missing_primary_marker"
+    },
+    {
+      "marker": "Dead End",
+      "path": ".agents/skills/network/01-environment.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/network/01-environment.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Dead End",
+      "path": ".agents/skills/network/02-services-and-authentication.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/network/02-services-and-authentication.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Dead End",
+      "path": ".agents/skills/network/03-mitm-smb-and-directory.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/network/03-mitm-smb-and-directory.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/network/04-exposure-and-remote-access.md",
+      "type": "missing_external_link"
+    },
+    {
+      "marker": "Dead End",
+      "path": ".agents/skills/network/04-exposure-and-remote-access.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/network/04-exposure-and-remote-access.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/network/05-pivoting-automation-and-evidence.md",
+      "type": "missing_external_link"
+    },
+    {
+      "marker": "Dead End",
+      "path": ".agents/skills/network/05-pivoting-automation-and-evidence.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/network/05-pivoting-automation-and-evidence.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "path": ".agents/skills/pwn/01-environment-baseline.md",
+      "type": "missing_primary_marker"
+    },
+    {
+      "marker": "Dead End",
+      "path": ".agents/skills/pwn/01-environment-baseline.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/pwn/01-environment-baseline.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/pwn/04-format-string-attacks.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/pwn/05-use-after-free-and-type-confusion.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/pwn/06-integer-overflows-and-signedness.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/pwn/07-off-by-one-and-null-byte-overflows.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/pwn/08-race-conditions-and-toctou.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/pwn/10-sandbox-and-vm-escape.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/recon/01-setup-and-contract.md",
+      "type": "missing_external_link"
+    },
+    {
+      "path": ".agents/skills/recon/01-setup-and-contract.md",
+      "type": "missing_primary_marker"
+    },
+    {
+      "marker": "Dead End",
+      "path": ".agents/skills/recon/01-setup-and-contract.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/recon/01-setup-and-contract.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/recon/04-ip-addresses.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/recon/05-cloud-assets.md",
+      "type": "missing_external_link"
+    },
+    {
+      "path": ".agents/skills/recon/07-state-transition-and-orchestration.md",
+      "type": "missing_primary_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/recon/07-state-transition-and-orchestration.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/reverse-engineering/03-anti-analysis-bypass.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/reverse-engineering/05-dynamic-analysis-and-tracing.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/reverse-engineering/06-custom-virtual-machine-reversing.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/reverse-engineering/08-algorithm-identification-and-reimplementation.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/reverse-engineering/09-firmware-and-embedded-re.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/reverse-engineering/10-dotnet-jvm-scripting-language-re.md",
+      "type": "missing_external_link"
+    },
+    {
+      "links": 0,
+      "path": ".agents/skills/web/01-prerequisites-and-environment.md",
+      "type": "missing_external_link"
+    },
+    {
+      "path": ".agents/skills/web/01-prerequisites-and-environment.md",
+      "type": "missing_primary_marker"
+    },
+    {
+      "marker": "Dead End",
+      "path": ".agents/skills/web/01-prerequisites-and-environment.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/web/01-prerequisites-and-environment.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "marker": "Data Chaining",
+      "path": ".agents/skills/web/08-insecure-deserialization.md",
+      "type": "missing_recommended_marker"
+    },
+    {
+      "path": ".agents/skills/web/10-cross-class-data-chaining-map.md",
+      "type": "missing_primary_marker"
+    },
+    {
+      "marker": "Dead End",
+      "path": ".agents/skills/web/10-cross-class-data-chaining-map.md",
+      "type": "missing_recommended_marker"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+name: Skills Quality
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Regenerate router wrappers
+        run: python tools/skills/generate_router_wrappers.py
+
+      - name: Normalize skills
+        run: python tools/skills/normalize_skills.py --check --fix-footnotes
+
+      - name: Validate skills
+        run: python tools/skills/validate_skills.py --report reports/skill-validation.json
+
+      - name: Run smoke eval gate
+        run: python tools/skills/smoke_eval.py --output reports/skill-smoke-eval.json

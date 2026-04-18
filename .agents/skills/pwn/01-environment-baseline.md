@@ -2,13 +2,13 @@
 
 **Environment baseline**
 
-- Use a fixed workspace so artifacts stay separated by analysis phase and by exploit maturity:  
+- Use a fixed workspace so artifacts stay separated by analysis phase and by exploit maturity:
 `/pwn/<target>/{bin,libc,ld,src,ghidra,gdb,core,crashes,corpus,asan,ropchains,shellcode,exploits,evidence,notes,docker,remote}`.
 - Install a minimum toolset of Ghidra on a supported 64-bit Windows/Linux/macOS host, GDB, one GDB plugin, pwntools in a Python virtualenv, binutils, patchelf, qemu-user/qemu-system, AFL++ with QEMU mode, and Docker for target replication; Ghidra supports 64-bit Windows, Linux, and macOS, pwntools is a Python exploit-development framework, and AFL++ QEMU mode is built with `./build_qemu_support.sh`. [arxiv](https://arxiv.org/pdf/1707.03341.pdf)
-- Pin the exploit runtime with a per-target virtualenv and libc bundle:  
-`python3 -m venv /pwn/<target>/.venv && source /pwn/<target>/.venv/bin/activate && pip install --upgrade pwntools`  
+- Pin the exploit runtime with a per-target virtualenv and libc bundle:
+`python3 -m venv /pwn/<target>/.venv && source /pwn/<target>/.venv/bin/activate && pip install --upgrade pwntools`
 `cp ./target ./libc.so.6 ./ld-linux*.so* /pwn/<target>/bin/`
-- Standardize GDB around one plugin per session to avoid command collisions. A practical `.gdbinit` core is:  
+- Standardize GDB around one plugin per session to avoid command collisions. A practical `.gdbinit` core is:
 ```gdb
 set disassembly-flavor intel
 set pagination off

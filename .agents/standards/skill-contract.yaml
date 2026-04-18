@@ -1,0 +1,78 @@
+version: 1
+status: phase-1-baseline
+goal: Canonical, agent-agnostic contract for skill manifests and TTP files.
+
+scope:
+  skill_root: .agents/skills
+  manifest_glob: .agents/skills/*/SKILL.md
+  ttp_glob: .agents/skills/*/*.md
+  exclude_ttp_filenames:
+    - SKILL.md
+
+manifest_contract:
+  required_front_matter_keys:
+    - name
+    - description
+    - dependencies
+    - files
+  optional_front_matter_keys:
+    - optional_deep_files
+    - metadata
+  description_max_chars: 240
+  files_list:
+    requires_numeric_prefix: true
+    filename_regex: ^\d{2}-[a-z0-9-]+\.md$
+    must_be_sequential: true
+  optional_deep_files:
+    item_keys:
+      - file
+      - load_when
+    filename_regex: ^\d{2}-[a-z0-9-]+\.md$
+  references:
+    dependencies_must_resolve_to_skill_names: true
+  instruction_tail:
+    require_sequential_loading_clause: true
+
+ttp_contract:
+  canonical_transition_grammar:
+    required_sections:
+      - Goal
+      - Preconditions
+      - Primary Probe
+      - Dead End Pivots
+      - Data Chaining
+      - Exit Criteria
+  citations:
+    minimum_external_links_per_file: 1
+    link_scheme: https
+    footnote_reference_style_allowed: false
+  formatting:
+    forbid_html_entities:
+      - "&#x20;"
+    forbid_escaped_heading_prefixes:
+      - "\\#"
+      - "\\##"
+  budgets:
+    fast_path:
+      max_lines: 120
+      max_approx_tokens: 2000
+    deep_path:
+      max_lines: 400
+      max_approx_tokens: 5000
+
+temporary_exceptions:
+  - file: .agents/skills/web/12-source-review-deep-architecture-and-trust.md
+    reason: Temporary deep-path transition while migration lands.
+    expiration_phase: 4
+    max_lines: 450
+    max_approx_tokens: 5500
+  - file: .agents/skills/web/13-source-review-deep-chain-playbooks.md
+    reason: Temporary deep-path transition while migration lands.
+    expiration_phase: 4
+    max_lines: 450
+    max_approx_tokens: 5500
+
+phase_1_deliverables:
+  - Define this contract as source-of-truth.
+  - Generate reproducible baseline metrics from current corpus state.
+  - Store baseline output in reports/skill-baseline.json.

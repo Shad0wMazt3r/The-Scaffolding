@@ -1,0 +1,250 @@
+{
+  "distribution": {
+    "approx_tokens": {
+      "max": 1647,
+      "median": 625.5,
+      "min": 98,
+      "p90": 901,
+      "p95": 1088
+    },
+    "lines": {
+      "max": 93,
+      "median": 25.0,
+      "min": 8,
+      "p90": 61,
+      "p95": 80
+    }
+  },
+  "generated_at_utc": "2026-04-18T21:12:09.660630+00:00",
+  "input_snapshot_sha256": "62faf7da6ef1e0cf823e153c05181e80559da5395e6c3ac83ffe4cf306c3ab4a",
+  "largest_files_top10": [
+    {
+      "approx_tokens": 685,
+      "lines": 93,
+      "path": ".agents/skills/recon/01-setup-and-contract.md"
+    },
+    {
+      "approx_tokens": 1150,
+      "lines": 88,
+      "path": ".agents/skills/reverse-engineering/01-baseline-and-initial-triage.md"
+    },
+    {
+      "approx_tokens": 1183,
+      "lines": 81,
+      "path": ".agents/skills/recon/06-js-files.md"
+    },
+    {
+      "approx_tokens": 769,
+      "lines": 81,
+      "path": ".agents/skills/web/13-source-review-deep-chain-playbooks.md"
+    },
+    {
+      "approx_tokens": 1647,
+      "lines": 80,
+      "path": ".agents/skills/web/09-api-specific-vulnerabilities.md"
+    },
+    {
+      "approx_tokens": 628,
+      "lines": 78,
+      "path": ".agents/skills/web/01-prerequisites-and-environment.md"
+    },
+    {
+      "approx_tokens": 933,
+      "lines": 70,
+      "path": ".agents/skills/forensics/01-environment-and-tooling.md"
+    },
+    {
+      "approx_tokens": 990,
+      "lines": 64,
+      "path": ".agents/skills/mobile/01-baseline-and-setup.md"
+    },
+    {
+      "approx_tokens": 868,
+      "lines": 61,
+      "path": ".agents/skills/recon/05-cloud-assets.md"
+    },
+    {
+      "approx_tokens": 1012,
+      "lines": 55,
+      "path": ".agents/skills/recon/03-subdomains.md"
+    }
+  ],
+  "per_skill": {
+    "agent-calibration": {
+      "approx_tokens": 753,
+      "chars": 3011,
+      "files": 2,
+      "files_with_data_chaining": 0,
+      "files_with_dead_end": 0,
+      "files_with_links": 0,
+      "files_with_primary_probe": 0,
+      "lines": 47
+    },
+    "agent-setup": {
+      "approx_tokens": 188,
+      "chars": 753,
+      "files": 1,
+      "files_with_data_chaining": 0,
+      "files_with_dead_end": 0,
+      "files_with_links": 0,
+      "files_with_primary_probe": 0,
+      "lines": 13
+    },
+    "crypto": {
+      "approx_tokens": 5324,
+      "chars": 21303,
+      "files": 10,
+      "files_with_data_chaining": 9,
+      "files_with_dead_end": 9,
+      "files_with_links": 3,
+      "files_with_primary_probe": 9,
+      "lines": 220
+    },
+    "forensics": {
+      "approx_tokens": 6761,
+      "chars": 27047,
+      "files": 10,
+      "files_with_data_chaining": 9,
+      "files_with_dead_end": 9,
+      "files_with_links": 4,
+      "files_with_primary_probe": 9,
+      "lines": 321
+    },
+    "mobile": {
+      "approx_tokens": 7014,
+      "chars": 28053,
+      "files": 12,
+      "files_with_data_chaining": 11,
+      "files_with_dead_end": 11,
+      "files_with_links": 9,
+      "files_with_primary_probe": 10,
+      "lines": 254
+    },
+    "network": {
+      "approx_tokens": 3253,
+      "chars": 13020,
+      "files": 5,
+      "files_with_data_chaining": 4,
+      "files_with_dead_end": 4,
+      "files_with_links": 2,
+      "files_with_primary_probe": 4,
+      "lines": 131
+    },
+    "pwn": {
+      "approx_tokens": 6765,
+      "chars": 27058,
+      "files": 12,
+      "files_with_data_chaining": 11,
+      "files_with_dead_end": 11,
+      "files_with_links": 6,
+      "files_with_primary_probe": 11,
+      "lines": 257
+    },
+    "recon": {
+      "approx_tokens": 5392,
+      "chars": 21569,
+      "files": 7,
+      "files_with_data_chaining": 5,
+      "files_with_dead_end": 6,
+      "files_with_links": 4,
+      "files_with_primary_probe": 5,
+      "lines": 396
+    },
+    "reverse-engineering": {
+      "approx_tokens": 7089,
+      "chars": 28361,
+      "files": 10,
+      "files_with_data_chaining": 10,
+      "files_with_dead_end": 10,
+      "files_with_links": 4,
+      "files_with_primary_probe": 10,
+      "lines": 361
+    },
+    "web": {
+      "approx_tokens": 10716,
+      "chars": 42869,
+      "files": 15,
+      "files_with_data_chaining": 13,
+      "files_with_dead_end": 13,
+      "files_with_links": 14,
+      "files_with_primary_probe": 13,
+      "lines": 694
+    }
+  },
+  "quality_findings": {
+    "files_without_external_links": [
+      ".agents/skills/agent-calibration/01-runbook.md",
+      ".agents/skills/agent-calibration/02-calibration-log.md",
+      ".agents/skills/agent-setup/01-agent-bootstrap.md",
+      ".agents/skills/crypto/02-classical-and-encoding.md",
+      ".agents/skills/crypto/04-elliptic-curve-attacks.md",
+      ".agents/skills/crypto/05-symmetric-attacks.md",
+      ".agents/skills/crypto/06-hash-attacks.md",
+      ".agents/skills/crypto/07-protocol-attacks.md",
+      ".agents/skills/crypto/08-lcg-and-prng-attacks.md",
+      ".agents/skills/crypto/10-zero-knowledge-and-commitment.md",
+      ".agents/skills/forensics/02-disk-image-analysis.md",
+      ".agents/skills/forensics/06-file-format-polyglot-analysis.md",
+      ".agents/skills/forensics/07-log-artifact-analysis.md",
+      ".agents/skills/forensics/08-multimedia-forensics.md",
+      ".agents/skills/forensics/09-cryptographic-artifact-recovery.md",
+      ".agents/skills/forensics/10-timeline-reconstruction-and-correlation.md",
+      ".agents/skills/mobile/08-authentication-and-session-handling.md",
+      ".agents/skills/mobile/09-api-and-backend-abuse.md",
+      ".agents/skills/mobile/10-biometrics-and-passcode-bypass.md",
+      ".agents/skills/network/01-environment.md",
+      ".agents/skills/network/04-exposure-and-remote-access.md",
+      ".agents/skills/network/05-pivoting-automation-and-evidence.md",
+      ".agents/skills/pwn/04-format-string-attacks.md",
+      ".agents/skills/pwn/05-use-after-free-and-type-confusion.md",
+      ".agents/skills/pwn/06-integer-overflows-and-signedness.md",
+      ".agents/skills/pwn/07-off-by-one-and-null-byte-overflows.md",
+      ".agents/skills/pwn/08-race-conditions-and-toctou.md",
+      ".agents/skills/pwn/10-sandbox-and-vm-escape.md",
+      ".agents/skills/recon/01-setup-and-contract.md",
+      ".agents/skills/recon/04-ip-addresses.md",
+      ".agents/skills/recon/05-cloud-assets.md",
+      ".agents/skills/reverse-engineering/03-anti-analysis-bypass.md",
+      ".agents/skills/reverse-engineering/05-dynamic-analysis-and-tracing.md",
+      ".agents/skills/reverse-engineering/06-custom-virtual-machine-reversing.md",
+      ".agents/skills/reverse-engineering/08-algorithm-identification-and-reimplementation.md",
+      ".agents/skills/reverse-engineering/09-firmware-and-embedded-re.md",
+      ".agents/skills/reverse-engineering/10-dotnet-jvm-scripting-language-re.md",
+      ".agents/skills/web/01-prerequisites-and-environment.md"
+    ],
+    "formatting_artifact_files": [],
+    "unresolved_footnote_files": []
+  },
+  "repo_root": "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding",
+  "router_baseline": [
+    {
+      "chars": 1034,
+      "lines": 16,
+      "path": ".cursor/skills/bug-hunt-framework/SKILL.md",
+      "sha256": "8cc0aabbe1cd6db860fc17770fdf0e433bfe51c011d409115d6974c42fad2efa"
+    },
+    {
+      "chars": 1068,
+      "lines": 16,
+      "path": ".github/agents/bug-hunt-framework.agent.md",
+      "sha256": "c69ef71e8725fac592461433d6eb137c0b334bf9c230561cd7f94c875859e26e"
+    },
+    {
+      "chars": 1064,
+      "lines": 21,
+      "path": ".opencode/agents/bug-hunt-framework.md",
+      "sha256": "698d0e8e436107febee0cc8f2d1bd440011c99666f44d9b1338efd296f8f4f27"
+    }
+  ],
+  "scope": {
+    "manifest_count": 10,
+    "skill_count": 10,
+    "skill_root": ".agents/skills",
+    "ttp_file_count": 84
+  },
+  "totals": {
+    "approx_tokens": 53255,
+    "chars": 213044,
+    "lines": 2694
+  }
+}

@@ -1,7 +1,7 @@
 ## JS Files
 
 - `J0 -> [Condition: live web hosts exist] -> Action: collect JavaScript aggressively`
-    - Primary Vector: crawl live hosts with Katana using JS-aware options; Katana supports JS crawling, headless mode, XHR extraction, known-file crawling, JSONL output, and response storage.[^2][^6]
+    - Primary Vector: crawl live hosts with Katana using JS-aware options; Katana supports JS crawling, headless mode, XHR extraction, known-file crawling, JSONL output, and response storage. [projectdiscovery](https://docs.projectdiscovery.io/tools/katana/overview)
     - Dead End Pivot:
         - If crawling is thin, pull archive URLs from gau/Wayback and filter for `\.js`, `map`, `json`, `config`.
         - If the app is SPA-heavy, enable headless crawling and XHR extraction.

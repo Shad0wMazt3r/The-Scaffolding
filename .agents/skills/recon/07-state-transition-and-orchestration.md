@@ -10,10 +10,10 @@
 **Minimal orchestration order**
 
 1. `scope/root-domains.txt`
-2. `subfinder -> subdomains/all.txt`[^1][^5]
+2. `subfinder -> subdomains/all.txt` [projectdiscovery](https://docs.projectdiscovery.io/tools/subfinder/overview)
 3. `dnsx -> subdomains/resolved/all.txt`
-4. `httpx -> hosts/httpx/httpx.jsonl`[^3]
-5. `katana/archive -> js/urls/all.txt`[^6][^2]
+4. `httpx -> hosts/httpx/httpx.jsonl` [projectdiscovery](https://docs.projectdiscovery.io/tools/httpx/overview)
+5. `katana/archive -> js/urls/all.txt` [projectdiscovery](https://docs.projectdiscovery.io/tools/katana/overview)
 6. `IP/cloud/JS pivots -> feed discoveries back upstream`
 
 This keeps the workflow recursive instead of linear, which is the right shape for high-yield recon in large bug-bounty programs.

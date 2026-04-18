@@ -20,7 +20,7 @@
         - `scope/root-domains.txt` becomes the only valid upstream file for subdomain tooling.
         - Preserve excluded roots in `scope/rejected-root-domains.txt` so you do not rediscover junk later.
 - `R2 -> [Condition: root domain set is stable] -> Action: start passive subdomain discovery`
-    - Primary Vector: `subfinder -dL scope/root-domains.txt -all -recursive -silent -o subdomains/raw/subfinder.raw.txt`; Subfinder is purpose-built for passive subdomain enumeration and supports workflow-friendly output modes and STDIN/STDOUT integration.[^5][^1]
+    - Primary Vector: `subfinder -dL scope/root-domains.txt -all -recursive -silent -o subdomains/raw/subfinder.raw.txt`; Subfinder is purpose-built for passive subdomain enumeration and supports workflow-friendly output modes and STDIN/STDOUT integration. [projectdiscovery](https://docs.projectdiscovery.io/tools/subfinder/overview)
     - Dead End Pivot:
         - Switch from passive to permutation-assisted DNS brute force on high-value labels like `api`, `admin`, `vpn`, `staging`, `dev`, `graphql`, `internal`, `sso`.
         - ASN brute-force reverse DNS for owned netblocks.

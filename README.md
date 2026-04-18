@@ -83,6 +83,45 @@ Domain-specific skill files are loaded by the agent based on challenge type. Eac
 | `reverse-engineering` | Binary analysis and RE |
 | `web` | Web application security testing |
 
+## Skill Contract and Baseline Metrics
+
+To keep skill quality consistent across agents, this repository includes:
+
+- Canonical contract: `.agents/standards/skill-contract.yaml`
+- Machine-readable contract: `.agents/standards/skill-contract.json`
+- Quality gate config: `.agents/standards/quality-gate.json`
+- Router single source of truth: `.agents/standards/router-spec.json`
+- Reproducible baseline generator: `tools/skills/baseline_metrics.py`
+- Validator: `tools/skills/validate_skills.py`
+- Normalizer: `tools/skills/normalize_skills.py`
+- Router generator: `tools/skills/generate_router_wrappers.py`
+- Smoke eval gate: `tools/skills/smoke_eval.py`
+- Current baseline snapshot: `reports/skill-baseline.json`
+
+Common commands:
+
+```bash
+# Generate baseline
+python tools/skills/baseline_metrics.py --output reports/skill-baseline.json
+
+# Normalize known markdown issues
+python tools/skills/normalize_skills.py --write --fix-footnotes
+
+# Check normalization drift (CI-safe)
+python tools/skills/normalize_skills.py --check --fix-footnotes
+
+# Validate against contract
+python tools/skills/validate_skills.py --report reports/skill-validation.json
+
+# Regenerate all router wrappers from one spec
+python tools/skills/generate_router_wrappers.py
+
+# Run end-to-end quality gate
+python tools/skills/smoke_eval.py --output reports/skill-smoke-eval.json
+```
+
+CI enforcement lives in `.github/workflows/skills-quality.yml`.
+
 ---
 
 ## Design Philosophy

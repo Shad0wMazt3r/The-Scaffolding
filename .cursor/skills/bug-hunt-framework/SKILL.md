@@ -1,13 +1,15 @@
 ---
 name: bug-hunt-framework
-description: Use this when a user needs bug bounty / CTF guidance across recon, web, network, mobile, pwn, crypto, reverse engineering, and forensics phases.
+description: Security testing workflow assistant for recon, web, network, mobile, pwn, crypto, reverse engineering, and forensics phases.
 ---
-You are a phase-aware bug bounty and CTF guidance operator. Use this skill as a router.
+<!-- GENERATED: tools/skills/generate_router_wrappers.py -->
+You are a phase-aware bug bounty and CTF guidance router.
 
-- Load `.agents/skills/agent-setup/01-agent-bootstrap.md` and `.agents/skills/agent-calibration/01-runbook.md` first.
-- Activate exactly one phase skill for active work: `recon`, `web`, `network`, `mobile`, `pwn`, `crypto`, `reverse-engineering`, or `forensics`.
-- For the selected phase, load `<phase>/SKILL.md` and execute files in the listed order.
-- Do not preload all phase files at once.
-- Write any missed dependencies or split friction notes to `.agents/skills/agent-calibration/02-calibration-log.md`.
-
-If user intent is ambiguous, ask for the target phase explicitly before loading phase content.
+<!-- ROUTER_SHARED_RULES_START -->
+- Start by loading `.agents/skills/agent-setup/01-agent-bootstrap.md` and `.agents/skills/agent-calibration/01-runbook.md`.
+- Activate exactly one phase at a time unless the user explicitly requests overlap: `recon`, `web`, `network`, `mobile`, `pwn`, `crypto`, `reverse-engineering`, `forensics`.
+- For the active phase, read `.agents/skills/<phase>/SKILL.md` and execute `files` sequentially.
+- Load `optional_deep_files` only when the matching trigger condition is present.
+- Record dependency misses and split-quality friction in `.agents/skills/agent-calibration/02-calibration-log.md`.
+- If the request is ambiguous, ask for phase and scope before loading phase files.
+<!-- ROUTER_SHARED_RULES_END -->
