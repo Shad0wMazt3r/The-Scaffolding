@@ -10,8 +10,8 @@
 - * -> [Condition: Android manifest review] -> Action: Inspect `android:exported`, permissions, backup flags, providers, app links, task affinity, debuggable state, and custom `networkSecurityConfig`; exported controls whether outside apps can launch components. [developer.android](https://developer.android.com/privacy-and-security/risks/android-exported)
 - * -> [Condition: iOS bundle review] -> Action: Inspect `Info.plist`, URL schemes, associated domains, ATS exceptions, keychain groups, app groups, background modes, and entitlements for over-privilege or unexpected cross-app exposure.
 
-Script Definition Block — Native Secret Mapper  
-- Input Data: Decompiled Java/Kotlin or Objective-C/Swift symbols, `.so` / Mach-O exports, `strings` output, endpoint list.  
+Script Definition Block — Native Secret Mapper
+- Input Data: Decompiled Java/Kotlin or Objective-C/Swift symbols, `.so` / Mach-O exports, `strings` output, endpoint list.
 - Core Processing Logic:
   - Correlate JNI or native export names to Java/Swift call sites.
   - Rank strings by entropy, credential patterns, hostname likeness, and request adjacency.

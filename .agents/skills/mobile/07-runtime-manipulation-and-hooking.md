@@ -9,10 +9,10 @@
   - * -> [Condition: Device-state checks block testing] -> Action: add hooks for root/jailbreak, emulator, debugger, and mock-location checks before moving deeper.
 - * -> [Condition: Non-root/non-jailbreak device is mandated] -> Action: Prefer repackaging with Frida Gadget where allowed because Objection supports `patchapk` and `patchipa` workflows for that mode. [appsecsanta](https://appsecsanta.com/objection)
 
-Simple inline one-liner:  
+Simple inline one-liner:
 `frida-ps -Uai && objection -g <bundle_or_package> explore`
 
-Script Definition Block — JNI Secret Interceptor  
+Script Definition Block — JNI Secret Interceptor
 - Input Data: Suspect native library path, exported/native method list, Java/Swift call sites, runtime trigger sequence.
 - Core Processing Logic:
   - Hook entry and return points of JNI/native functions tied to auth, pinning, or crypto.

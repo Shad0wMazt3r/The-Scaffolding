@@ -8,6 +8,6 @@
   - * -> [Condition: Local bypass exists only in-app] -> Action: Remote-vs-local divergence: determine whether bypass merely reveals local UI or whether backend trusts the manipulated client state.
 - * -> [Condition: Biometrics wrap tokens locally] -> Action: verify whether a successful biometric unlock actually gates a server-side operation or only unlocks already-issued local credentials.
 
-Simple inline one-liner:  
+Simple inline one-liner:
 `grep -RniE "Bearer |refresh|access_token|session|biometric|deviceId" /mobile/<target>/apk/jadx /mobile/<target>/ipa/unzip`
 

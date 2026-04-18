@@ -8,6 +8,6 @@
   - * -> [Condition: Secret release occurs after forced success] -> Action: Data Chaining: extract session tokens, offline keys, or account-switch material; then validate whether backend accepts actions without true recent authentication.
   - * -> [Condition: Exploit works only on modified device] -> Action: classify as local post-compromise unless the app reuses long-lived tokens that can be exfiltrated and replayed remotely.
 
-Simple inline one-liner:  
+Simple inline one-liner:
 `grep -RniE "BiometricPrompt|FingerprintManager|LAContext|evaluatePolicy|setUserAuthenticationRequired" /mobile/<target>`
 

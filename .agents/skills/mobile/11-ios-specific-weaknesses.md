@@ -9,7 +9,7 @@
   - * -> [Condition: Filza/SSH access available] -> Action: pull `Library/Preferences/*.plist`, app-group containers, `Caches`, and crash logs, then compare them against live runtime hooks.
 - * -> [Condition: Jailbroken device setup] -> Action: Frida deployment commonly starts from the Frida package path described for iOS device instrumentation. [frida](https://frida.re/docs/ios/)
 
-Simple inline one-liner:  
+Simple inline one-liner:
 `plutil -p Info.plist | egrep "CFBundleURLTypes|LSApplicationQueriesSchemes|NSAppTransportSecurity|com.apple.security"`
 
 ## Android-Specific Weaknesses

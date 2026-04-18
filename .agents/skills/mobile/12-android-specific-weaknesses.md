@@ -10,6 +10,6 @@
   - * -> [Condition: Backup or trust configuration is suspicious] -> Action: validate `allowBackup`, extraction rules, cleartext allowances, and custom trust config; Android network security config and Auto Backup both materially affect exploitability. [developer.android](https://developer.android.com/privacy-and-security/security-config)
 - * -> [Condition: App targets modern Android] -> Action: remember that deep links, exported components, and trust behavior may shift with target SDK and verified-link configuration, so always test on both declared target behavior and the actual device OS. [developer.android](https://developer.android.com/training/app-links)
 
-Simple inline one-liners:  
-`adb shell content query --uri content://<authority>/`  
+Simple inline one-liners:
+`adb shell content query --uri content://<authority>/`
 `adb shell am broadcast -a <package>.ACTION_SYNC --es path "../../../../data/data/<package>/shared_prefs/auth.xml"`

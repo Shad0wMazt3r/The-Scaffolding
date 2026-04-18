@@ -3,7 +3,7 @@
 Always validate this prerequisite block before activating any category skill:
 
 - Create/confirm the target root folder for the current mission.
-- Prepare required credentials and secrets out-of-band from shell history. 
+- Prepare required credentials and secrets out-of-band from shell history.
 - Verify outbound connectivity and proxy expectations.
 - Confirm approved toolchain presence from the mission profile.
 - If using local Docker targets, check host port collisions before launch and remap challenge ports early.

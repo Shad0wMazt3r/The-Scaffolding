@@ -9,6 +9,6 @@
   - * -> [Condition: Parcelable objects are accepted] -> Action: Test Parcel serialization mismatch or type confusion against exported components for privilege escalation or crash-to-bypass conditions.
 - * -> [Condition: External invocation control matters] -> Action: Remember that `android:exported` determines whether other apps can launch a component, so any browsable or exported handler deserves full hostile-intent testing. [developer.android](https://developer.android.com/privacy-and-security/risks/android-exported)
 
-Simple inline one-liner:  
+Simple inline one-liner:
 `adb shell am start -n <package>/<activity> --es role admin --es uid 1001 --ez skipAuth true`
 

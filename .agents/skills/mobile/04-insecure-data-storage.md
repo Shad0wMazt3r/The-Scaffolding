@@ -1,7 +1,7 @@
 ## Insecure Data Storage
 
 - * -> [Condition: App container accessible] -> Action: Primary Probe: inspect SharedPreferences, Room/SQLite DBs, plist files, caches, logs, WebView storage, cookies, and Keychain / Keystore usage.
-  - * -> [Condition: Android package is debuggable or testable on rooted device] -> Action: `adb shell "su -c 'cd /data/data/<package> && find . -maxdepth 3 -type f | sort'"` 
+  - * -> [Condition: Android package is debuggable or testable on rooted device] -> Action: `adb shell "su -c 'cd /data/data/<package> && find . -maxdepth 3 -type f | sort'"`
   - * -> [Condition: iOS app container reachable] -> Action: browse `Documents`, `Library/Preferences`, `Library/Caches`, and Keychain-linked artifacts through Filza or SSH.
   - * -> [Condition: No cleartext secrets found] -> Action: Dead End Pivot 1: inspect backup pathways, including Android extraction rules and iTunes/iCloud-style app backup artifacts where permitted; Android Auto Backup exists for Android 6.0+ targets. [developer.android](https://developer.android.com/identity/data/autobackup)
   - * -> [Condition: Filesystem looks clean] -> Action: Dead End Pivot 2: hook runtime reads/writes for `SharedPreferences`, `sqlite`, `NSUserDefaults`, `SecItemAdd`, `SecItemCopyMatching`, and log sinks to catch transient secrets.

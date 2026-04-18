@@ -8,7 +8,7 @@
   - * -> [Condition: Server trusts client-calculated values] -> Action: test discounts, reward balances, KYC states, or entitlement flags modified from rooted runtime hooks.
 - * -> [Condition: Mobile transport is different from browser transport] -> Action: keep separate replay collections for app-only headers, protobuf bodies, certificate-bound flows, and feature-flag endpoints.
 
-Script Definition Block — Mobile Endpoint Correlator  
+Script Definition Block — Mobile Endpoint Correlator
 - Input Data: Burp history, decompiled base URLs, Retrofit/Alamofire models, GraphQL/protobuf artifacts.
 - Core Processing Logic:
   - Normalize routes and group by auth context.

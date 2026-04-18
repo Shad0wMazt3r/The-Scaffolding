@@ -9,10 +9,10 @@
   - * -> [Condition: Local bypass only] -> Action: Remote-vs-local divergence: if exploitation requires a rooted or repackaged client, reframe as malware-on-device / hostile-OS / rogue-device threat; if the same weakness permits MITM on stock devices, escalate to remote account compromise.
 - * -> [Condition: Android trust behavior unclear] -> Action: Check manifest and `network_security_config` because Android’s trust handling can differ by app configuration and target API, including user-added CA trust on older-targeted apps. [developer.android](https://developer.android.com/privacy-and-security/security-config)
 
-Simple inline one-liner:  
+Simple inline one-liner:
 `frida -U -f <package> -l /mobile/<target>/frida/common/ssl_bypass.js --no-pause`
 
-Script Definition Block — Custom Pinning Locator  
+Script Definition Block — Custom Pinning Locator
 - Input Data: Decompiled classes, stack traces from failed TLS sessions, runtime-loaded class names.
 - Core Processing Logic:
   - Search for trust manager, pinner, host verifier, or trust-evaluation wrappers.
