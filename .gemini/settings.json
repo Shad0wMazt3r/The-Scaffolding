@@ -1,16 +1,40 @@
 {
   "contextFileName": "AGENTS.md",
   "contextFileMaxSize": 32768,
-   "mcpServers": {
+  "mcpServers": {
     "lattice-mind": {
-      "httpUrl": "http://localhost:8000/mcp",
+      "serverUrl": "http://localhost:8000/mcp",
       "headers": {
         "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwYmVyaSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MzI4MTE0OH0.riAZ-FIwc53djvYfp12jm6iGuub4Omud37COOC7dKQk",
         "Content-Type": "application/json"
       }
     },
     "kali-mcp-server": {
-      "url": "http://localhost:8137/sse"
+      "serverUrl": "http://localhost:8137/sse",
+      "headers": {}
+    },
+    "ghidra-mcp": {
+      "command": "python",
+      "args": [
+        "C:\\Tools\\GhidraMCP/bridge_mcp_ghidra.py",
+        "--ghidra-server",
+        "http://127.0.0.1:8080/"
+      ],
+      "env": {}
+    },
+    "github-mcp": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_..."
+      }
     }
   }
 }

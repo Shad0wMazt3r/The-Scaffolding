@@ -3,16 +3,30 @@
   "mcp": {
     "lattice-mind": {
       "type": "remote",
-      "url": "http://localhost:8000/mcp",
-      "headers": {
-        "Authorization": "Bearer anytoken"
-      },
-      "enabled": true
+      "url": "http://localhost:8000/mcp"
     },
     "kali-mcp-server": {
       "type": "remote",
-      "url": "http://localhost:8137",
-      "enabled": true
+      "url": "http://localhost:8137/sse"
+    },
+    "ghidra-mcp": {
+      "type": "remote",
+      "url": "http://127.0.0.1:8081/sse"
+    },
+    "github-mcp": {
+      "type": "local",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_..."
+      }
     }
   },
   "agent": {

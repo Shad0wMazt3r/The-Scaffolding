@@ -1,180 +1,189 @@
-  # Model Sweep Report: Skills vs No Skills (Vuln Benchmark)
+# Model Sweep Report (3 Runs): Skills vs No Skills
 
-  ## Executive Summary
-  **Across 11 completed model sweeps, skills improved objective F1 on 7 models and regressed on 4. When skills help, gains reach up to ~30%—effectively elevating model capability by roughly one reasoning tier. When regression occurs, it's often modest (<5% for GPT models), creating a favorable asymmetry: upside potential substantially outweighs downside risk for most deployments.**
+## Executive summary
+All requested reruns are complete: **11 models**, **3 runs/profile** (`control` vs `skills-only`), **20 tasks/run**.
 
-  The strongest objective configuration remains **`gpt-5.4-mini-high` control** (F1 0.8372). The largest skills gain is **`gpt-5.1-codex-mini-low`** (+0.1506 F1, **+29.2%**). Cross-model analysis reveals that skills act as a **cost-performance multiplier**—enabling smaller, cheaper models to achieve performance competitive with larger tiers, though the effect is not uniform across model families.
+Across 3-run means, skills are net positive but highly model-dependent:
+- **Objective:** macro F1 **0.6591 -> 0.6695** (**+0.0104**), with **6/11** models improving.
+- **Subjective:** macro score **3.8426 -> 3.8765** (**+0.0339**), with **7/11** models improving.
+- **Stability:** F1 stddev improves on **7/11** models (mean **0.0426 -> 0.0383**).
+- **Diminishing returns:** baseline strength strongly anti-correlates with skill uplift (**corr = -0.81**).
 
-  ### Skills Impact by Model Tier
+---
 
-  | Category | Models | Average F1 Gain |
-  |----------|--------|-----------------|
-  | **Strong gains (≥15%)** | gpt-5.1-codex-mini-low, gpt-5.4-nano-none, gpt-5.4-nano-high, gpt-5.4-nano-low | **+21.1%** |
-  | **Modest gains (1-6%)** | gpt-5.4-mini-low, gpt-5.4-mini-medium, claude-4.6-sonnet-medium | **+3.7%** |
-  | **GPT regressions** | gpt-5.4-mini-high, gpt-5.4-nano-medium | **-3.9%** |
-  | **Cross-family regressions** | gemini-3-flash, kimi-k2.5 | **-12.4%** |
+## Setup
+- Tasks: `tools/benchmarks/cursor_vuln_tasks.json` (20 tasks)
+- Profiles: `control`, `skills-only`
+- Runs per model/profile: 3
+- Timeout: 120s/task
+- Primary artifacts:
+  - `reports/benchmarks/model-sweep/<model>/experiment-runs3.json`
+  - `reports/benchmarks/model-sweep/<model>/manual-grade-runs3.json`
 
-  **Core pattern:** Skills provide the greatest lift to weaker base models (diminishing returns as capability increases) and show **GPT-specific optimization**—GPT models average +6.2% F1 gain, while non-GPT models average -6.3% regression.
+---
 
+## Objective + subjective by model (3-run means)
 
-  ## Benchmark setup
-  - Tasks: 20 (`tools/benchmarks/cursor_vuln_tasks.json`)
-  - Profiles: `control` vs `skills-only`
-  - Runs per model: 1 per profile
-  - Timeout: 120s/task
-  - Artifacts per model:
-    - `experiment.json`
-    - `manual-grade.json`
-    - `control-vs-skills.json`
-    - `experiment-runs/cursor-vuln-control-run1.json`
-    - `experiment-runs/cursor-vuln-skills-only-run1.json`
+| Model | Control F1 | Skills F1 | ΔF1 | ΔFP/task | ΔStrict | F1 stddev (C->S) | ΔSubjective |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| gpt-5.1-codex-mini-low | 0.4774 | 0.5926 | **+0.1152** | +0.1667 | +20.00 | 0.0547->0.0524 | +0.0555 |
+| gpt-5.4-nano-none | 0.4384 | 0.5011 | **+0.0627** | -0.2667 | +11.67 | 0.0440->0.0315 | -0.0178 |
+| gpt-5.4-nano-low | 0.5137 | 0.5663 | **+0.0526** | -0.1333 | +10.00 | 0.0179->0.0452 | -0.1020 |
+| gpt-5.4-nano-high | 0.5877 | 0.6197 | **+0.0320** | -0.0834 | +1.67 | 0.0545->0.0132 | +0.0488 |
+| gpt-5.4-mini-low | 0.7409 | 0.7609 | **+0.0200** | -0.0500 | -1.67 | 0.0580->0.0058 | +0.0434 |
+| gemini-3-flash | 0.7145 | 0.7329 | **+0.0184** | -0.0834 | +0.00 | 0.0369->0.0380 | +0.0930 |
+| kimi-k2.5 | 0.6959 | 0.6803 | -0.0156 | +0.0333 | -6.67 | 0.0232->0.0737 | +0.0175 |
+| claude-4.6-sonnet-medium | 0.7875 | 0.7697 | -0.0178 | +0.1334 | -10.00 | 0.0479->0.0302 | **+0.2666** |
+| gpt-5.4-mini-high | 0.8384 | 0.8035 | -0.0349 | +0.0167 | -6.67 | 0.0319->0.0169 | -0.1043 |
+| gpt-5.4-nano-medium | 0.6647 | 0.6088 | -0.0559 | +0.1000 | -5.00 | 0.0707->0.0694 | +0.0822 |
+| gpt-5.4-mini-medium | 0.7906 | 0.7286 | -0.0620 | +0.0333 | -3.33 | 0.0284->0.0445 | -0.0100 |
 
-  ## Objective metrics (control vs skills-only)
+---
 
-  | Model | Control F1 | Skills F1 | ΔF1 | % Improvement | ΔPrecision | ΔRecall | ΔFP/task |
-  |---|---:|---:|---:|---:|---:|---:|---:|
-  | claude-4.6-sonnet-medium | 0.7273 | 0.7347 | +0.0074 | **+1.0%** | -0.0460 | +0.1000 | +0.1500 |
-  | gemini-3-flash | 0.7660 | 0.6818 | -0.0842 | **-11.0%** | -0.0417 | -0.1500 | +0.0000 |
-  | gpt-5.1-codex-mini-low | 0.5161 | 0.6667 | +0.1506 | **+29.2%** | +0.0227 | +0.2000 | +0.0500 |
-  | gpt-5.4-mini-high | 0.8372 | 0.8095 | -0.0277 | **-3.3%** | -0.0099 | -0.0500 | +0.0000 |
-  | gpt-5.4-mini-low | 0.7179 | 0.7568 | +0.0389 | **+5.4%** | +0.0867 | +0.0000 | -0.1000 |
-  | gpt-5.4-mini-medium | 0.7619 | 0.7692 | +0.0073 | **+1.0%** | +0.0622 | -0.0500 | -0.1000 |
-  | gpt-5.4-nano-high | 0.5106 | 0.6122 | +0.1016 | **+19.9%** | +0.0728 | +0.1500 | -0.0500 |
-  | gpt-5.4-nano-low | 0.4889 | 0.5652 | +0.0763 | **+15.6%** | +0.0600 | +0.1000 | -0.0500 |
-  | gpt-5.4-nano-medium | 0.6364 | 0.6087 | -0.0277 | **-4.4%** | -0.0448 | +0.0000 | +0.1000 |
-  | gpt-5.4-nano-none | 0.4151 | 0.5333 | +0.1182 | **+28.5%** | +0.1467 | +0.0500 | -0.4500 |
-  | kimi-k2.5 | 0.6977 | 0.5833 | -0.1144 | **-16.4%** | -0.1522 | -0.0500 | +0.3000 |
+## Deep dive: how skills helped, and where they hurt
 
-  ### Key Pattern: Diminishing Returns and Asymmetric Risk
+### 1) Where skills helped
+The strongest improvements are concentrated on weaker baselines:
+- **Low baseline group (control F1 < 0.60):** avg **ΔF1 +0.0656**, avg **ΔFP/task -0.0792**, avg **ΔStrict +10.83**.
+- This pattern appears in `gpt-5.1-codex-mini-low` and nano tiers (`none`, `low`, `high`).
 
-  | Base F1 Range | Typical Skills Impact | Example Models |
-  |---------------|---------------------|----------------|
-  | <0.55 | **+15–30%** (strong lift) | nano-none, codex-mini-low, nano-high, nano-low |
-  | 0.55–0.75 | **+1–6%** (modest lift) | mini-low, nano-medium*, claude-sonnet |
-  | >0.75 | **-3% to -11%** (neutral/regression) | mini-high, gemini-flash*, kimi* |
+Interpretation:
+1. Skills improve output structure adherence and reduce omission errors.
+2. Skills increase candidate coverage enough to materially lift recall/strict hit rates.
+3. For weaker models, extra structure offsets under-specification and hesitation.
 
-  *Cross-family models show larger regressions, suggesting GPT-specific skill optimization.
+### 2) Where skills hindered
+Regressions are concentrated on stronger baselines:
+- **High baseline group (control F1 >= 0.75):** avg **ΔF1 -0.0382**, avg **ΔFP/task +0.0611**, avg **ΔStrict -6.67**.
+- Regressions cluster in `gpt-5.4-mini-high`, `gpt-5.4-mini-medium`, and `claude-4.6-sonnet-medium`.
 
-  **Asymmetry insight:** Among GPT models, upside reaches ~29% (codex-mini-low) while downside is capped at ~4% (nano-medium, mini-high)—a **7:1 upside/downside ratio** at the extremes. This makes skills a **safe default for GPT deployments**.
+Interpretation:
+1. Strong models already have robust internal reasoning; heavy scaffolding can become overhead.
+2. Over-constraining output can shift effort from discrimination to format compliance.
+3. Added skill text can increase verbosity and marginal claims, increasing FP pressure.
 
+### 3) Mixed-family behavior
+- **Gemini 3 Flash:** objective improves slightly (**+0.0184 F1**) with better precision/lower FP, but chain success collapses (**66.7% -> 0%**). Skills help single-finding precision but hurt chain-oriented behavior.
+- **Kimi K2.5:** objective regresses (**-0.0156 F1**, strict down, FP up), while subjective nudges up (**+0.0175**). Better narrative feel, worse exploit discrimination.
+- **Sonnet 4.6:** largest subjective gain (**+0.2666**) but objective regression (**-0.0178**) and FP increase.
 
-  ## Visual 1: ΔF1 (skills - control)
-  Scale: ~1 block = 0.01 F1
+---
 
-  ```text
-  gpt-5.1-codex-mini-low  +0.1506  ███████████████  (+29.2%)
-  gpt-5.4-nano-none       +0.1182  ████████████    (+28.5%)
-  gpt-5.4-nano-high       +0.1016  ██████████      (+19.9%)
-  gpt-5.4-nano-low        +0.0763  ████████        (+15.6%)
-  gpt-5.4-mini-low        +0.0389  ████            (+5.4%)
-  claude-4.6-sonnet-medium+0.0074  █               (+1.0%)
-  gpt-5.4-mini-medium     +0.0073  █               (+1.0%)
-  gpt-5.4-mini-high       -0.0277  ░░░             (-3.3%)
-  gpt-5.4-nano-medium     -0.0277  ░░░             (-4.4%)
-  gemini-3-flash          -0.0842  ░░░░░░░░        (-11.0%)
-  kimi-k2.5               -0.1144  ░░░░░░░░░░░     (-16.4%)
-  ```
+## If baseline is already strong, how skills should change
 
+For strong baselines, use **skills-lite**, not full scaffolding:
 
-  ## Subjective grading summary
+1. **Compress instruction surface**
+   - Keep only: expected output schema + hard evidence requirements.
+   - Remove long rubric text and repeated phrasing.
 
-  | Model | Control subjective | Skills subjective | ΔSubjective | Control exact TP rate | Skills exact TP rate |
-  |---|---:|---:|---:|---:|---:|
-  | claude-4.6-sonnet-medium | 3.5833 | 3.8966 | **+0.3133** | 0.7083 | 0.6207 |
-  | gemini-3-flash | 3.8519 | 3.8333 | -0.0186 | 0.7037 | 0.7083 |
-  | gpt-5.1-codex-mini-low | 3.7273 | 3.8125 | +0.0852 | 0.7273 | 0.8125 |
-  | gpt-5.4-mini-high | 3.8261 | 3.7273 | -0.0988 | 0.8261 | 0.7727 |
-  | gpt-5.4-mini-low | 3.7368 | 3.6471 | -0.0897 | 0.7895 | 0.8235 |
-  | gpt-5.4-mini-medium | 3.7727 | 3.6316 | -0.1411 | 0.7273 | 0.8421 |
-  | gpt-5.4-nano-high | 4.0370 | 4.0000 | -0.0370 | 0.4444 | 0.5172 |
-  | gpt-5.4-nano-low | 4.2000 | 4.1538 | -0.0462 | 0.4400 | 0.5000 |
-  | gpt-5.4-nano-medium | 3.8750 | 4.0000 | +0.1250 | 0.5833 | 0.6154 |
-  | gpt-5.4-nano-none | 4.2424 | 4.2400 | -0.0024 | 0.3333 | 0.4800 |
-  | kimi-k2.5 | 3.6522 | 3.6429 | -0.0093 | 0.6522 | 0.5000 |
+2. **Evidence-gated claims**
+   - Require at least one concrete anchor (`file+line` or endpoint+payload+observable effect) before allowing a finding.
+   - For high-baseline models, this is more impactful than additional reasoning instructions.
 
-  ### Sonnet 4.6 requested note
-  `claude-4.6-sonnet-medium` shows the **largest subjective improvement with skills**: **+0.3133** (3.5833 → 3.8966), indicating materially better narrative clarity/explanation quality even though objective F1 gain is small (+1.0%). This positions Claude + skills as the preferred configuration for **analyst-facing reports** where explanation quality matters as much as detection accuracy.
+3. **Top-K candidate cap before expansion**
+   - Force initial shortlist (`K=2-3`) before detailed writeups.
+   - Reduces over-calling and keeps attention on highest-confidence vulnerabilities.
 
+4. **Optional chain mode, not mandatory**
+   - Enable chain-specific fields only when model reports explicit multi-step preconditions.
+   - Avoid forcing chain narrative into tasks that are single-hop by nature.
 
-  ## Deep dive: why Gemini performed worse with skills
-  Only one Gemini-family model was available (`gemini-3-flash`), and it regressed with skills:
+5. **Two-pass discriminator for high-baseline models**
+   - Pass 1: candidate generation.
+   - Pass 2: adversarial self-check ("why this may be false") + exploitability confirmation.
+   - Keep pass-2 short and evidence-first.
 
-  - F1: **0.7660 → 0.6818** (Δ -0.0842, **-11.0%**)
-  - Precision: **0.6667 → 0.6250**
-  - Recall: **0.9000 → 0.7500** (largest drop)
-  - FP/task: unchanged (**0.45 → 0.45**)
-  - Strict accuracy: **60 → 55**
-  - Chain success: **100 → 0**
-  - Route strict: **100** (routing is not the issue)
+6. **Model-conditional routing**
+   - `mini-high`: default control or skills-lite.
+   - `sonnet`: skills for reporting mode, control for strict triage mode.
+   - `gemini`: control for chain-heavy tasks, skills-lite for precision triage.
 
-  Interpretation: this is **not** a routing failure and not mainly FP inflation; it is mostly a **recall/coverage collapse under skills constraints**. Notably, Gemini-3-Flash control already achieves **100% native chaining success** without skills—the model already thinks in structured vulnerability chains. The skills prompt adds overhead that **breaks** this native capability rather than enhancing it.
+---
 
-  **Key takeaway:** Skills appear **GPT-tuned**. Models with native structural reasoning (Gemini) may perform better with lightweight or no external scaffolding.
+## Visuals
 
+### Visual A: ΔF1 (skills - control)
+```text
++0.12 | gpt-5.1-codex-mini-low   ████████████
++0.06 | gpt-5.4-nano-none        ██████
++0.05 | gpt-5.4-nano-low         █████
++0.03 | gpt-5.4-nano-high        ███
++0.02 | gpt-5.4-mini-low         ██
++0.02 | gemini-3-flash           ██
+-0.02 | kimi-k2.5                ░░
+-0.02 | claude-4.6-sonnet-medium ░░
+-0.03 | gpt-5.4-mini-high        ░░░
+-0.06 | gpt-5.4-nano-medium      ░░░░░░
+-0.06 | gpt-5.4-mini-medium      ░░░░░░
+```
 
-  ## Deep dive: Kimi objective vs subjective
-  Kimi regressed the most objectively under skills:
+### Visual B: Baseline strength vs uplift
+```text
+Correlation(control F1, ΔF1) = -0.81
+Low baseline  -> larger positive skill lift
+High baseline -> flat/negative skill lift
+```
 
-  - F1: **0.6977 → 0.5833** (Δ -0.1144, **-16.4%**)
-  - Precision: **0.6522 → 0.5000**
-  - Recall: **0.7500 → 0.7000**
-  - FP/task: **0.40 → 0.70** (substantial noise increase)
-  - Strict accuracy: **65 → 35**
+### Visual C: Objective vs subjective quadrants
+```text
+Obj+, Subj+:  gemini-3-flash, gpt-5.1-codex-mini-low, gpt-5.4-mini-low, gpt-5.4-nano-high
+Obj+, Subj-:  gpt-5.4-nano-none, gpt-5.4-nano-low
+Obj-, Subj+:  claude-4.6-sonnet-medium, kimi-k2.5, gpt-5.4-nano-medium
+Obj-, Subj-:  gpt-5.4-mini-high, gpt-5.4-mini-medium
+```
 
-  Subjective view is flatter:
+---
 
-  - Avg subjective: **3.6522 → 3.6429** (near-neutral)
-  - Subjective score sum: **84 → 102** (more total evaluated content)
-  - Chain success: **0 → 100** (better chain articulation/completion behavior)
+## Online pricing snapshot (input/output, USD per 1M tokens)
 
-  So Kimi's "gain" from subjective grading is mostly **format/coverage of explanations and chain narrative**, but this does **not** convert to objective exploit discrimination (TP/FP), where it worsens. Skills make Kimi **more verbose and better at storytelling, but less accurate at vulnerability identification**.
+> Note: Cursor model IDs (`gpt-5.4-mini-high`, etc.) are routing/tier aliases. Pricing is mapped to closest published provider SKUs. Thinking tiers mostly change token volume/latency, not unit token price.
 
+| Benchmark model(s) | Pricing model used | Input $/MTok | Output $/MTok | Source |
+|---|---|---:|---:|---|
+| `gpt-5.4-nano-*` | `openai/gpt-5-nano` | 0.05 | 0.40 | OpenRouter models API |
+| `gpt-5.4-mini-*` | `openai/gpt-5-mini` | 0.25 | 2.00 | OpenRouter models API |
+| `gpt-5.1-codex-mini-low` | `openai/gpt-5.1-codex-mini` | 0.25 | 2.00 | OpenRouter models API |
+| `gemini-3-flash` | Gemini Flash Standard tier | 0.25 | 1.50 | Google Gemini API pricing |
+| `claude-4.6-sonnet-medium` | Sonnet 4.6 | 3.00 | 15.00 | Anthropic pricing |
+| `kimi-k2.5` | `moonshotai/kimi-k2.5` | 0.3827 | 1.72 | OpenRouter models API |
 
-  ## Cost-benefit analysis (skills profile)
+### Output-cost pressure (important for verbose report stages)
+```text
+Lower output $/MTok is better for long-form generation:
+gpt-5-nano 0.40 < gemini-flash 1.50 < kimi-k2.5 1.72 < gpt-5-mini/codex-mini 2.00 << sonnet 15.00
+```
 
-  | Model | Skills F1 | Skills avg tokens | Skills avg latency (s) | F1 per 1k tokens |
-  |---|---:|---:|---:|---:|
-  | gpt-5.4-mini-high | 0.8095 | 625.2 | 18.649 | 1.2948 |
-  | gpt-5.4-mini-medium | 0.7692 | 607.3 | 17.273 | 1.2666 |
-  | gpt-5.4-mini-low | 0.7568 | 600.8 | 14.051 | 1.2597 |
-  | claude-4.6-sonnet-medium | 0.7347 | 704.8 | 19.496 | 1.0424 |
-  | gpt-5.1-codex-mini-low | 0.6667 | 596.7 | 11.620 | 1.1173 |
-  | gemini-3-flash | 0.6818 | 636.4 | 27.728 | 1.0713 |
-  | kimi-k2.5 | 0.5833 | 689.0 | 28.449 | 0.8466 |
+---
 
-  Takeaway: best quality-per-token among high performers is currently the GPT-5.4 mini family. Sonnet adds strong subjective quality but at higher token/latency cost.
+## Cost-constrained stage routing for CTF / bug bounty / pentest
 
-  **Cost-performance insight:** Skills enable smaller models to approach larger-model performance. For example, `gpt-5.4-nano-low` + skills (F1 0.5652) approaches `gpt-5.4-nano-medium` control (F1 0.6364) at lower inference cost. This positions skills as a **cost-performance multiplier** for budget-constrained deployments.
+| Stage | Constraint profile | Best model/profile | Why |
+|---|---|---|---|
+| Recon + broad surface sweep | Lowest cost, high volume | `gpt-5.4-nano-low` + skills | Strong low-cost uplift; low unit pricing; good FP reduction vs control in nano tiers. |
+| Candidate vuln triage | Balanced cost/quality | `gpt-5.4-mini-low` + skills | Positive F1 delta with lower FP/task; stable across runs. |
+| High-confidence exploit triage | Max objective accuracy | `gpt-5.4-mini-high` control | Best raw objective accuracy in this benchmark; avoids high-baseline skills drag. |
+| Chain-heavy exploitation paths | Preserve chain behavior | `gemini-3-flash` control (or skills-lite) | Skills improved precision but collapsed chain success; control safer for chaining tasks. |
+| Evidence-heavy verification pass | Keep false claims down | `gpt-5.4-mini-high` control + verifier pass | Strong discriminator with less scaffolding overhead. |
+| Final report writing / analyst handoff | Highest narrative quality | `claude-4.6-sonnet-medium` + skills | Largest subjective quality gain; best when clarity is prioritized over raw F1. |
+| Budget-constrained but strong uplift needed | Max gain per dollar | `gpt-5.1-codex-mini-low` + skills | Largest F1 lift, but pair with strict verifier to counter FP increase. |
 
+---
 
-  ## Model capability/use-case recommendations
+## What to change next in scaffolding
+1. Ship **skills-lite** and auto-route high-baseline models to it.
+2. Add **evidence-gating + top-K cap** before full writeups.
+3. Split task modes:
+   - **discovery mode** (coverage, cheap models, skills on),
+   - **verification mode** (strict, high-baseline models, skills-lite/control),
+   - **report mode** (subjective quality, Sonnet + skills).
+4. Add chain-mode toggles by task type (do not force chain fields globally).
 
-  | Use Case | Recommended Configuration | Rationale |
-  |----------|-------------------------|-----------|
-  | **High-stakes vuln triage (best objective)** | `gpt-5.4-mini-high` (control) | F1 0.8372, no skills friction |
-  | **Balanced production default** | `gpt-5.4-mini-medium` + skills | F1 0.7692, strong precision, reduced FP |
-  | **Low-cost routine scanning** | `gpt-5.1-codex-mini-low` + skills | +29.2% lift from skills, best value |
-  | **Report-writing / analyst handoff** | `claude-4.6-sonnet-medium` + skills | +0.3133 subjective gain, best explanations |
-  | **Gemini 3 Flash** | Control only | Skills cause -11% F1 regression |
-  | **Kimi K2.5** | Control only | Skills increase overcalling (+0.30 FP/task) |
+---
 
-  ### The "+1 Reasoning Tier" Rule of Thumb
+## Pricing source links used
+- Google Gemini pricing: `https://ai.google.dev/gemini-api/docs/pricing`
+- Anthropic pricing: `https://www.anthropic.com/pricing`
+- Moonshot pricing landing page: `https://platform.moonshot.ai/pricing`
+- OpenRouter models API (model-level token pricing): `https://openrouter.ai/api/v1/models`
 
-  For GPT-family models, skills effectively elevate capability by approximately one tier:
-  - nano-none + skills ≈ nano-low control
-  - nano-low + skills ≈ nano-medium control
-  - nano-high + skills ≈ nano-medium/mini-low control
-  - codex-mini-low + skills ≈ approaches mini-low control
-
-  This pattern holds until models approach ceiling performance (mini-high, F1 >0.83), where skills become friction rather than leverage.
-
-
-  ## Scaffolding improvements (model-adaptive)
-
-  1. **Skills-lite profile** for Gemini/Kimi: shorter schema, stricter top-1/top-2 cap, fewer narrative fields.
-  2. **Model-conditional skill routing**: skip skills entirely for Gemini (native chaining), mini-high (saturation), and Kimi (over-calling sensitivity).
-  3. **Two-pass mode**: pass 1 discover candidates, pass 2 verify exploitability and drop weak claims.
-  4. **Model-conditional FP suppression**: stronger evidence requirements for models with rising FP/task (nano-medium, Kimi).
-  5. **Adaptive output budget**: hard cap sentence lengths/field lengths to reduce verbosity-induced drift.
-  6. **Chain scoring split in reports**: keep chain quality separate from TP/FP so "good narrative, bad detection" is explicit.
-  7. **Cross-family skill tuning**: current skills are GPT-optimized; develop Claude/Gemini/Kimi-specific variants that leverage each model's native strengths rather than imposing uniform structure.

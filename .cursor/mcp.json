@@ -1,14 +1,31 @@
 {
   "mcpServers": {
     "lattice-mind": {
-      "url": "http://localhost:8000/mcp",
-      "headers": {
-        "Authorization": "Bearer 1234"
-      }
+      "type": "sse",
+      "url": "http://localhost:8000/mcp"
     },
     "kali-mcp-server": {
-      "transport": "sse",
+      "type": "sse",
       "url": "http://localhost:8137/sse"
+    },
+    "ghidra-mcp": {
+      "type": "sse",
+      "url": "http://127.0.0.1:8081/sse"
+    },
+    "github-mcp": {
+      "type": "command",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_..."
+      }
     }
   }
 }

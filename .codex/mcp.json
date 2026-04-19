@@ -1,0 +1,39 @@
+{
+  "mcp": {
+    "servers": {
+      "lattice-mind": {
+        "type": "http",
+        "url": "http://localhost:8000/mcp"
+      },
+      "kali-mcp-server": {
+        "type": "http",
+        "url": "http://localhost:8137/sse"
+      },
+      "ghidra-mcp": {
+        "type": "stdio",
+        "command": "python",
+        "args": [
+          "C:\\Tools\\GhidraMCP/bridge_mcp_ghidra.py",
+          "--ghidra-server",
+          "http://127.0.0.1:8080/"
+        ],
+        "env": {}
+      },
+      "github-mcp": {
+        "type": "stdio",
+        "command": "docker",
+        "args": [
+          "run",
+          "-i",
+          "--rm",
+          "-e",
+          "GITHUB_PERSONAL_ACCESS_TOKEN",
+          "ghcr.io/github/github-mcp-server"
+        ],
+        "env": {
+          "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_..."
+        }
+      }
+    }
+  }
+}
