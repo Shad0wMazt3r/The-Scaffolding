@@ -148,7 +148,7 @@ def build_prompt(task: dict, profile: str) -> str:
         "mcp-enabled": "MCP-enabled mode: skills plus MCP-assisted pivots are allowed.",
     }[profile]
     max_findings = int(task.get("max_findings", 2))
-    scenario_inline = re.sub(r"\s+", " ", str(task["scenario"])).strip()
+    scenario_inline = re.sub(r"\s+", " ", str(task["scenario"])).strip().replace('"', "'")
     route_hint = (
         "Include skill routing anchor with exact values. "
         "Use skill_anchor.phase in [recon, web, network, mobile, pwn, crypto, reverse-engineering, forensics] and "

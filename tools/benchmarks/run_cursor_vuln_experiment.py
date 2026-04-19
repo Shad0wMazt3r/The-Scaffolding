@@ -223,6 +223,11 @@ def main() -> int:
         action="store_true",
         help="Store full model outputs in per-run reports for manual grading",
     )
+    parser.add_argument(
+        "--reuse-existing",
+        action="store_true",
+        help="Reuse existing per-run reports from --out-dir instead of executing new runs",
+    )
     args = parser.parse_args()
 
     if args.max_tasks > 20:
@@ -241,18 +246,22 @@ def main() -> int:
 
     for profile in args.profiles:
         for run_index in range(1, args.runs + 1):
-            out_path = run_once(
-                repo_root=repo_root,
-                profile=profile,
-                run_index=run_index,
-                tasks=tasks,
-                max_tasks=args.max_tasks,
-                timeout_sec=args.timeout_sec,
-                model=args.model,
-                agent_cmd=args.agent_cmd,
-                out_dir=out_dir,
-                store_raw_output=args.store_raw_output,
-            )
+            out_path = out_dir / f"cursor-vuln-{profile}-run{run_index}.json"
+            if not args.reuse_existing:
+                out_path = run_once(
+                    repo_root=repo_root,
+                    profile=profile,
+                    run_index=run_index,
+                    tasks=tasks,
+                    max_tasks=args.max_tasks,
+                    timeout_sec=args.timeout_sec,
+                    model=args.model,
+                    agent_cmd=args.agent_cmd,
+                    out_dir=out_dir,
+                    store_raw_output=args.store_raw_output,
+                )
+            elif not out_path.exists():
+                raise SystemExit(f"Missing run report for reuse mode: {out_path}")
             report = read_json(out_path)
             reports_by_profile[profile].append(report)
             run_records.append(
