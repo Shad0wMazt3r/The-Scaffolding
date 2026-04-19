@@ -9,7 +9,39 @@ MODELS = {
     "antigravity": []
 }
 
+import subprocess
+import shutil
+
+import re
+
 def get_models_for_agent(agent: str):
+    cmd_name = "cursor-agent" if agent == "cursor agent" else agent
+    cmd_path = shutil.which(cmd_name + ".cmd") or shutil.which(cmd_name + ".bat") or shutil.which(cmd_name)
+    
+    if cmd_path:
+        try:
+            help_res = subprocess.run([cmd_path, "--help"], capture_output=True, text=True, timeout=5)
+            help_text = help_res.stdout + help_res.stderr
+            
+            if re.search(r'--models\b|\bmodels\b', help_text):
+                # Try `models` subcommand first
+                res = subprocess.run([cmd_path, "models"], capture_output=True, text=True, timeout=10)
+                if res.returncode == 0 and res.stdout.strip():
+                    lines = [line.strip() for line in res.stdout.strip().split("\n") if line.strip()]
+                    parsed = [(line, line) for line in lines if re.match(r'^[\w\.\-/]+$', line)]
+                    if parsed:
+                        return parsed
+                        
+                # Try `--models` argument as fallback
+                res2 = subprocess.run([cmd_path, "--models"], capture_output=True, text=True, timeout=10)
+                if res2.returncode == 0 and res2.stdout.strip():
+                    lines = [line.strip() for line in res2.stdout.strip().split("\n") if line.strip()]
+                    parsed = [(line, line) for line in lines if re.match(r'^[\w\.\-/]+$', line)]
+                    if parsed:
+                        return parsed
+        except Exception:
+            pass
+
     return MODELS.get(agent, [])
 
 def build_model_arg(agent: str, model_id: str):

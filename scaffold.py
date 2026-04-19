@@ -7,11 +7,12 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from scaffold.tui import run_tui
 from scaffold.registry import add_server, remove_server, sync, list_servers
-from scaffold.launcher import launch_agent
+from scaffold.launcher import launch_agent, check_agent_available, build_launch_command
 from scaffold.skeleton import setup_project
 from scaffold.health import check_all
 from scaffold.sessions import get_resume_command, load_sessions
 from scaffold.installer import run_installs
+from scaffold.models import build_model_arg
 
 def main():
     parser = argparse.ArgumentParser(description="The Scaffolding - MCP Agent Orchestration")
@@ -23,6 +24,8 @@ def main():
     init_parser.add_argument("--project", help="Project directory")
     init_parser.add_argument("--model", help="Model to use")
     init_parser.add_argument("--dry-run", action="store_true")
+    init_parser.add_argument("--skip-installs", action="store_true", help="Skip MCP source installation")
+    init_parser.add_argument("--preflight-only", action="store_true", help="Only run agent availability checks")
 
     # mcp
     mcp_parser = subparsers.add_parser("mcp", help="Manage MCP registry")
@@ -41,6 +44,7 @@ def main():
 
     rm_parser = mcp_sub.add_parser("remove", help="Remove an MCP")
     rm_parser.add_argument("name")
+    rm_parser.add_argument("--dry-run", action="store_true")
 
     sync_parser = mcp_sub.add_parser("sync", help="Sync MCPs to agent configs")
     sync_parser.add_argument("--agent", help="Sync to specific agent only")
@@ -59,6 +63,18 @@ def main():
         if not args.agent or not args.project:
             run_tui("init")
             return
+
+        ok, detail = check_agent_available(args.agent)
+        if not ok:
+            print(f"Pre-flight failed: {detail}")
+            return
+        if args.preflight_only:
+            model_args = build_model_arg(args.agent, args.model)
+            cmd = build_launch_command(args.agent, model_args)
+            print(f"Pre-flight passed: {detail}")
+            if cmd:
+                print(f"Launch command preview: {' '.join(cmd)}")
+            return
         
         if args.dry_run:
             print(f"[DRY-RUN] Would init {args.agent} in {args.project} with model {args.model}")
@@ -66,8 +82,9 @@ def main():
             
         print(f"Initializing {args.agent} in {args.project}...")
         setup_project(args.project)
-        servers = list_servers()
-        run_installs(servers)
+        if not args.skip_installs:
+            servers = list_servers()
+            run_installs(servers)
         launch_agent(args.agent, args.project, args.model)
 
     elif args.command == "mcp":
@@ -98,19 +115,31 @@ def main():
                     "install": args.install_cmd,
                     "localPath": f"./tools/{args.name}"
                 }
-            add_server(args.name, entry)
-            print(f"Added {args.name} and synced to agents.")
+            try:
+                add_server(args.name, entry)
+                print(f"Added {args.name} and synced to agents.")
+            except Exception as exc:
+                print(f"Failed to add MCP '{args.name}': {exc}")
             
         elif args.mcp_command == "remove":
-            remove_server(args.name)
-            print(f"Removed {args.name} and synced.")
+            if args.dry_run:
+                print(f"[DRY-RUN] Would remove {args.name}")
+                return
+            try:
+                remove_server(args.name)
+                print(f"Removed {args.name} and synced.")
+            except Exception as exc:
+                print(f"Failed to remove MCP '{args.name}': {exc}")
             
         elif args.mcp_command == "sync":
             if args.dry_run:
                 print(f"[DRY-RUN] Would sync to {args.agent or 'all agents'}")
                 return
-            sync(args.agent)
-            print("Sync complete.")
+            try:
+                sync(args.agent)
+                print("Sync complete.")
+            except Exception as exc:
+                print(f"Sync failed: {exc}")
 
 if __name__ == "__main__":
     main()

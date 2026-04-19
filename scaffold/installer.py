@@ -1,4 +1,5 @@
 import subprocess
+import shlex
 from pathlib import Path
 
 def install_source(name: str, source_cfg: dict):
@@ -18,11 +19,15 @@ def install_source(name: str, source_cfg: dict):
     p.parent.mkdir(parents=True, exist_ok=True)
     
     try:
-        subprocess.run(["git", "clone", git_url, str(p)], check=True)
+        subprocess.run(["git", "clone", git_url, str(p)], check=True, timeout=300)
         if install_cmd:
-            subprocess.run(install_cmd, shell=True, cwd=str(p), check=True)
+            cmd_parts = shlex.split(install_cmd)
+            subprocess.run(cmd_parts, cwd=str(p), check=True, timeout=600)
+        print(f"Installed source for {name}: {p}")
     except subprocess.CalledProcessError as e:
         print(f"Install failed for {name}: {e}")
+    except subprocess.TimeoutExpired:
+        print(f"Install timed out for {name}")
 
 def run_installs(servers: dict):
     from scaffold.env import resolve_dict

@@ -1,6 +1,7 @@
 import json
 import logging
 from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -17,14 +18,25 @@ def load_json(path):
     if not path.exists():
         return {}
     try:
-        with path.open('r') as f:
+        with path.open('r', encoding="utf-8", errors="replace") as f:
             return json.load(f)
-    except json.JSONDecodeError:
-        return {}
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"Invalid JSON in config file: {path} ({exc})") from exc
 
 def save_json(path, data):
-    with path.open('w') as f:
-        json.dump(data, f, indent=2)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open('w', encoding="utf-8") as f:
+        json.dump(data, f, indent=2, sort_keys=True)
+
+
+def _contains_unresolved_env(value: Any) -> bool:
+    if isinstance(value, str):
+        return "${" in value and "}" in value
+    if isinstance(value, dict):
+        return any(_contains_unresolved_env(v) for v in value.values())
+    if isinstance(value, list):
+        return any(_contains_unresolved_env(v) for v in value)
+    return False
 
 def to_gemini(name: str, entry: dict) -> dict:
     transports = entry.get("transports", {})
@@ -99,7 +111,10 @@ CONFIG_PATHS = {
 def sync_to_all_agents(registry_servers: dict, specific_agent: str = None):
     from scaffold.env import resolve_dict, load_env
     load_env()
-    resolved_servers = resolve_dict(registry_servers)
+    missing_env: set[str] = set()
+    resolved_servers = resolve_dict(registry_servers, missing=missing_env)
+    if missing_env:
+        logger.warning("Missing env vars while syncing MCP config: %s", ", ".join(sorted(missing_env)))
     
     agents = [specific_agent] if specific_agent else TRANSLATORS.keys()
     base_dir = Path.cwd()
@@ -112,6 +127,9 @@ def sync_to_all_agents(registry_servers: dict, specific_agent: str = None):
         
         mcp_block = {}
         for name, entry in resolved_servers.items():
+            if _contains_unresolved_env(entry):
+                logger.warning("Skipping MCP '%s' due to unresolved env placeholders", name)
+                continue
             translated = translator(name, entry)
             if translated:
                 mcp_block[name] = translated
@@ -121,13 +139,12 @@ def sync_to_all_agents(registry_servers: dict, specific_agent: str = None):
             
         config = load_json(path)
         if agent == "opencode":
-            if "mcp" not in config: config["mcp"] = {}
-            config["mcp"].update(mcp_block)
+            config["mcp"] = dict(mcp_block)
         elif agent == "codex":
-            if "mcp" not in config: config["mcp"] = {"servers": {}}
-            config["mcp"]["servers"].update(mcp_block)
+            if "mcp" not in config or not isinstance(config.get("mcp"), dict):
+                config["mcp"] = {}
+            config["mcp"]["servers"] = dict(mcp_block)
         else:
-            if "mcpServers" not in config: config["mcpServers"] = {}
-            config["mcpServers"].update(mcp_block)
+            config["mcpServers"] = dict(mcp_block)
         
         save_json(path, config)

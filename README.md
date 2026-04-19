@@ -196,6 +196,27 @@ python tools/benchmarks/run_cursor_vuln_benchmark.py ^
   --output reports/benchmarks/cursor-vuln-skills-only.json
 ```
 
+Adaptive and light-scaffolding profiles are also supported:
+
+```bash
+python tools/benchmarks/run_cursor_vuln_benchmark.py ^
+  --profile adaptive ^
+  --model gpt-5.4-mini-high ^
+  --tasks tools/benchmarks/cursor_vuln_tasks.json ^
+  --max-tasks 20 ^
+  --timeout-sec 120 ^
+  --output reports/benchmarks/cursor-vuln-adaptive.json
+
+python tools/benchmarks/run_cursor_vuln_benchmark.py ^
+  --profile skills-lite ^
+  --model gemini-3-flash ^
+  --tasks tools/benchmarks/cursor_vuln_tasks.json ^
+  --max-tasks 20 ^
+  --timeout-sec 120 ^
+  --verify-findings ^
+  --output reports/benchmarks/cursor-vuln-skills-lite.json
+```
+
 Later (after enabling MCPs):
 
 ```bash
@@ -238,6 +259,15 @@ Generate objective + subjective grading from all run responses:
 python tools/benchmarks/grade_cursor_vuln_responses.py ^
   --experiment reports/benchmarks/cursor-vuln-experiment-runs2.json ^
   --output reports/benchmarks/cursor-vuln-manual-grade.json
+```
+
+Generate a consolidated runs3 leaderboard (JSON + Markdown):
+
+```bash
+python tools/benchmarks/generate_vuln_leaderboard.py ^
+  --input-root reports/benchmarks/model-sweep ^
+  --output-json reports/benchmarks/model-sweep-leaderboard.json ^
+  --output-md reports/benchmarks/model-sweep-leaderboard.md
 ```
 
 By default, vuln comparison focuses on efficacy metrics; add `--include-cost` only when you explicitly want latency/token deltas.

@@ -10,6 +10,9 @@ import re
 import subprocess
 import time
 from pathlib import Path
+from collections import Counter
+
+from adaptive_profile import choose_profile
 
 FENCED_BLOCK_RE = re.compile(r"```(?:json)?\s*([\s\S]*?)\s*```", re.IGNORECASE)
 DEFAULT_MODEL = "composer-2"
@@ -160,6 +163,7 @@ def build_prompt(task: dict, profile: str) -> str:
     mode_hint = {
         "control": "Control mode: analyze only the provided snippet; do not rely on skill files or MCP tooling.",
         "skills-only": "Skills-only mode: use internal security skill reasoning, but do not rely on MCP tooling.",
+        "skills-lite": "Skills-lite mode: use concise skill reasoning, prioritize high-confidence findings, and avoid speculative claims.",
         "mcp-enabled": "MCP-enabled mode: skills plus MCP-assisted pivots are allowed.",
     }[profile]
     max_findings = int(task.get("max_findings", 2))
@@ -197,6 +201,49 @@ def build_prompt(task: dict, profile: str) -> str:
         "Keep each text field to one concise sentence and keep it short (roughly <= 180 chars). "
         f"Scenario: {scenario_inline}"
     )
+
+
+def build_verification_prompt(task: dict, parsed: dict) -> str:
+    findings = parsed.get("findings", []) if isinstance(parsed, dict) else []
+    compact = json.dumps(findings, separators=(",", ":"))
+    scenario_inline = re.sub(r"\s+", " ", str(task.get("scenario", ""))).strip().replace('"', "'")
+    return (
+        "You are validating vulnerability findings for exploitability. "
+        "Given the scenario and findings list, keep only high-confidence, non-speculative findings. "
+        "Return ONLY minified JSON with shape {\"keep_indices\":[0,1,...],\"reason\":\"\"}. "
+        "Indices must refer to the original findings array positions. "
+        "If none are valid, return {\"keep_indices\":[],\"reason\":\"insufficient evidence\"}. "
+        f"Scenario: {scenario_inline} Findings: {compact}"
+    )
+
+
+def classify_failure_mode(row: dict) -> str:
+    error = row.get("error", "")
+    if error == "timeout":
+        return "timeout"
+    if error == "truncated_output":
+        return "truncated_output"
+    if error == "malformed_json":
+        return "malformed_json"
+    if error:
+        return "runtime_error"
+    if row.get("strict_pass"):
+        return "pass"
+    if row.get("route_required") and not row.get("route_strict_ok"):
+        return "route_miss"
+    if row.get("chain_required") and row.get("chain_success") is False:
+        return "chain_failure"
+    if row.get("expected_count", 0) == 0 and row.get("fp_count", 0) > 0:
+        return "control_overcall"
+    if row.get("fn_count", 0) > 0 and row.get("fp_count", 0) > 0:
+        return "mixed_miss_overcall"
+    if row.get("fn_count", 0) > 0:
+        return "miss"
+    if row.get("weak_matches", 0) > 0:
+        return "weak_evidence"
+    if row.get("fp_count", 0) > 0:
+        return "overcall"
+    return "other"
 
 
 def run_agent(agent_cmd: str, prompt: str, timeout_sec: int, model: str, approve_mcps: bool) -> tuple[str, str, int, float, str]:
@@ -406,7 +453,7 @@ def main() -> int:
     parser.add_argument("--model", default=DEFAULT_MODEL, help=f"Model override (default: {DEFAULT_MODEL})")
     parser.add_argument(
         "--profile",
-        choices=["control", "skills-only", "mcp-enabled"],
+        choices=["control", "skills-only", "skills-lite", "mcp-enabled", "adaptive"],
         default="skills-only",
         help="Benchmark profile",
     )
@@ -420,6 +467,17 @@ def main() -> int:
         action="store_true",
         default=True,
         help="Store full model output/error text for manual grading (always enabled by default)",
+    )
+    parser.add_argument(
+        "--verify-findings",
+        action="store_true",
+        help="Run a second-pass verifier that prunes speculative findings before scoring",
+    )
+    parser.add_argument(
+        "--verify-timeout-sec",
+        type=int,
+        default=45,
+        help="Timeout for verification pass when --verify-findings is enabled",
     )
     args = parser.parse_args()
 
@@ -437,13 +495,16 @@ def main() -> int:
         output_path = root / output_path
 
     tasks = read_json(task_path)[: args.max_tasks]
-    approve_mcps = args.profile == "mcp-enabled"
+    resolved_profile, profile_reason = choose_profile(args.profile, args.model, tasks)
+    approve_mcps = resolved_profile == "mcp-enabled"
 
     results: list[dict] = []
     malformed_json_count = 0
     truncated_output_count = 0
+    verification_total = 0
+    verification_pruned = 0
     for task in tasks:
-        base_prompt = build_prompt(task, profile=args.profile)
+        base_prompt = build_prompt(task, profile=resolved_profile)
         prompt = base_prompt
         parsed = None
         stdout = ""
@@ -474,7 +535,36 @@ def main() -> int:
             malformed_json_count += 1
             error = "malformed_json"
 
-        scored = score_task(task, parsed, error, returncode, profile=args.profile)
+        verification_applied = False
+        verification_kept = None
+        verification_reason = ""
+        verification_preview = ""
+        if args.verify_findings and parsed is not None and error == "" and isinstance(parsed.get("findings", []), list):
+            findings_count_before = len(parsed.get("findings", []))
+            if findings_count_before > 0:
+                verification_total += 1
+                verify_prompt = build_verification_prompt(task, parsed)
+                v_stdout, _v_stderr, v_returncode, _v_elapsed, v_error = run_agent(
+                    agent_cmd=args.agent_cmd,
+                    prompt=verify_prompt,
+                    timeout_sec=args.verify_timeout_sec,
+                    model=args.model,
+                    approve_mcps=False,
+                )
+                verification_preview = (v_stdout or "")[:300]
+                if v_error == "" and v_returncode == 0:
+                    v_parsed = extract_json(v_stdout)
+                    keep_indices = v_parsed.get("keep_indices", []) if isinstance(v_parsed, dict) else []
+                    if isinstance(keep_indices, list) and all(isinstance(i, int) for i in keep_indices):
+                        kept = [f for idx, f in enumerate(parsed.get("findings", [])) if idx in set(keep_indices)]
+                        parsed["findings"] = kept
+                        verification_applied = True
+                        verification_kept = len(kept)
+                        verification_reason = str(v_parsed.get("reason", "")) if isinstance(v_parsed, dict) else ""
+                        if len(kept) < findings_count_before:
+                            verification_pruned += findings_count_before - len(kept)
+
+        scored = score_task(task, parsed, error, returncode, profile=resolved_profile)
         out_chars = len(stdout or "")
         prompt_chars = len(prompt)
         est_tokens = math.ceil((prompt_chars + out_chars) / 4)
@@ -518,10 +608,15 @@ def main() -> int:
                 "strict_pass": scored["strict_pass"],
                 "stdout_preview": stdout[:300] if stdout else "",
                 "stderr_preview": stderr[:300] if stderr else "",
+                "verification_applied": verification_applied,
+                "verification_kept_findings": verification_kept,
+                "verification_reason": verification_reason,
+                "verification_preview": verification_preview,
                 "raw_output": stdout,
                 "raw_error": stderr,
             }
         )
+        results[-1]["failure_mode"] = classify_failure_mode(results[-1])
 
     attempted = len(results)
     completed = len([r for r in results if r["error"] == ""])
@@ -549,6 +644,7 @@ def main() -> int:
     avg_prompt_chars = round(sum(r["prompt_chars"] for r in results) / attempted, 1) if attempted else 0.0
     avg_output_chars = round(sum(r["output_chars"] for r in results) / attempted, 1) if attempted else 0.0
     avg_est_tokens = round(sum(r["estimated_tokens"] for r in results) / attempted, 1) if attempted else 0.0
+    failure_mode_breakdown = dict(sorted(Counter(r.get("failure_mode", "other") for r in results).items()))
 
     precision = tp_total / (tp_total + fp_total) if (tp_total + fp_total) else 0.0
     recall = tp_total / (tp_total + fn_total) if (tp_total + fn_total) else 0.0
@@ -557,12 +653,16 @@ def main() -> int:
 
     report = {
         "config": {
-            "profile": args.profile,
+            "profile": resolved_profile,
+            "profile_requested": args.profile,
+            "profile_resolution_reason": profile_reason,
             "tasks_file": str(task_path),
             "max_tasks": args.max_tasks,
             "timeout_sec": args.timeout_sec,
             "model": args.model,
             "agent_cmd": args.agent_cmd,
+            "verify_findings": bool(args.verify_findings),
+            "verify_timeout_sec": args.verify_timeout_sec,
             "auto_mode_flags": {
                 "print": True,
                 "trust": True,
@@ -601,6 +701,9 @@ def main() -> int:
             "strict_task_accuracy": pct(strict_ok, attempted),
             "malformed_json_task_rate": pct(malformed_json_count, attempted),
             "truncated_output_task_rate": pct(truncated_output_count, attempted),
+            "failure_mode_breakdown": failure_mode_breakdown,
+            "verification_tasks": verification_total,
+            "verification_pruned_findings_total": verification_pruned,
             "avg_latency_sec": avg_latency,
             "time_per_valid_tp_sec": time_per_tp,
             "avg_prompt_chars": avg_prompt_chars,

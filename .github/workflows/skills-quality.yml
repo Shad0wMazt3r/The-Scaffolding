@@ -29,3 +29,7 @@ jobs:
 
       - name: Run smoke eval gate
         run: python tools/skills/smoke_eval.py --output reports/skill-smoke-eval.json
+
+      - name: Syntax check scaffold and benchmark scripts
+        run: |
+          python -m py_compile scaffold.py scaffold/*.py tools/benchmarks/*.py

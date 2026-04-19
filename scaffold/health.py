@@ -1,12 +1,15 @@
 import socket
 import urllib.request
+import urllib.error
+from urllib.parse import urlparse
 import subprocess
+import time
 from concurrent.futures import ThreadPoolExecutor
 
 class HealthResult:
     def __init__(self, name, status, message, warn_only, latency_ms=0):
         self.name = name
-        self.status = status # 'up', 'down', 'conflict'
+        self.status = status # 'up', 'down', 'conflict', 'error'
         self.message = message
         self.warn_only = warn_only
         self.latency_ms = latency_ms
@@ -16,17 +19,35 @@ def check_port(host, port):
         s.settimeout(1)
         return s.connect_ex((host, port)) == 0
 
+def _url_port(url: str) -> int | None:
+    parsed = urlparse(url)
+    return parsed.port
+
+
+def _url_host(url: str) -> str:
+    parsed = urlparse(url)
+    return parsed.hostname or "127.0.0.1"
+
+
 def check_http(url, port):
-    if port and check_port("127.0.0.1", int(port)):
-        try:
-            urllib.request.urlopen(url, timeout=2)
-            return "up", "OK"
-        except urllib.error.HTTPError as e:
-            return "up", f"HTTP {e.code}"
-        except Exception as e:
-            return "conflict", f"Port {port} in use by non-MCP process"
-    else:
-        return "down", "Connection refused"
+    start = time.perf_counter()
+    host = _url_host(url)
+    port_int = int(port) if str(port).isdigit() else _url_port(url)
+    if port_int and not check_port(host, int(port_int)):
+        return "down", "Connection refused", 0
+    try:
+        urllib.request.urlopen(url, timeout=2)
+        latency = int((time.perf_counter() - start) * 1000)
+        return "up", "OK", latency
+    except urllib.error.HTTPError as e:
+        latency = int((time.perf_counter() - start) * 1000)
+        return "up", f"HTTP {e.code}", latency
+    except urllib.error.URLError as e:
+        if port_int and check_port(host, int(port_int)):
+            return "conflict", f"Port {port_int} reachable but endpoint failed: {e.reason}", 0
+        return "down", f"Request failed: {e.reason}", 0
+    except Exception as e:
+        return "error", f"HTTP health check error: {type(e).__name__}", 0
 
 def check_docker(image):
     try:
@@ -56,8 +77,8 @@ def check_server(name: str, entry: dict) -> HealthResult:
     if htype == "http":
         url = entry.get("transports", {}).get("http", {}).get("url") or entry.get("transports", {}).get("sse", {}).get("url")
         if not url: url = "http://127.0.0.1:8000"
-        status, msg = check_http(url, health_cfg.get("port"))
-        return HealthResult(name, status, msg, warn_only)
+        status, msg, latency_ms = check_http(url, health_cfg.get("port"))
+        return HealthResult(name, status, msg, warn_only, latency_ms=latency_ms)
     elif htype == "docker-image":
         status, msg = check_docker(health_cfg.get("image"))
         return HealthResult(name, status, msg, warn_only)
@@ -72,5 +93,9 @@ def check_all(servers: dict) -> list:
     with ThreadPoolExecutor() as executor:
         futures = {executor.submit(check_server, k, v): k for k, v in servers.items()}
         for f in futures:
-            results.append(f.result())
+            name = futures[f]
+            try:
+                results.append(f.result())
+            except Exception as exc:
+                results.append(HealthResult(name, "error", f"Unhandled health exception: {exc}", warn_only=False))
     return results

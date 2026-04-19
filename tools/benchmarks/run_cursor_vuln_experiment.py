@@ -203,6 +203,16 @@ def main() -> int:
     parser.add_argument("--repo-root", default=str(Path(__file__).resolve().parents[2]), help="Repository root path")
     parser.add_argument("--tasks", default="tools/benchmarks/cursor_vuln_tasks.json", help="Task file path")
     parser.add_argument("--profiles", nargs="+", default=DEFAULT_PROFILES, help="Profiles to run")
+    parser.add_argument(
+        "--delta-baseline",
+        default="control",
+        help="Profile used as baseline for delta computation",
+    )
+    parser.add_argument(
+        "--delta-candidate",
+        default="skills-only",
+        help="Profile used as candidate for delta computation",
+    )
     parser.add_argument("--runs", type=int, default=2, help="Runs per profile")
     parser.add_argument("--max-tasks", type=int, default=20, help="Maximum tasks per run (hard limit 20)")
     parser.add_argument("--timeout-sec", type=int, default=120, help="Timeout per task in seconds")
@@ -274,17 +284,19 @@ def main() -> int:
             )
 
     aggregates = {profile: aggregate_profile(reports) for profile, reports in reports_by_profile.items()}
-    deltas = (
-        profile_delta(aggregates.get("control", {}), aggregates.get("skills-only", {}))
-        if "control" in aggregates and "skills-only" in aggregates
-        else {}
-    )
+    deltas = {}
+    if args.delta_baseline in aggregates and args.delta_candidate in aggregates:
+        deltas = profile_delta(aggregates.get(args.delta_baseline, {}), aggregates.get(args.delta_candidate, {}))
 
     stability = {
         profile: collect_task_stability(reports)
         for profile, reports in reports_by_profile.items()
     }
-    route_failures = collect_route_failures(reports_by_profile.get("skills-only", []))
+    route_failures: list[dict] = []
+    for profile, reports in reports_by_profile.items():
+        if profile == "control":
+            continue
+        route_failures.extend(collect_route_failures(reports))
 
     output = {
         "config": {
@@ -296,6 +308,8 @@ def main() -> int:
             "timeout_sec": args.timeout_sec,
             "model": args.model,
             "store_raw_output": bool(args.store_raw_output),
+            "delta_baseline": args.delta_baseline,
+            "delta_candidate": args.delta_candidate,
         },
         "run_records": run_records,
         "aggregates": aggregates,

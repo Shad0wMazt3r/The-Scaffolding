@@ -32,6 +32,7 @@ def record_session(agent: str, project_dir: str, model: str, native_id: str = No
         "native_id": native_id
     }
     sessions.insert(0, sess)
+    sessions = sessions[:200]
     save_sessions(sessions)
     return sess['id']
 
