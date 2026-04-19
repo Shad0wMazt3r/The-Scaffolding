@@ -1,3 +1,5 @@
 .cursor/hooks/state/continual-learning.json
 Notes/
 *.pyc
+.env
+./my-ctf/
