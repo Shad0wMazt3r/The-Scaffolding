@@ -1,0 +1,930 @@
+{
+  "config": {
+    "run_reports": [
+      "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\reports\\benchmarks\\model-sweep\\kimi-k2.5\\experiment-runs\\cursor-vuln-control-run1.json",
+      "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\reports\\benchmarks\\model-sweep\\kimi-k2.5\\experiment-runs\\cursor-vuln-skills-only-run1.json"
+    ],
+    "tasks": "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\tools\\benchmarks\\cursor_vuln_tasks.json"
+  },
+  "graded_findings": [
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-89",
+        "file": "app.py",
+        "line_end": 7,
+        "line_start": 4,
+        "vuln_claim": "Unvalidated 'dir' parameter is directly interpolated into SQL query enabling injection attacks."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v01-sqli-orderby"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-20",
+        "file": "app.py",
+        "line_end": 6,
+        "line_start": 2,
+        "vuln_claim": "Incomplete input validation: 'sort' is whitelisted but 'direction' is not, creating bypass."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v01-sqli-orderby"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-918",
+        "file": "proxy.js",
+        "line_end": 3,
+        "line_start": 3,
+        "vuln_claim": "Broken URL validation due to JavaScript comment syntax causing complete bypass"
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [],
+      "subjective_score_0_to_5": 5,
+      "task_id": "v02-ssrf-allowlist-bypass"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-639",
+        "file": "invoices.py",
+        "line_end": 3,
+        "line_start": 3,
+        "vuln_claim": "Invoice fetched before authorization check enables IDOR"
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v03-idor-object-access"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-22",
+        "file": "files.js",
+        "line_end": 3,
+        "line_start": 2,
+        "vuln_claim": "Path traversal due to single-pass ../ sanitization bypassable via ....// or ....\\/ sequences"
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v04-path-traversal-sanitize-bypass"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-502",
+        "file": "session.py",
+        "line_end": 6,
+        "line_start": 6,
+        "vuln_claim": "pickle.loads() deserializes untrusted user-controlled cookie data without validation"
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v05-insecure-deserialization"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-862",
+        "file": "users.js",
+        "line_end": 2,
+        "line_start": 2,
+        "vuln_claim": "Broken authorization check due to missing logical operator between req.user.id and req.user.isSupport"
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [],
+      "subjective_score_0_to_5": 5,
+      "task_id": "v06-idor-plus-mass-assignment-chain"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-285",
+        "file": "users.js",
+        "line_end": 7,
+        "line_start": 5,
+        "vuln_claim": "Missing authorization check allows users to modify other users' data (IDOR)"
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v06-idor-plus-mass-assignment-chain"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-915",
+        "file": "users.js",
+        "line_end": 6,
+        "line_start": 6,
+        "vuln_claim": "Mass assignment via Object.assign merges req.body directly into user without field filtering"
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v06-idor-plus-mass-assignment-chain"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-78",
+        "file": "backup.py",
+        "line_end": 8,
+        "line_start": 7,
+        "vuln_claim": "The name parameter is unsafely interpolated into a shell command executed via os.system() without sanitization."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v07-command-injection-archive"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-22",
+        "file": "backup.py",
+        "line_end": 8,
+        "line_start": 5,
+        "vuln_claim": "The src path validation using startswith() can be bypassed via directory traversal sequences."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v07-command-injection-archive"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-79",
+        "file": "comments.py",
+        "line_end": 5,
+        "line_start": 3,
+        "vuln_claim": "Stored XSS via unsanitized markdown rendering; markdown.markdown() allows raw HTML through by default."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v08-stored-xss-markdown-html"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-367",
+        "file": "wallet.py",
+        "line_end": 8,
+        "line_start": 5,
+        "vuln_claim": "TOCTOU race condition allows balance overdraft via concurrent transfer requests."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v09-race-condition-wallet-transfer"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-347",
+        "file": "auth.js",
+        "line_end": 7,
+        "line_start": 6,
+        "vuln_claim": "In production, failed JWT verification falls back to jwt.decode() which skips signature verification, accepting forged tokens."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v10-jwt-debug-bypass"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-208",
+        "file": "webhook.py",
+        "line_end": 6,
+        "line_start": 6,
+        "vuln_claim": "HMAC comparison uses == which is vulnerable to timing attacks due to short-circuit evaluation"
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v12-webhook-signature-compare"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-601",
+        "file": "redirect.py",
+        "line_end": 6,
+        "line_start": 3,
+        "vuln_claim": "The startswith('/') check is insufficient to prevent open redirects; //attacker.com bypasses the validation."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v13-open-redirect-double-slash"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-611",
+        "file": "xml_api.py",
+        "line_end": 4,
+        "line_start": 3,
+        "vuln_claim": "XXE vulnerability due to resolve_entities=True and no_network=False enabling external entity resolution and network requests"
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v14-xxe-parser-entities"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-943",
+        "file": "login.js",
+        "line_end": 3,
+        "line_start": 2,
+        "vuln_claim": "NoSQL injection via unvalidated user input passed directly to MongoDB findOne query."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v15-nosqli-operator-injection"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-918",
+        "file": "avatar.py",
+        "line_end": 6,
+        "line_start": 3,
+        "vuln_claim": "SSRF via insufficient URL validation allows internal service access"
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v16-ssrf-metadata-endpoint"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-787",
+        "file": "vuln.c",
+        "line_end": 5,
+        "line_start": 5,
+        "vuln_claim": "gets() function lacks bounds checking allowing buffer overflow"
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v17-pwn-gets-overflow"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-312",
+        "file": "SessionStore.kt",
+        "line_end": 4,
+        "line_start": 3,
+        "vuln_claim": "Access token stored unencrypted in SharedPreferences without additional encryption layer."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v18-mobile-plaintext-token-storage"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-798",
+        "file": "crypto_util.py",
+        "line_end": 2,
+        "line_start": 2,
+        "vuln_claim": "AES encryption key hardcoded as static 16-byte literal"
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "weak_proof",
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 2,
+      "task_id": "v19-crypto-hardcoded-key"
+    },
+    {
+      "classification": "control_flag",
+      "finding": {
+        "cwe": "CWE-476",
+        "file": "safe_copy.c",
+        "line_end": 5,
+        "line_start": 3,
+        "vuln_claim": "Inverted null check at line 3 allows NULL pointer to pass validation, causing NULL pointer dereference when memcpy writes to NULL destination at line 5."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v20-pwn-safe-copy-control"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-89",
+        "file": "app.py",
+        "line_end": 7,
+        "line_start": 7,
+        "vuln_claim": "SQL injection via unvalidated direction parameter interpolated into query string."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v01-sqli-orderby"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-918",
+        "file": "proxy.js",
+        "line_end": 3,
+        "line_start": 3,
+        "vuln_claim": "Broken URL validation allows SSRF; the condition appears incomplete/corrupted enabling any URL to bypass checks"
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v02-ssrf-allowlist-bypass"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-20",
+        "file": "proxy.js",
+        "line_end": 2,
+        "line_start": 2,
+        "vuln_claim": "User-supplied URL lacks proper input validation before being passed to HTTP client"
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v02-ssrf-allowlist-bypass"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-285",
+        "file": "invoices.py",
+        "line_end": 4,
+        "line_start": 3,
+        "vuln_claim": "Invoice fetched from database before authorization check occurs"
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v03-idor-object-access"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-754",
+        "file": "invoices.py",
+        "line_end": 4,
+        "line_start": 3,
+        "vuln_claim": "Missing null check for non-existent invoice causes unhandled exception"
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v03-idor-object-access"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-22",
+        "file": "files.js",
+        "line_end": 3,
+        "line_start": 2,
+        "vuln_claim": "Path traversal via insufficient sanitize: single replace('../','') is bypassable with '....//' or encoded sequences like '%2e%2e%2f'."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v04-path-traversal-sanitize-bypass"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-502",
+        "file": "session.py",
+        "line_end": 6,
+        "line_start": 6,
+        "vuln_claim": "Insecure deserialization via pickle.loads() on user-controlled cookie data"
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v05-insecure-deserialization"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-284",
+        "file": "users.js",
+        "line_end": 2,
+        "line_start": 2,
+        "vuln_claim": "Broken authorization check due to missing operator between conditions causes syntax error, disabling all access control."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v06-idor-plus-mass-assignment-chain"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-915",
+        "file": "users.js",
+        "line_end": 6,
+        "line_start": 6,
+        "vuln_claim": "Mass assignment vulnerability allows attackers to overwrite arbitrary user fields via req.body."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v06-idor-plus-mass-assignment-chain"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-639",
+        "file": "users.js",
+        "line_end": 5,
+        "line_start": 5,
+        "vuln_claim": "Insecure direct object reference allows accessing/modifying any user record by ID."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v06-idor-plus-mass-assignment-chain"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-78",
+        "file": "backup.py",
+        "line_end": 8,
+        "line_start": 7,
+        "vuln_claim": "OS command injection via unsanitized name parameter in shell command."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v07-command-injection-archive"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-22",
+        "file": "backup.py",
+        "line_end": 7,
+        "line_start": 4,
+        "vuln_claim": "Path traversal bypass via src parameter with weak directory validation."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v07-command-injection-archive"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-362",
+        "file": "wallet.py",
+        "line_end": 8,
+        "line_start": 5,
+        "vuln_claim": "Race condition in balance check and update enables double-spending via concurrent requests."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v09-race-condition-wallet-transfer"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-639",
+        "file": "wallet.py",
+        "line_end": 3,
+        "line_start": 3,
+        "vuln_claim": "Missing authorization allows transferring to arbitrary or non-existent recipient accounts."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v09-race-condition-wallet-transfer"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-681",
+        "file": "wallet.py",
+        "line_end": 4,
+        "line_start": 4,
+        "vuln_claim": "No validation that amount is positive allows negative transfer to steal from target."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v09-race-condition-wallet-transfer"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-287",
+        "file": "auth.js",
+        "line_end": 8,
+        "line_start": 5,
+        "vuln_claim": "In production, failed JWT verification falls back to jwt.decode() without signature verification, allowing token forgery."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v10-jwt-debug-bypass"
+    },
+    {
+      "classification": "control_flag",
+      "finding": {
+        "cwe": "CWE-639",
+        "file": "safe_query.py",
+        "line_end": 6,
+        "line_start": 5,
+        "vuln_claim": "Missing authorization check allows any authenticated user to access other users' data via ID parameter manipulation (IDOR)."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v11-safe-authz-control"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-208",
+        "file": "webhook.py",
+        "line_end": 6,
+        "line_start": 6,
+        "vuln_claim": "String equality comparison 'got == want' is vulnerable to timing attacks"
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v12-webhook-signature-compare"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-601",
+        "file": "redirect.py",
+        "line_end": 6,
+        "line_start": 3,
+        "vuln_claim": "Open redirect via protocol-relative URL bypass (e.g., //evil.com) allows phishing."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v13-open-redirect-double-slash"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-22",
+        "file": "redirect.py",
+        "line_end": 6,
+        "line_start": 3,
+        "vuln_claim": "Path traversal via encoded sequences (e.g., /../etc/passwd) possible."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v13-open-redirect-double-slash"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-611",
+        "file": "xml_api.py",
+        "line_end": 4,
+        "line_start": 3,
+        "vuln_claim": "XXE vulnerability via XML parser with entity resolution and network access enabled"
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v14-xxe-parser-entities"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-943",
+        "file": "login.js",
+        "line_end": 3,
+        "line_start": 2,
+        "vuln_claim": "NoSQL injection via unvalidated req.body fields passed directly to findOne query"
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v15-nosqli-operator-injection"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-287",
+        "file": "login.js",
+        "line_end": 4,
+        "line_start": 4,
+        "vuln_claim": "Hardcoded if(true) bypasses all authentication checks unconditionally"
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v15-nosqli-operator-injection"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-918",
+        "file": "avatar.py",
+        "line_end": 6,
+        "line_start": 4,
+        "vuln_claim": "SSRF via insufficient URL validation - startsWith('http') allows internal IP access"
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v16-ssrf-metadata-endpoint"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-121",
+        "file": "vuln.c",
+        "line_end": 5,
+        "line_start": 5,
+        "vuln_claim": "gets() function performs unbounded read into fixed 64-byte buffer enabling stack buffer overflow"
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v17-pwn-gets-overflow"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-312",
+        "file": "SessionStore.kt",
+        "line_end": 4,
+        "line_start": 2,
+        "vuln_claim": "Access token stored in SharedPreferences without encryption."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v18-mobile-plaintext-token-storage"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-798",
+        "file": "crypto_util.py",
+        "line_end": 2,
+        "line_start": 2,
+        "vuln_claim": "Hardcoded AES encryption key embedded in source code"
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v19-crypto-hardcoded-key"
+    },
+    {
+      "classification": "control_flag",
+      "finding": {
+        "cwe": "CWE-476",
+        "file": "safe_copy.c",
+        "line_end": 6,
+        "line_start": 3,
+        "vuln_claim": "Inverted null check allows NULL pointer dereference and write."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v20-pwn-safe-copy-control"
+    }
+  ],
+  "manual_review_guidance": {
+    "focus_first": [
+      "speculative_extra",
+      "control_flag",
+      "plausible_extra_same_file"
+    ],
+    "use_subjective_flags_to_prioritize": true
+  },
+  "profile_summary": {
+    "control": {
+      "avg_subjective_score": 3.6522,
+      "control_flag_rate": 0.0,
+      "control_flags": 0,
+      "exact_tp": 15,
+      "exact_tp_rate": 0.6522,
+      "findings_total": 23,
+      "plausible_extra_same_file": 7,
+      "runs": 1,
+      "speculative_extra": 0,
+      "speculative_extra_rate": 0.0,
+      "subjective_score_sum": 84
+    },
+    "skills-only": {
+      "avg_subjective_score": 3.6429,
+      "control_flag_rate": 0.0,
+      "control_flags": 0,
+      "exact_tp": 14,
+      "exact_tp_rate": 0.5,
+      "findings_total": 28,
+      "plausible_extra_same_file": 12,
+      "runs": 1,
+      "speculative_extra": 0,
+      "speculative_extra_rate": 0.0,
+      "subjective_score_sum": 102
+    }
+  }
+}

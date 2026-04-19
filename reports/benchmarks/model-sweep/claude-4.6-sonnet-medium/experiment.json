@@ -1,0 +1,669 @@
+{
+  "aggregates": {
+    "control": {
+      "metric_stats": {
+        "chain_coverage_rate": {
+          "max": 1.0,
+          "mean": 1.0,
+          "min": 1.0,
+          "stddev": 0.0
+        },
+        "chain_linked_rate": {
+          "max": 100.0,
+          "mean": 100.0,
+          "min": 100.0,
+          "stddev": 0.0
+        },
+        "chain_success_rate": {
+          "max": 100.0,
+          "mean": 100.0,
+          "min": 100.0,
+          "stddev": 0.0
+        },
+        "cwe_recall": {
+          "max": 0.85,
+          "mean": 0.85,
+          "min": 0.85,
+          "stddev": 0.0
+        },
+        "empty_output_task_rate": {
+          "max": 10.0,
+          "mean": 10.0,
+          "min": 10.0,
+          "stddev": 0.0
+        },
+        "evidence_recall": {
+          "max": 0.85,
+          "mean": 0.85,
+          "min": 0.85,
+          "stddev": 0.0
+        },
+        "f1": {
+          "max": 0.7273,
+          "mean": 0.7273,
+          "min": 0.7273,
+          "stddev": 0.0
+        },
+        "file_recall": {
+          "max": 0.85,
+          "mean": 0.85,
+          "min": 0.85,
+          "stddev": 0.0
+        },
+        "fp_per_task": {
+          "max": 0.4,
+          "mean": 0.4,
+          "min": 0.4,
+          "stddev": 0.0
+        },
+        "line_recall": {
+          "max": 0.85,
+          "mean": 0.85,
+          "min": 0.85,
+          "stddev": 0.0
+        },
+        "overreport_rate": {
+          "max": 0.3333,
+          "mean": 0.3333,
+          "min": 0.3333,
+          "stddev": 0.0
+        },
+        "precision": {
+          "max": 0.6667,
+          "mean": 0.6667,
+          "min": 0.6667,
+          "stddev": 0.0
+        },
+        "recall": {
+          "max": 0.8,
+          "mean": 0.8,
+          "min": 0.8,
+          "stddev": 0.0
+        },
+        "skill_anchor_presence_rate": {
+          "max": null,
+          "mean": null,
+          "min": null,
+          "stddev": null
+        },
+        "skill_route_first_file_accuracy": {
+          "max": null,
+          "mean": null,
+          "min": null,
+          "stddev": null
+        },
+        "skill_route_phase_accuracy": {
+          "max": null,
+          "mean": null,
+          "min": null,
+          "stddev": null
+        },
+        "skill_route_strict_accuracy": {
+          "max": null,
+          "mean": null,
+          "min": null,
+          "stddev": null
+        },
+        "strict_task_accuracy": {
+          "max": 60.0,
+          "mean": 60.0,
+          "min": 60.0,
+          "stddev": 0.0
+        },
+        "tp_per_task": {
+          "max": 0.8,
+          "mean": 0.8,
+          "min": 0.8,
+          "stddev": 0.0
+        }
+      },
+      "runs": 1,
+      "totals": {
+        "attempted": 20,
+        "completed": 20,
+        "expected_findings_total": 20,
+        "f1_from_totals": 0.7273,
+        "fn_total": 4,
+        "fp_total": 8,
+        "precision_from_totals": 0.6667,
+        "predicted_findings_total": 24,
+        "recall_from_totals": 0.8,
+        "timeouts": 0,
+        "valid_tp_total": 16
+      }
+    },
+    "skills-only": {
+      "metric_stats": {
+        "chain_coverage_rate": {
+          "max": 1.0,
+          "mean": 1.0,
+          "min": 1.0,
+          "stddev": 0.0
+        },
+        "chain_linked_rate": {
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
+          "stddev": 0.0
+        },
+        "chain_success_rate": {
+          "max": 100.0,
+          "mean": 100.0,
+          "min": 100.0,
+          "stddev": 0.0
+        },
+        "cwe_recall": {
+          "max": 0.9,
+          "mean": 0.9,
+          "min": 0.9,
+          "stddev": 0.0
+        },
+        "empty_output_task_rate": {
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
+          "stddev": 0.0
+        },
+        "evidence_recall": {
+          "max": 0.9,
+          "mean": 0.9,
+          "min": 0.9,
+          "stddev": 0.0
+        },
+        "f1": {
+          "max": 0.7347,
+          "mean": 0.7347,
+          "min": 0.7347,
+          "stddev": 0.0
+        },
+        "file_recall": {
+          "max": 0.9,
+          "mean": 0.9,
+          "min": 0.9,
+          "stddev": 0.0
+        },
+        "fp_per_task": {
+          "max": 0.55,
+          "mean": 0.55,
+          "min": 0.55,
+          "stddev": 0.0
+        },
+        "line_recall": {
+          "max": 0.9,
+          "mean": 0.9,
+          "min": 0.9,
+          "stddev": 0.0
+        },
+        "overreport_rate": {
+          "max": 0.3793,
+          "mean": 0.3793,
+          "min": 0.3793,
+          "stddev": 0.0
+        },
+        "precision": {
+          "max": 0.6207,
+          "mean": 0.6207,
+          "min": 0.6207,
+          "stddev": 0.0
+        },
+        "recall": {
+          "max": 0.9,
+          "mean": 0.9,
+          "min": 0.9,
+          "stddev": 0.0
+        },
+        "skill_anchor_presence_rate": {
+          "max": 100.0,
+          "mean": 100.0,
+          "min": 100.0,
+          "stddev": 0.0
+        },
+        "skill_route_first_file_accuracy": {
+          "max": 100.0,
+          "mean": 100.0,
+          "min": 100.0,
+          "stddev": 0.0
+        },
+        "skill_route_phase_accuracy": {
+          "max": 100.0,
+          "mean": 100.0,
+          "min": 100.0,
+          "stddev": 0.0
+        },
+        "skill_route_strict_accuracy": {
+          "max": 100.0,
+          "mean": 100.0,
+          "min": 100.0,
+          "stddev": 0.0
+        },
+        "strict_task_accuracy": {
+          "max": 45.0,
+          "mean": 45.0,
+          "min": 45.0,
+          "stddev": 0.0
+        },
+        "tp_per_task": {
+          "max": 0.9,
+          "mean": 0.9,
+          "min": 0.9,
+          "stddev": 0.0
+        }
+      },
+      "runs": 1,
+      "totals": {
+        "attempted": 20,
+        "completed": 20,
+        "expected_findings_total": 20,
+        "f1_from_totals": 0.7347,
+        "fn_total": 2,
+        "fp_total": 11,
+        "precision_from_totals": 0.6207,
+        "predicted_findings_total": 29,
+        "recall_from_totals": 0.9,
+        "timeouts": 0,
+        "valid_tp_total": 18
+      }
+    }
+  },
+  "config": {
+    "max_tasks": 20,
+    "model": "claude-4.6-sonnet-medium",
+    "profiles": [
+      "control",
+      "skills-only"
+    ],
+    "repo_root": "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding",
+    "runs": 1,
+    "store_raw_output": false,
+    "tasks": "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\tools\\benchmarks\\cursor_vuln_tasks.json",
+    "timeout_sec": 120
+  },
+  "control_vs_skills_delta_mean": {
+    "chain_coverage_rate": 0.0,
+    "chain_linked_rate": -100.0,
+    "chain_success_rate": 0.0,
+    "cwe_recall": 0.05,
+    "empty_output_task_rate": -10.0,
+    "evidence_recall": 0.05,
+    "f1": 0.0074,
+    "file_recall": 0.05,
+    "fp_per_task": 0.15,
+    "line_recall": 0.05,
+    "overreport_rate": 0.046,
+    "precision": -0.046,
+    "recall": 0.1,
+    "strict_task_accuracy": -15.0,
+    "tp_per_task": 0.1
+  },
+  "run_records": [
+    {
+      "profile": "control",
+      "report_path": "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\reports\\benchmarks\\model-sweep\\claude-4.6-sonnet-medium\\experiment-runs\\cursor-vuln-control-run1.json",
+      "run_index": 1,
+      "summary": {
+        "attempted": 20,
+        "avg_estimated_tokens": 491.8,
+        "avg_latency_sec": 11.244,
+        "avg_output_chars": 798.9,
+        "avg_prompt_chars": 1166.7,
+        "chain_coverage_rate": 1.0,
+        "chain_linked_rate": 100.0,
+        "chain_success_rate": 100.0,
+        "completed": 20,
+        "cwe_recall": 0.85,
+        "empty_output_task_rate": 10.0,
+        "evidence_recall": 0.85,
+        "expected_findings_total": 20,
+        "f1": 0.7273,
+        "file_recall": 0.85,
+        "fn_total": 4,
+        "fp_per_task": 0.4,
+        "fp_total": 8,
+        "line_recall": 0.85,
+        "malformed_json_task_rate": 0.0,
+        "overreport_rate": 0.3333,
+        "precision": 0.6667,
+        "predicted_findings_total": 24,
+        "recall": 0.8,
+        "skill_anchor_presence_rate": null,
+        "skill_route_first_file_accuracy": null,
+        "skill_route_phase_accuracy": null,
+        "skill_route_strict_accuracy": null,
+        "strict_task_accuracy": 60.0,
+        "time_per_valid_tp_sec": 14.055,
+        "timeouts": 0,
+        "tp_per_task": 0.8,
+        "truncated_output_task_rate": 0.0,
+        "valid_tp_total": 16
+      }
+    },
+    {
+      "profile": "skills-only",
+      "report_path": "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\reports\\benchmarks\\model-sweep\\claude-4.6-sonnet-medium\\experiment-runs\\cursor-vuln-skills-only-run1.json",
+      "run_index": 1,
+      "summary": {
+        "attempted": 20,
+        "avg_estimated_tokens": 704.8,
+        "avg_latency_sec": 19.496,
+        "avg_output_chars": 1068.3,
+        "avg_prompt_chars": 1749.7,
+        "chain_coverage_rate": 1.0,
+        "chain_linked_rate": 0.0,
+        "chain_success_rate": 100.0,
+        "completed": 20,
+        "cwe_recall": 0.9,
+        "empty_output_task_rate": 0.0,
+        "evidence_recall": 0.9,
+        "expected_findings_total": 20,
+        "f1": 0.7347,
+        "file_recall": 0.9,
+        "fn_total": 2,
+        "fp_per_task": 0.55,
+        "fp_total": 11,
+        "line_recall": 0.9,
+        "malformed_json_task_rate": 0.0,
+        "overreport_rate": 0.3793,
+        "precision": 0.6207,
+        "predicted_findings_total": 29,
+        "recall": 0.9,
+        "skill_anchor_presence_rate": 100.0,
+        "skill_route_first_file_accuracy": 100.0,
+        "skill_route_phase_accuracy": 100.0,
+        "skill_route_strict_accuracy": 100.0,
+        "strict_task_accuracy": 45.0,
+        "time_per_valid_tp_sec": 21.663,
+        "timeouts": 0,
+        "tp_per_task": 0.9,
+        "truncated_output_task_rate": 0.0,
+        "valid_tp_total": 18
+      }
+    }
+  ],
+  "skills_route_failures": [],
+  "task_stability": {
+    "control": {
+      "v01-sqli-orderby": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v02-ssrf-allowlist-bypass": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v03-idor-object-access": {
+        "fn_mean": 1.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 0.0
+      },
+      "v04-path-traversal-sanitize-bypass": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v05-insecure-deserialization": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v06-idor-plus-mass-assignment-chain": {
+        "fn_mean": 1.0,
+        "fp_mean": 2.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 1.0
+      },
+      "v07-command-injection-archive": {
+        "fn_mean": 0.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 1.0
+      },
+      "v08-stored-xss-markdown-html": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v09-race-condition-wallet-transfer": {
+        "fn_mean": 0.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 2.0
+      },
+      "v10-jwt-debug-bypass": {
+        "fn_mean": 1.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 0.0
+      },
+      "v11-safe-authz-control": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 0.0
+      },
+      "v12-webhook-signature-compare": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v13-open-redirect-double-slash": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v14-xxe-parser-entities": {
+        "fn_mean": 0.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 1.0
+      },
+      "v15-nosqli-operator-injection": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v16-ssrf-metadata-endpoint": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v17-pwn-gets-overflow": {
+        "fn_mean": 1.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 0.0
+      },
+      "v18-mobile-plaintext-token-storage": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v19-crypto-hardcoded-key": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v20-pwn-safe-copy-control": {
+        "fn_mean": 0.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 0.0
+      }
+    },
+    "skills-only": {
+      "v01-sqli-orderby": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v02-ssrf-allowlist-bypass": {
+        "fn_mean": 0.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 1.0
+      },
+      "v03-idor-object-access": {
+        "fn_mean": 0.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 1.0
+      },
+      "v04-path-traversal-sanitize-bypass": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v05-insecure-deserialization": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v06-idor-plus-mass-assignment-chain": {
+        "fn_mean": 0.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 2.0
+      },
+      "v07-command-injection-archive": {
+        "fn_mean": 0.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 1.0
+      },
+      "v08-stored-xss-markdown-html": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v09-race-condition-wallet-transfer": {
+        "fn_mean": 0.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 2.0
+      },
+      "v10-jwt-debug-bypass": {
+        "fn_mean": 1.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 0.0
+      },
+      "v11-safe-authz-control": {
+        "fn_mean": 0.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 0.0
+      },
+      "v12-webhook-signature-compare": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v13-open-redirect-double-slash": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v14-xxe-parser-entities": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v15-nosqli-operator-injection": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v16-ssrf-metadata-endpoint": {
+        "fn_mean": 0.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 1.0
+      },
+      "v17-pwn-gets-overflow": {
+        "fn_mean": 1.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 0.0
+      },
+      "v18-mobile-plaintext-token-storage": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v19-crypto-hardcoded-key": {
+        "fn_mean": 0.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 1.0
+      },
+      "v20-pwn-safe-copy-control": {
+        "fn_mean": 0.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 0.0
+      }
+    }
+  }
+}

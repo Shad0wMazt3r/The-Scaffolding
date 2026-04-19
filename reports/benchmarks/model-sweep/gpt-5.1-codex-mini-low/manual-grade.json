@@ -1,0 +1,511 @@
+{
+  "config": {
+    "run_reports": [
+      "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\reports\\benchmarks\\model-sweep\\gpt-5.1-codex-mini-low\\experiment-runs\\cursor-vuln-control-run1.json",
+      "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\reports\\benchmarks\\model-sweep\\gpt-5.1-codex-mini-low\\experiment-runs\\cursor-vuln-skills-only-run1.json"
+    ],
+    "tasks": "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\tools\\benchmarks\\cursor_vuln_tasks.json"
+  },
+  "graded_findings": [
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-22",
+        "file": "files.js",
+        "line_end": 3,
+        "line_start": 2,
+        "vuln_claim": "User input is used to build a filesystem path without normalizing the directory traversal payload."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v04-path-traversal-sanitize-bypass"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-502",
+        "file": "session.py",
+        "line_end": 7,
+        "line_start": 1,
+        "vuln_claim": "Pickle.load on user cookie allows remote code execution"
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v05-insecure-deserialization"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-78",
+        "file": "backup.py",
+        "line_end": 8,
+        "line_start": 7,
+        "vuln_claim": "Unsanitized `name` controls shell command, allowing injection."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v07-command-injection-archive"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-20",
+        "file": "wallet.py",
+        "line_end": 9,
+        "line_start": 3,
+        "vuln_claim": "Negative transfers succeed because amount is not validated as positive."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v09-race-condition-wallet-transfer"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-208",
+        "file": "webhook.py",
+        "line_end": 7,
+        "line_start": 5,
+        "vuln_claim": "Comparing request signature with == leaks timing information about the valid HMAC."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v12-webhook-signature-compare"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-611",
+        "file": "xml_api.py",
+        "line_end": 4,
+        "line_start": 3,
+        "vuln_claim": "XML parser resolves external entities with network access, enabling XXE."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v14-xxe-parser-entities"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-287",
+        "file": "login.js",
+        "line_end": 5,
+        "line_start": 1,
+        "vuln_claim": "Always-true branch skips credential check so anyone wins authentication."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [],
+      "subjective_score_0_to_5": 5,
+      "task_id": "v15-nosqli-operator-injection"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-918",
+        "file": "avatar.py",
+        "line_end": 6,
+        "line_start": 3,
+        "vuln_claim": "Calling requests.get with user-supplied URL allows SSRF because only http prefix is checked."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v16-ssrf-metadata-endpoint"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-120",
+        "file": "vuln.c",
+        "line_end": 5,
+        "line_start": 5,
+        "vuln_claim": "gets reads unlimited input into 64-byte buf allowing overflow."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v17-pwn-gets-overflow"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-522",
+        "file": "SessionStore.kt",
+        "line_end": 5,
+        "line_start": 1,
+        "vuln_claim": "Access tokens are stored in plaintext SharedPreferences, exposing secrets if the attacker gains file access."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v18-mobile-plaintext-token-storage"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-798",
+        "file": "crypto_util.py",
+        "line_end": 2,
+        "line_start": 2,
+        "vuln_claim": "Static AES key literal allows any reader to decrypt data."
+      },
+      "profile": "control",
+      "run": "cursor-vuln-control-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v19-crypto-hardcoded-key"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-89",
+        "file": "app.py",
+        "line_end": 8,
+        "line_start": 7,
+        "vuln_claim": "User input is interpolated directly into ORDER BY clause, allowing SQL meta injection."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v01-sqli-orderby"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-918",
+        "file": "proxy.js",
+        "line_end": 7,
+        "line_start": 2,
+        "vuln_claim": "Unsanitized url query lets endpoint act as unchecked forwarder."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v02-ssrf-allowlist-bypass"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-22",
+        "file": "files.js",
+        "line_end": 4,
+        "line_start": 2,
+        "vuln_claim": "Incomplete sanitization still allows sequences like '../../' to slip through and reach fs.readFile."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v04-path-traversal-sanitize-bypass"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-502",
+        "file": "session.py",
+        "line_end": 6,
+        "line_start": 6,
+        "vuln_claim": "Untrusted cookie data is deserialized without validation via pickle."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v05-insecure-deserialization"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-639",
+        "file": "users.js",
+        "line_end": 7,
+        "line_start": 1,
+        "vuln_claim": "Missing comparison lets authenticated users edit any profile because the guard clause never resolves to true."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v06-idor-plus-mass-assignment-chain"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-78",
+        "file": "backup.py",
+        "line_end": 7,
+        "line_start": 7,
+        "vuln_claim": "Unsanitized `name` interpolated into shell command allows injection."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v07-command-injection-archive"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-79",
+        "file": "comments.py",
+        "line_end": 5,
+        "line_start": 4,
+        "vuln_claim": "Markdown is rendered then stored directly into the database without sanitization, enabling stored XSS payloads."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v08-stored-xss-markdown-html"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-20",
+        "file": "wallet.py",
+        "line_end": 4,
+        "line_start": 3,
+        "vuln_claim": "Amount parsed without non-negative guard allows abuse"
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v09-race-condition-wallet-transfer"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-347",
+        "file": "auth.js",
+        "line_end": 8,
+        "line_start": 6,
+        "vuln_claim": "Production code decodes tokens after verification fails, so it accepts any bearer token payload."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v10-jwt-debug-bypass"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-367",
+        "file": "webhook.py",
+        "line_end": 6,
+        "line_start": 5,
+        "vuln_claim": "Non-constant-time signature comparison leaks timing differences for valid/invalid HMAC attempts."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v12-webhook-signature-compare"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-611",
+        "file": "xml_api.py",
+        "line_end": 4,
+        "line_start": 3,
+        "vuln_claim": "XML parser resolves external entities and allows network access, enabling XXE."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v14-xxe-parser-entities"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-943",
+        "file": "login.js",
+        "line_end": 3,
+        "line_start": 2,
+        "vuln_claim": "Directly using user-supplied credentials inside the Mongo query lets attackers inject query operators."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v15-nosqli-operator-injection"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-918",
+        "file": "avatar.py",
+        "line_end": 7,
+        "line_start": 1,
+        "vuln_claim": "Endpoint fetches unvalidated URLs directly from user input allowing SSRF."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v16-ssrf-metadata-endpoint"
+    },
+    {
+      "classification": "plausible_extra_same_file",
+      "finding": {
+        "cwe": "CWE-522",
+        "file": "SessionStore.kt",
+        "line_end": 4,
+        "line_start": 2,
+        "vuln_claim": "Access token is stored plaintext in shared preferences without encryption."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal"
+      ],
+      "subjective_score_0_to_5": 4,
+      "task_id": "v18-mobile-plaintext-token-storage"
+    },
+    {
+      "classification": "exact_tp",
+      "finding": {
+        "cwe": "CWE-321",
+        "file": "crypto_util.py",
+        "line_end": 2,
+        "line_start": 2,
+        "vuln_claim": "Hard-coded AES key is stored in source making it trivial to leak."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v19-crypto-hardcoded-key"
+    },
+    {
+      "classification": "control_flag",
+      "finding": {
+        "cwe": "CWE-476",
+        "file": "safe_copy.c",
+        "line_end": 5,
+        "line_start": 3,
+        "vuln_claim": "The guard wrongly checks `out` instead of `!out`, so a null destination pointer bypasses the null check."
+      },
+      "profile": "skills-only",
+      "run": "cursor-vuln-skills-only-run1.json",
+      "subjective_flags": [
+        "no_concrete_test_signal",
+        "thin_exploitability_reasoning"
+      ],
+      "subjective_score_0_to_5": 3,
+      "task_id": "v20-pwn-safe-copy-control"
+    }
+  ],
+  "manual_review_guidance": {
+    "focus_first": [
+      "speculative_extra",
+      "control_flag",
+      "plausible_extra_same_file"
+    ],
+    "use_subjective_flags_to_prioritize": true
+  },
+  "profile_summary": {
+    "control": {
+      "avg_subjective_score": 3.7273,
+      "control_flag_rate": 0.0,
+      "control_flags": 0,
+      "exact_tp": 8,
+      "exact_tp_rate": 0.7273,
+      "findings_total": 11,
+      "plausible_extra_same_file": 3,
+      "runs": 1,
+      "speculative_extra": 0,
+      "speculative_extra_rate": 0.0,
+      "subjective_score_sum": 41
+    },
+    "skills-only": {
+      "avg_subjective_score": 3.8125,
+      "control_flag_rate": 0.0,
+      "control_flags": 0,
+      "exact_tp": 13,
+      "exact_tp_rate": 0.8125,
+      "findings_total": 16,
+      "plausible_extra_same_file": 2,
+      "runs": 1,
+      "speculative_extra": 0,
+      "speculative_extra_rate": 0.0,
+      "subjective_score_sum": 61
+    }
+  }
+}
