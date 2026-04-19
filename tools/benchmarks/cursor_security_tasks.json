@@ -1,0 +1,98 @@
+[
+  {
+    "id": "s01-recon-recursive",
+    "scenario": "Authorized bug bounty target. Need recursive recon from root domains through JS and cloud pivots before exploit testing.",
+    "expected_phase": "recon",
+    "expected_first_file": "01-setup-and-contract.md",
+    "expected_deep_file": "",
+    "required_terms": ["subdomains", "httpx", "js"]
+  },
+  {
+    "id": "s02-web-access-control",
+    "scenario": "Need to test authenticated API for IDOR, mass assignment, and role escalation without noisy scanning.",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
+    "expected_deep_file": "",
+    "required_terms": ["idor", "role", "authz"]
+  },
+  {
+    "id": "s03-web-source-architecture",
+    "scenario": "Need architecture-first source code review: trust boundaries, trust signals, and crown-jewel path mapping.",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
+    "expected_deep_file": "12-source-review-deep-architecture-and-trust.md",
+    "required_terms": ["trust", "boundary", "crown"]
+  },
+  {
+    "id": "s04-web-chain-playbooks",
+    "scenario": "Need cross-class exploit-chain playbooks from low-severity primitives toward high impact.",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
+    "expected_deep_file": "13-source-review-deep-chain-playbooks.md",
+    "required_terms": ["chain", "primitive", "impact"]
+  },
+  {
+    "id": "s05-web-exploitability",
+    "scenario": "Need exploitability decision process to separate confirmed chains from code-review-only findings.",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
+    "expected_deep_file": "14-source-review-deep-exploitability-and-interactions.md",
+    "required_terms": ["reachability", "control", "confirmed"]
+  },
+  {
+    "id": "s06-web-severity-reporting",
+    "scenario": "Need severity amplification and 3-sentence finding narrative quality for report readiness.",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
+    "expected_deep_file": "15-source-review-deep-severity-and-reporting.md",
+    "required_terms": ["severity", "impact", "narrative"]
+  },
+  {
+    "id": "s07-network-ad-hardening",
+    "scenario": "Need non-destructive network and Active Directory posture assessment with evidence-linked pivots.",
+    "expected_phase": "network",
+    "expected_first_file": "01-environment.md",
+    "expected_deep_file": "",
+    "required_terms": ["smb", "ldap", "evidence"]
+  },
+  {
+    "id": "s08-mobile-pinning-runtime",
+    "scenario": "Android traffic is blocked by certificate pinning; need runtime bypass and secure storage abuse review.",
+    "expected_phase": "mobile",
+    "expected_first_file": "01-baseline-and-setup.md",
+    "expected_deep_file": "",
+    "required_terms": ["pinning", "frida", "storage"]
+  },
+  {
+    "id": "s09-pwn-format-string",
+    "scenario": "Binary exploit challenge suggests format-string primitive; need leak-to-write chain planning.",
+    "expected_phase": "pwn",
+    "expected_first_file": "01-environment-baseline.md",
+    "expected_deep_file": "",
+    "required_terms": ["format", "leak", "write"]
+  },
+  {
+    "id": "s10-crypto-rsa-triage",
+    "scenario": "Have RSA keys/ciphertexts and need weak-key classification and practical next pivots.",
+    "expected_phase": "crypto",
+    "expected_first_file": "01-workspace-baseline.md",
+    "expected_deep_file": "",
+    "required_terms": ["rsa", "gcd", "padding"]
+  },
+  {
+    "id": "s11-re-anti-analysis",
+    "scenario": "Obfuscated sample exits under debugger; need anti-analysis bypass then dynamic tracing.",
+    "expected_phase": "reverse-engineering",
+    "expected_first_file": "01-baseline-and-initial-triage.md",
+    "expected_deep_file": "",
+    "required_terms": ["anti-analysis", "debugger", "trace"]
+  },
+  {
+    "id": "s12-forensics-timeline",
+    "scenario": "Need to correlate disk, memory, and PCAP into one incident timeline with reproducible artifacts.",
+    "expected_phase": "forensics",
+    "expected_first_file": "01-environment-and-tooling.md",
+    "expected_deep_file": "",
+    "required_terms": ["timeline", "pcap", "memory"]
+  }
+]

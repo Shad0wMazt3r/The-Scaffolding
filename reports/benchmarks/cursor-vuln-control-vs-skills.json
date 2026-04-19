@@ -1,0 +1,70 @@
+{
+  "baseline": {
+    "attempted": 12,
+    "path": "reports\\benchmarks\\cursor-vuln-control.json",
+    "profile": "control",
+    "timeouts": 0
+  },
+  "candidate": {
+    "attempted": 12,
+    "path": "reports\\benchmarks\\cursor-vuln-skills-only.json",
+    "profile": "skills-only",
+    "timeouts": 3
+  },
+  "metric_deltas": {
+    "avg_estimated_tokens": {
+      "baseline": 245.0,
+      "candidate": 237.8,
+      "delta": -7.2,
+      "direction": "better"
+    },
+    "avg_latency_sec": {
+      "baseline": 12.511,
+      "candidate": 23.856,
+      "delta": 11.345,
+      "direction": "worse"
+    },
+    "chain_success_rate": {
+      "baseline": 0.0,
+      "candidate": 0.0,
+      "delta": 0.0,
+      "direction": "equal"
+    },
+    "f1": {
+      "baseline": 0.0,
+      "candidate": 0.0,
+      "delta": 0.0,
+      "direction": "equal"
+    },
+    "fp_per_task": {
+      "baseline": 0.0,
+      "candidate": 0.0,
+      "delta": 0.0,
+      "direction": "equal"
+    },
+    "precision": {
+      "baseline": 0.0,
+      "candidate": 0.0,
+      "delta": 0.0,
+      "direction": "equal"
+    },
+    "recall": {
+      "baseline": 0.0,
+      "candidate": 0.0,
+      "delta": 0.0,
+      "direction": "equal"
+    },
+    "strict_task_accuracy": {
+      "baseline": 8.33,
+      "candidate": 8.33,
+      "delta": 0.0,
+      "direction": "equal"
+    },
+    "tp_per_task": {
+      "baseline": 0.0,
+      "candidate": 0.0,
+      "delta": 0.0,
+      "direction": "equal"
+    }
+  }
+}

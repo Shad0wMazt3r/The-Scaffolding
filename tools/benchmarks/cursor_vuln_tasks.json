@@ -1,0 +1,194 @@
+[
+  {
+    "id": "v01-sqli-orderby",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: app.py\n1| def list_users(request):\n2|     allowed = {'name', 'created_at'}\n3|     sort = request.args.get('sort', 'name')\n4|     direction = request.args.get('dir', 'asc')\n5|     if sort not in allowed:\n6|         sort = 'name'\n7|     q = f\"SELECT id,email FROM users ORDER BY {sort} {direction}\"\n8|     return db.fetch_all(q)\n```",
+    "expected_findings": [
+      {
+        "cwe": "CWE-89",
+        "file": "app.py",
+        "line_start": 7,
+        "line_end": 7,
+        "evidence_terms": ["direction", "order by", "query"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v02-ssrf-allowlist-bypass",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```javascript\n// file: proxy.js\n1| app.get('/fetch', async (req, res) => {\n2|   const u = req.query.url || '';\n3|   if (!u.startsWith('https://api.partner.com')) {\n4|     return res.status(400).send('bad target');\n5|   }\n6|   const data = await axios.get(u, { timeout: 1500 });\n7|   res.send(data.data);\n8| });\n```",
+    "expected_findings": [
+      {
+        "cwe": "CWE-918",
+        "file": "proxy.js",
+        "line_start": 3,
+        "line_end": 6,
+        "evidence_terms": ["startswith", "partner.com@", "internal"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v03-idor-object-access",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: invoices.py\n1| @app.patch('/api/invoices/<inv_id>')\n2| def update_invoice(inv_id):\n3|     inv = db.get_invoice(inv_id)\n4|     if not user_can_edit(current_user, inv.project_id):\n5|         return {'error': 'forbidden'}, 403\n6|     inv.note = request.json.get('note', inv.note)\n7|     db.save(inv)\n8|     return inv.to_json()\n```",
+    "expected_findings": [
+      {
+        "cwe": "CWE-639",
+        "file": "invoices.py",
+        "line_start": 3,
+        "line_end": 5,
+        "evidence_terms": ["inv_id", "object", "authorization"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v04-path-traversal-sanitize-bypass",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```javascript\n// file: files.js\n1| app.get('/download', (req, res) => {\n2|   const f = (req.query.file || '').replace('../', '');\n3|   const p = path.join('/srv/data', f);\n4|   fs.readFile(p, 'utf8', (err, body) => {\n5|     if (err) return res.status(404).end();\n6|     res.type('text/plain').send(body);\n7|   });\n8| });\n```",
+    "expected_findings": [
+      {
+        "cwe": "CWE-22",
+        "file": "files.js",
+        "line_start": 2,
+        "line_end": 4,
+        "evidence_terms": ["traversal", "..\\", "path.join"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v05-insecure-deserialization",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: session.py\n1| @app.get('/resume')\n2| def resume():\n3|     raw = request.cookies.get('state', '')\n4|     if not raw:\n5|         return {'ok': True}\n6|     obj = pickle.loads(base64.b64decode(raw))\n7|     return {'last': obj.get('last_page', '/home')}\n```",
+    "expected_findings": [
+      {
+        "cwe": "CWE-502",
+        "file": "session.py",
+        "line_start": 6,
+        "line_end": 6,
+        "evidence_terms": ["pickle", "cookie", "code execution"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v06-idor-plus-mass-assignment-chain",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```javascript\n// file: users.js\n1| app.patch('/api/users/:id', async (req, res) => {\n2|   if (req.user.id !== req.params.id && !req.user.isSupport) {\n3|     return res.status(403).end();\n4|   }\n5|   const user = await db.users.findById(req.params.id);\n6|   Object.assign(user, req.body);\n7|   await db.users.save(user);\n8|   res.json({ ok: true });\n9| });\n```",
+    "expected_findings": [
+      {
+        "cwe": "CWE-639",
+        "file": "users.js",
+        "line_start": 2,
+        "line_end": 5,
+        "evidence_terms": ["id", "other user", "authorization"]
+      },
+      {
+        "cwe": "CWE-915",
+        "file": "users.js",
+        "line_start": 6,
+        "line_end": 6,
+        "evidence_terms": ["object.assign", "role", "mass assignment"]
+      }
+    ],
+    "max_findings": 3,
+    "chain_required": true,
+    "chain_terms": ["idor", "mass assignment", "role"],
+    "allowed_fp": 0
+  },
+  {
+    "id": "v07-command-injection-archive",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: backup.py\n1| @app.post('/backup')\n2| def backup():\n3|     name = request.json.get('name', 'daily')\n4|     src = request.json.get('src', '/var/data/app')\n5|     if not src.startswith('/var/data/'):\n6|         return {'error': 'bad src'}, 400\n7|     cmd = f\"tar -czf /tmp/{name}.tgz {src}\"\n8|     os.system(cmd)\n9|     return {'ok': True}\n```",
+    "expected_findings": [
+      {
+        "cwe": "CWE-78",
+        "file": "backup.py",
+        "line_start": 7,
+        "line_end": 8,
+        "evidence_terms": ["os.system", "name", "command injection"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v08-stored-xss-markdown-html",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: comments.py\n1| @app.post('/comments')\n2| def create_comment():\n3|     body = request.json.get('body', '')\n4|     rendered = markdown.markdown(body)\n5|     db.insert_comment({'html': rendered, 'author': current_user.id})\n6|     return {'ok': True}\n7|\n8| @app.get('/comments')\n9| def list_comments():\n10|    return {'items': db.all_comments()}\n```",
+    "expected_findings": [
+      {
+        "cwe": "CWE-79",
+        "file": "comments.py",
+        "line_start": 4,
+        "line_end": 5,
+        "evidence_terms": ["script", "stored", "html"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v09-race-condition-wallet-transfer",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: wallet.py\n1| @app.post('/transfer')\n2| def transfer():\n3|     to = request.json['to']\n4|     amt = int(request.json['amount'])\n5|     src = db.get_balance(current_user.id)\n6|     if src < amt:\n7|         return {'error': 'insufficient'}, 400\n8|     db.set_balance(current_user.id, src - amt)\n9|     db.set_balance(to, db.get_balance(to) + amt)\n10|    return {'ok': True}\n```",
+    "expected_findings": [
+      {
+        "cwe": "CWE-362",
+        "file": "wallet.py",
+        "line_start": 5,
+        "line_end": 9,
+        "evidence_terms": ["race", "concurrent", "double spend"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v10-jwt-debug-bypass",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```javascript\n// file: auth.js\n1| function verifyToken(req) {\n2|   const t = req.headers.authorization?.replace('Bearer ', '') || '';\n3|   try {\n4|     return jwt.verify(t, process.env.JWT_PUBLIC_KEY, { algorithms: ['RS256'] });\n5|   } catch (e) {\n6|     if (process.env.NODE_ENV !== 'production') {\n7|       return jwt.decode(t);\n8|     }\n9|     throw e;\n10|  }\n11| }\n```",
+    "expected_findings": [
+      {
+        "cwe": "CWE-347",
+        "file": "auth.js",
+        "line_start": 6,
+        "line_end": 7,
+        "evidence_terms": ["decode", "unsigned", "bypass"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v11-safe-prepared-query-control",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: safe_query.py\n1| @app.get('/u')\n2| def user_lookup():\n3|     uid = int(request.args['id'])\n4|     row = db.fetch_one('SELECT id,email FROM users WHERE id = %s', [uid])\n5|     return row or {}\n```",
+    "expected_findings": [],
+    "max_findings": 1,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v12-webhook-signature-compare",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: webhook.py\n1| @app.post('/hook')\n2| def hook():\n3|     body = request.get_data()\n4|     got = request.headers.get('X-Sig', '')\n5|     want = hmac.new(SECRET, body, hashlib.sha256).hexdigest()\n6|     if got == want:\n7|         process_event(json.loads(body))\n8|         return {'ok': True}\n9|     return {'error': 'bad sig'}, 401\n```",
+    "expected_findings": [
+      {
+        "cwe": "CWE-208",
+        "file": "webhook.py",
+        "line_start": 6,
+        "line_end": 6,
+        "evidence_terms": ["timing", "compare_digest", "hmac"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  }
+]

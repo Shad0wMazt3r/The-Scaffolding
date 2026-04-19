@@ -169,6 +169,46 @@ python tools/benchmarks/compare_cursor_benchmarks.py ^
   --output reports/benchmarks/cursor-security-comparison.json
 ```
 
+### Vulnerability-finding benchmark (ground-truth quality)
+
+Run hard-but-low-cost vuln-finding benchmark (<=15 tasks) with strict JSON findings and TP/FP/FN scoring:
+
+```bash
+python tools/benchmarks/run_cursor_vuln_benchmark.py ^
+  --profile control ^
+  --tasks tools/benchmarks/cursor_vuln_tasks.json ^
+  --max-tasks 12 ^
+  --timeout-sec 25 ^
+  --output reports/benchmarks/cursor-vuln-control.json
+
+python tools/benchmarks/run_cursor_vuln_benchmark.py ^
+  --profile skills-only ^
+  --tasks tools/benchmarks/cursor_vuln_tasks.json ^
+  --max-tasks 12 ^
+  --timeout-sec 25 ^
+  --output reports/benchmarks/cursor-vuln-skills-only.json
+```
+
+Later (after enabling MCPs):
+
+```bash
+python tools/benchmarks/run_cursor_vuln_benchmark.py ^
+  --profile mcp-enabled ^
+  --tasks tools/benchmarks/cursor_vuln_tasks.json ^
+  --max-tasks 12 ^
+  --timeout-sec 25 ^
+  --output reports/benchmarks/cursor-vuln-mcp-enabled.json
+```
+
+Compare two vuln runs:
+
+```bash
+python tools/benchmarks/compare_cursor_vuln_benchmarks.py ^
+  --baseline reports/benchmarks/cursor-vuln-control.json ^
+  --candidate reports/benchmarks/cursor-vuln-skills-only.json ^
+  --output reports/benchmarks/cursor-vuln-control-vs-skills.json
+```
+
 ---
 
 ## Design Philosophy

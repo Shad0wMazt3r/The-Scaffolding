@@ -1,0 +1,62 @@
+[
+  {
+    "id": "t01-recon-subdomains",
+    "scenario": "Program scope is broad and I need to discover root domains, subdomains, live hosts, and JS assets first.",
+    "expected_phase": "recon",
+    "expected_first_file": "01-setup-and-contract.md"
+  },
+  {
+    "id": "t02-web-idor",
+    "scenario": "I have authenticated web traffic and need to validate IDOR, mass assignment, and access-control bugs in APIs.",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md"
+  },
+  {
+    "id": "t03-network-ad",
+    "scenario": "Target includes SMB, LDAP, and AD trust posture; I need non-destructive network and auth assessment.",
+    "expected_phase": "network",
+    "expected_first_file": "01-environment.md"
+  },
+  {
+    "id": "t04-mobile-tls",
+    "scenario": "Android app traffic is blocked by certificate pinning and I need runtime hooks and storage checks.",
+    "expected_phase": "mobile",
+    "expected_first_file": "01-baseline-and-setup.md"
+  },
+  {
+    "id": "t05-pwn-stack",
+    "scenario": "Challenge is a native binary with suspected stack overflow and mitigations to fingerprint.",
+    "expected_phase": "pwn",
+    "expected_first_file": "01-environment-baseline.md"
+  },
+  {
+    "id": "t06-crypto-rsa",
+    "scenario": "I only have RSA public parameters and ciphertexts and need weak-key and padding triage.",
+    "expected_phase": "crypto",
+    "expected_first_file": "01-workspace-baseline.md"
+  },
+  {
+    "id": "t07-re-malware",
+    "scenario": "Sample is an obfuscated PE that exits under debugger; I need static/dynamic reverse engineering flow.",
+    "expected_phase": "reverse-engineering",
+    "expected_first_file": "01-baseline-and-initial-triage.md"
+  },
+  {
+    "id": "t08-forensics-multi-artifact",
+    "scenario": "I need to investigate disk image, memory dump, and pcap together with reproducible evidence handling.",
+    "expected_phase": "forensics",
+    "expected_first_file": "01-environment-and-tooling.md"
+  },
+  {
+    "id": "t09-web-ssrf-chain",
+    "scenario": "I found possible SSRF and want to validate internal exposure and chain toward impact.",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md"
+  },
+  {
+    "id": "t10-recon-cloud-pivot",
+    "scenario": "Need low-noise recon with cloud asset pivots and recursive discovery loops before exploitation.",
+    "expected_phase": "recon",
+    "expected_first_file": "01-setup-and-contract.md"
+  }
+]
