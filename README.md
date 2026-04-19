@@ -44,11 +44,13 @@ The bootstrap skill loads domain-specific knowledge at session start. Notes pers
 **Setup**
 
 1. Clone this repository
-2. Set up [LatticeMind](https://github.com/Shad0wMazt3r/Lattice-Mind) and run it on Docker
-3. Run the MCP server: `docker compose up --profile=dev`
-4. Add the MCP server to your agent's configuration
-5. Set up [Kali MCP](https://github.com/k3nn3dy-ai/kali-mcp) on a separate port (recommended: `8137`)
-6. Start your agent and load the `bug-hunt-framework` instructions
+2. Copy `.env.example` to `.env` and fill in your API keys / paths
+3. Setup MCPs and launch your preferred agent using the scaffold script:
+   ```bash
+   pip install -r scaffold/requirements.txt
+   python scaffold.py
+   ```
+   *The interactive TUI will let you configure MCPs, initialize projects, and launch agents (Gemini, Cursor, OpenCode, Codex, Copilot, Claude, Antigravity).*
 
 
 ## Project Structure

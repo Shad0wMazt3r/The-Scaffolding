@@ -6,9 +6,23 @@
 - Codex CLI: Reads root `AGENTS.md` directly by default with inheritance rules.
 - OpenCode: Reads `AGENTS.md` via instructions and optional `.opencode/opencode.json`; added `.opencode/agents/bug-hunt-framework.md` and `.opencode/opencode.json`.
 
-## Launch Commands
+## Launch & Orchestration
+You should use the unified `scaffold.py` script to manage and launch agents:
+
+```bash
+# Launch interactive TUI
+python scaffold.py
+
+# CLI alternatives
+python scaffold.py init --agent gemini --project ./my-target
+python scaffold.py mcp sync
+```
+
+Alternatively, direct launch commands:
 - Gemini CLI: `gemini`
-- Cursor: Open Agent chat and use `@bug-hunt-framework` or `/bug-hunt-framework`
-- Copilot CLI: `copilot --agent bug-hunt-framework`
+- Cursor: `cursor <project-dir>` or `cursor-agent`
+- Copilot CLI: `copilot`
 - Codex: `codex`
 - OpenCode: `opencode`
+- Claude: `claude`
+- Antigravity: Open the project folder via the VS Code fork / Antigravity app natively.

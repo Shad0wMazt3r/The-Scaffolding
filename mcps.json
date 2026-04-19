@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "servers": {
+    "lattice-mind": {
+      "description": "LatticeMind scanner and finding scorer",
+      "transports": {
+        "http": { "url": "http://localhost:${LATTICE_MIND_PORT}/mcp" }
+      },
+      "defaultTransport": "http",
+      "headers": {
+        "Authorization": "Bearer ${LATTICE_MIND_TOKEN}",
+        "Content-Type": "application/json"
+      },
+      "health": { "type": "http", "port": "${LATTICE_MIND_PORT}", "warnOnly": false }
+    },
+    "kali-mcp-server": {
+      "description": "Kali Linux security tooling via MCP",
+      "transports": {
+        "sse": { "url": "http://localhost:${KALI_MCP_PORT}/sse" }
+      },
+      "defaultTransport": "sse",
+      "health": { "type": "http", "port": "${KALI_MCP_PORT}", "warnOnly": false }
+    },
+    "ghidra-mcp": {
+      "description": "GhidraMCP reverse engineering bridge (LaurieWired)",
+      "source": {
+        "git": "https://github.com/LaurieWired/GhidraMCP.git",
+        "install": "pip install -r requirements.txt",
+        "localPath": "${GHIDRA_BRIDGE_DIR}"
+      },
+      "transports": {
+        "stdio": {
+          "command": "python",
+          "args": ["${GHIDRA_BRIDGE_DIR}/bridge_mcp_ghidra.py", "--ghidra-server", "http://127.0.0.1:${GHIDRA_MCP_PORT}/"]
+        },
+        "sse": { "url": "http://127.0.0.1:${GHIDRA_BRIDGE_SSE_PORT}/sse" }
+      },
+      "defaultTransport": "stdio",
+      "health": { "type": "bridge-path", "path": "${GHIDRA_BRIDGE_DIR}/bridge_mcp_ghidra.py", "port": "${GHIDRA_BRIDGE_SSE_PORT}", "warnOnly": true }
+    },
+    "github-mcp": {
+      "description": "GitHub MCP server for exploit/PoC search",
+      "transports": {
+        "stdio": {
+          "command": "docker",
+          "args": ["run", "-i", "--rm", "-e", "GITHUB_PERSONAL_ACCESS_TOKEN", "ghcr.io/github/github-mcp-server"],
+          "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}" }
+        }
+      },
+      "defaultTransport": "stdio",
+      "health": { "type": "docker-image", "image": "ghcr.io/github/github-mcp-server", "warnOnly": false }
+    }
+  }
+}
