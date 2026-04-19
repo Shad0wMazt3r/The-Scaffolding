@@ -96,7 +96,7 @@ def run_tui(start_tab="Init"):
                                 transport = entry.get("defaultTransport", list(entry.get("transports", {}).keys())[0] if entry.get("transports") else "unknown")
                                 t_rows.append(Row.from_strings([str(name), str(transport), "❓ checking..."]))
 
-                        t = Table(t_rows, [Constraint.percentage(30), Constraint.percentage(20), Constraint.percentage(50)], header=header) \
+                        t = Table(t_rows).column_widths([Constraint.percentage(30), Constraint.percentage(20), Constraint.percentage(50)]).header(header) \
                             .block(Block().bordered().title("Registered MCPs")) \
                             .highlight_style(Style().fg(Color.yellow()).bold()) \
                             .highlight_symbol("▶ ")
@@ -110,7 +110,7 @@ def run_tui(start_tab="Init"):
                             model_str = s.get("model") or "default"
                             t_rows.append(Row.from_strings([str(s.get("agent", "")), str(model_str), str(s.get("project", "")), str(s.get("timestamp", ""))[:16]]))
                         
-                        t = Table(t_rows, [Constraint.percentage(20), Constraint.percentage(20), Constraint.percentage(40), Constraint.percentage(20)], header=header) \
+                        t = Table(t_rows).column_widths([Constraint.percentage(20), Constraint.percentage(20), Constraint.percentage(40), Constraint.percentage(20)]).header(header) \
                             .block(Block().bordered().title("Recent Sessions")) \
                             .highlight_style(Style().fg(Color.yellow()).bold()) \
                             .highlight_symbol("▶ ")
