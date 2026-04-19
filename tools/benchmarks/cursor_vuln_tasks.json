@@ -2,6 +2,8 @@
   {
     "id": "v01-sqli-orderby",
     "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: app.py\n1| def list_users(request):\n2|     allowed = {'name', 'created_at'}\n3|     sort = request.args.get('sort', 'name')\n4|     direction = request.args.get('dir', 'asc')\n5|     if sort not in allowed:\n6|         sort = 'name'\n7|     q = f\"SELECT id,email FROM users ORDER BY {sort} {direction}\"\n8|     return db.fetch_all(q)\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
     "expected_findings": [
       {
         "cwe": "CWE-89",
@@ -18,6 +20,8 @@
   {
     "id": "v02-ssrf-allowlist-bypass",
     "scenario": "Analyze this snippet for real vulnerabilities only.\n```javascript\n// file: proxy.js\n1| app.get('/fetch', async (req, res) => {\n2|   const u = req.query.url || '';\n3|   if (!u.startsWith('https://api.partner.com')) {\n4|     return res.status(400).send('bad target');\n5|   }\n6|   const data = await axios.get(u, { timeout: 1500 });\n7|   res.send(data.data);\n8| });\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
     "expected_findings": [
       {
         "cwe": "CWE-918",
@@ -34,6 +38,8 @@
   {
     "id": "v03-idor-object-access",
     "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: invoices.py\n1| @app.patch('/api/invoices/<inv_id>')\n2| def update_invoice(inv_id):\n3|     inv = db.get_invoice(inv_id)\n4|     if not user_can_edit(current_user, inv.project_id):\n5|         return {'error': 'forbidden'}, 403\n6|     inv.note = request.json.get('note', inv.note)\n7|     db.save(inv)\n8|     return inv.to_json()\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
     "expected_findings": [
       {
         "cwe": "CWE-639",
@@ -50,6 +56,8 @@
   {
     "id": "v04-path-traversal-sanitize-bypass",
     "scenario": "Analyze this snippet for real vulnerabilities only.\n```javascript\n// file: files.js\n1| app.get('/download', (req, res) => {\n2|   const f = (req.query.file || '').replace('../', '');\n3|   const p = path.join('/srv/data', f);\n4|   fs.readFile(p, 'utf8', (err, body) => {\n5|     if (err) return res.status(404).end();\n6|     res.type('text/plain').send(body);\n7|   });\n8| });\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
     "expected_findings": [
       {
         "cwe": "CWE-22",
@@ -66,6 +74,8 @@
   {
     "id": "v05-insecure-deserialization",
     "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: session.py\n1| @app.get('/resume')\n2| def resume():\n3|     raw = request.cookies.get('state', '')\n4|     if not raw:\n5|         return {'ok': True}\n6|     obj = pickle.loads(base64.b64decode(raw))\n7|     return {'last': obj.get('last_page', '/home')}\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
     "expected_findings": [
       {
         "cwe": "CWE-502",
@@ -82,6 +92,8 @@
   {
     "id": "v06-idor-plus-mass-assignment-chain",
     "scenario": "Analyze this snippet for real vulnerabilities only.\n```javascript\n// file: users.js\n1| app.patch('/api/users/:id', async (req, res) => {\n2|   if (req.user.id !== req.params.id && !req.user.isSupport) {\n3|     return res.status(403).end();\n4|   }\n5|   const user = await db.users.findById(req.params.id);\n6|   Object.assign(user, req.body);\n7|   await db.users.save(user);\n8|   res.json({ ok: true });\n9| });\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
     "expected_findings": [
       {
         "cwe": "CWE-639",
@@ -106,6 +118,8 @@
   {
     "id": "v07-command-injection-archive",
     "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: backup.py\n1| @app.post('/backup')\n2| def backup():\n3|     name = request.json.get('name', 'daily')\n4|     src = request.json.get('src', '/var/data/app')\n5|     if not src.startswith('/var/data/'):\n6|         return {'error': 'bad src'}, 400\n7|     cmd = f\"tar -czf /tmp/{name}.tgz {src}\"\n8|     os.system(cmd)\n9|     return {'ok': True}\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
     "expected_findings": [
       {
         "cwe": "CWE-78",
@@ -122,6 +136,8 @@
   {
     "id": "v08-stored-xss-markdown-html",
     "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: comments.py\n1| @app.post('/comments')\n2| def create_comment():\n3|     body = request.json.get('body', '')\n4|     rendered = markdown.markdown(body)\n5|     db.insert_comment({'html': rendered, 'author': current_user.id})\n6|     return {'ok': True}\n7|\n8| @app.get('/comments')\n9| def list_comments():\n10|    return {'items': db.all_comments()}\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
     "expected_findings": [
       {
         "cwe": "CWE-79",
@@ -138,6 +154,8 @@
   {
     "id": "v09-race-condition-wallet-transfer",
     "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: wallet.py\n1| @app.post('/transfer')\n2| def transfer():\n3|     to = request.json['to']\n4|     amt = int(request.json['amount'])\n5|     src = db.get_balance(current_user.id)\n6|     if src < amt:\n7|         return {'error': 'insufficient'}, 400\n8|     db.set_balance(current_user.id, src - amt)\n9|     db.set_balance(to, db.get_balance(to) + amt)\n10|    return {'ok': True}\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
     "expected_findings": [
       {
         "cwe": "CWE-362",
@@ -145,15 +163,24 @@
         "line_start": 5,
         "line_end": 9,
         "evidence_terms": ["race", "concurrent", "double spend"]
+      },
+      {
+        "cwe": "CWE-20",
+        "file": "wallet.py",
+        "line_start": 4,
+        "line_end": 9,
+        "evidence_terms": ["negative", "amount", "validation"]
       }
     ],
-    "max_findings": 2,
+    "max_findings": 3,
     "chain_required": false,
     "allowed_fp": 0
   },
   {
     "id": "v10-jwt-debug-bypass",
     "scenario": "Analyze this snippet for real vulnerabilities only.\n```javascript\n// file: auth.js\n1| function verifyToken(req) {\n2|   const t = req.headers.authorization?.replace('Bearer ', '') || '';\n3|   try {\n4|     return jwt.verify(t, process.env.JWT_PUBLIC_KEY, { algorithms: ['RS256'] });\n5|   } catch (e) {\n6|     if (process.env.NODE_ENV !== 'production') {\n7|       return jwt.decode(t);\n8|     }\n9|     throw e;\n10|  }\n11| }\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
     "expected_findings": [
       {
         "cwe": "CWE-347",
@@ -168,8 +195,10 @@
     "allowed_fp": 0
   },
   {
-    "id": "v11-safe-prepared-query-control",
-    "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: safe_query.py\n1| @app.get('/u')\n2| def user_lookup():\n3|     uid = int(request.args['id'])\n4|     row = db.fetch_one('SELECT id,email FROM users WHERE id = %s', [uid])\n5|     return row or {}\n```",
+    "id": "v11-safe-authz-control",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: safe_query.py\n1| @app.get('/u')\n2| @login_required\n3| def user_lookup():\n4|     uid = int(request.args['id'])\n5|     if uid != current_user.id:\n6|         return {'error': 'forbidden'}, 403\n7|     row = db.fetch_one('SELECT id,email FROM users WHERE id = %s', [uid])\n8|     return row or {}\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
     "expected_findings": [],
     "max_findings": 1,
     "chain_required": false,
@@ -178,6 +207,8 @@
   {
     "id": "v12-webhook-signature-compare",
     "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: webhook.py\n1| @app.post('/hook')\n2| def hook():\n3|     body = request.get_data()\n4|     got = request.headers.get('X-Sig', '')\n5|     want = hmac.new(SECRET, body, hashlib.sha256).hexdigest()\n6|     if got == want:\n7|         process_event(json.loads(body))\n8|         return {'ok': True}\n9|     return {'error': 'bad sig'}, 401\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
     "expected_findings": [
       {
         "cwe": "CWE-208",
@@ -188,6 +219,142 @@
       }
     ],
     "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v13-open-redirect-double-slash",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: redirect.py\n1| @app.get('/go')\n2| def go():\n3|     nxt = request.args.get('next', '/home')\n4|     if not nxt.startswith('/'):\n5|         return {'error': 'bad target'}, 400\n6|     return redirect(nxt)\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
+    "expected_findings": [
+      {
+        "cwe": "CWE-601",
+        "file": "redirect.py",
+        "line_start": 4,
+        "line_end": 6,
+        "evidence_terms": ["//evil.com", "redirect", "next"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v14-xxe-parser-entities",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: xml_api.py\n1| @app.post('/xml/import')\n2| def import_xml():\n3|     parser = etree.XMLParser(resolve_entities=True, no_network=False)\n4|     doc = etree.fromstring(request.data, parser=parser)\n5|     return {'title': doc.findtext('title', default='')}\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
+    "expected_findings": [
+      {
+        "cwe": "CWE-611",
+        "file": "xml_api.py",
+        "line_start": 3,
+        "line_end": 4,
+        "evidence_terms": ["resolve_entities", "external entity", "xxe"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v15-nosqli-operator-injection",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```javascript\n// file: login.js\n1| app.post('/login', async (req, res) => {\n2|   const q = { email: req.body.email, password: req.body.password };\n3|   const user = await db.users.findOne(q);\n4|   if (!user) return res.status(401).end();\n5|   res.json({ ok: true });\n6| });\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
+    "expected_findings": [
+      {
+        "cwe": "CWE-943",
+        "file": "login.js",
+        "line_start": 2,
+        "line_end": 3,
+        "evidence_terms": ["$ne", "object", "operator"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v16-ssrf-metadata-endpoint",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: avatar.py\n1| @app.post('/avatar/fetch')\n2| def fetch_avatar():\n3|     url = request.json['url']\n4|     if not url.startswith('http'):\n5|         return {'error': 'bad url'}, 400\n6|     data = requests.get(url, timeout=2).content\n7|     return {'size': len(data)}\n```",
+    "expected_phase": "web",
+    "expected_first_file": "01-prerequisites-and-environment.md",
+    "expected_findings": [
+      {
+        "cwe": "CWE-918",
+        "file": "avatar.py",
+        "line_start": 3,
+        "line_end": 6,
+        "evidence_terms": ["169.254.169.254", "metadata", "internal"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v17-pwn-gets-overflow",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```c\n// file: vuln.c\n1| #include <stdio.h>\n2| int main(void) {\n3|   char buf[64];\n4|   puts(\"name:\");\n5|   gets(buf);\n6|   puts(\"ok\");\n7|   return 0;\n8| }\n```",
+    "expected_phase": "pwn",
+    "expected_first_file": "01-environment-baseline.md",
+    "expected_findings": [
+      {
+        "cwe": "CWE-120",
+        "file": "vuln.c",
+        "line_start": 5,
+        "line_end": 5,
+        "evidence_terms": ["gets", "overflow", "bounds"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v18-mobile-plaintext-token-storage",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```kotlin\n// file: SessionStore.kt\n1| class SessionStore(private val ctx: Context) {\n2|   fun saveToken(token: String) {\n3|     val p = ctx.getSharedPreferences(\"auth\", Context.MODE_PRIVATE)\n4|     p.edit().putString(\"access_token\", token).apply()\n5|   }\n6| }\n```",
+    "expected_phase": "mobile",
+    "expected_first_file": "01-baseline-and-setup.md",
+    "expected_findings": [
+      {
+        "cwe": "CWE-312",
+        "file": "SessionStore.kt",
+        "line_start": 3,
+        "line_end": 4,
+        "evidence_terms": ["plaintext", "sharedpreferences", "token"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v19-crypto-hardcoded-key",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```python\n# file: crypto_util.py\n1| from Crypto.Cipher import AES\n2| KEY = b'0123456789abcdef'\n3| def enc(data: bytes) -> bytes:\n4|     iv = os.urandom(16)\n5|     cipher = AES.new(KEY, AES.MODE_CBC, iv)\n6|     return iv + cipher.encrypt(pad(data, 16))\n```",
+    "expected_phase": "crypto",
+    "expected_first_file": "01-workspace-baseline.md",
+    "expected_findings": [
+      {
+        "cwe": "CWE-321",
+        "file": "crypto_util.py",
+        "line_start": 2,
+        "line_end": 2,
+        "evidence_terms": ["hardcoded", "key", "constant"]
+      }
+    ],
+    "max_findings": 2,
+    "chain_required": false,
+    "allowed_fp": 0
+  },
+  {
+    "id": "v20-pwn-safe-copy-control",
+    "scenario": "Analyze this snippet for real vulnerabilities only.\n```c\n// file: safe_copy.c\n1| #include <string.h>\n2| int copy_name(const char *in, char *out, size_t out_sz) {\n3|   if (!in || !out || out_sz == 0) return -1;\n4|   size_t n = strnlen(in, out_sz - 1);\n5|   memcpy(out, in, n);\n6|   out[n] = '\\0';\n7|   return 0;\n8| }\n```",
+    "expected_phase": "pwn",
+    "expected_first_file": "01-environment-baseline.md",
+    "expected_findings": [],
+    "max_findings": 1,
     "chain_required": false,
     "allowed_fp": 0
   }

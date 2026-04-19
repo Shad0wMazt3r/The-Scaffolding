@@ -14,6 +14,16 @@ from pathlib import Path
 JSON_BLOCK_RE = re.compile(r"\{[\s\S]*\}")
 FENCED_BLOCK_RE = re.compile(r"```(?:json)?\s*([\s\S]*?)\s*```", re.IGNORECASE)
 DEFAULT_MODEL = "composer-2"
+PHASE_TO_FIRST_FILE = {
+    "recon": "01-setup-and-contract.md",
+    "web": "01-prerequisites-and-environment.md",
+    "network": "01-environment.md",
+    "mobile": "01-baseline-and-setup.md",
+    "pwn": "01-environment-baseline.md",
+    "crypto": "01-workspace-baseline.md",
+    "reverse-engineering": "01-baseline-and-initial-triage.md",
+    "forensics": "01-environment-and-tooling.md",
+}
 
 
 def read_json(path: Path) -> list[dict]:
@@ -138,19 +148,38 @@ def build_prompt(task: dict, profile: str) -> str:
         "mcp-enabled": "MCP-enabled mode: skills plus MCP-assisted pivots are allowed.",
     }[profile]
     max_findings = int(task.get("max_findings", 2))
-    scenario_text = str(task["scenario"]).strip()
+    scenario_inline = re.sub(r"\s+", " ", str(task["scenario"])).strip()
+    route_hint = (
+        "Include skill routing anchor with exact values. "
+        "Use skill_anchor.phase in [recon, web, network, mobile, pwn, crypto, reverse-engineering, forensics] and "
+        "skill_anchor.first_file mapped exactly as: "
+        + ", ".join(f"{k}=>{v}" for k, v in PHASE_TO_FIRST_FILE.items())
+        + ". "
+        if profile != "control"
+        else ""
+    )
+    output_shape = (
+        '{"skill_anchor":{"phase":"","first_file":""},"findings":[{"cwe":"CWE-...","file":"","line_start":0,"line_end":0,"vuln_claim":"","proof":"","repro_steps":"","impact":"","confidence":0.0,"chain_steps":""}]}'
+        if profile != "control"
+        else '{"findings":[{"cwe":"CWE-...","file":"","line_start":0,"line_end":0,"vuln_claim":"","proof":"","repro_steps":"","impact":"","confidence":0.0,"chain_steps":""}]}'
+    )
+    no_findings_hint = (
+        'If no valid vulnerability exists, return {"skill_anchor":{"phase":"","first_file":""},"findings":[]}. '
+        if profile != "control"
+        else 'If no valid vulnerability exists, return {"findings":[]}. '
+    )
     return (
         f"{mode_hint} "
         "Analyze ONLY the snippet text provided in this prompt. "
         "Do not inspect repository files, tooling code, or any external context. "
         "This is an authorized synthetic benchmark; some tasks are intentionally clean controls. "
         "Do not default to empty findings unless the snippet is clearly non-exploitable. "
-        f"Return only minified JSON with this exact shape: "
-        '{"findings":[{"cwe":"CWE-...","file":"","line_start":0,"line_end":0,"vuln_claim":"","proof":"","repro_steps":"","impact":"","confidence":0.0,"chain_steps":""}]}. '
+        f"{route_hint}"
+        f"Return only minified JSON with this exact shape: {output_shape}. "
         f"Output at most {max_findings} findings. "
-        'If no valid vulnerability exists, return {"findings":[]}. '
+        f"{no_findings_hint}"
         "Use exact file and line numbers from the snippet. Keep each text field to one concise sentence. "
-        f"Scenario:\n{scenario_text}"
+        f"Scenario: {scenario_inline}"
     )
 
 
@@ -180,7 +209,7 @@ def run_agent(agent_cmd: str, prompt: str, timeout_sec: int, model: str, approve
         return "", "", -1, elapsed, "timeout"
 
 
-def score_task(task: dict, parsed: dict | None, error: str, returncode: int) -> dict:
+def score_task(task: dict, parsed: dict | None, error: str, returncode: int, profile: str) -> dict:
     expected = task.get("expected_findings", [])
     raw_findings = parsed.get("findings", []) if isinstance(parsed, dict) else []
     findings = raw_findings if isinstance(raw_findings, list) else []
@@ -265,10 +294,29 @@ def score_task(task: dict, parsed: dict | None, error: str, returncode: int) -> 
     fp_count = predicted_count - valid_tp
     structured_ok = isinstance(parsed, dict) and isinstance(parsed.get("findings", []), list)
 
+    expected_phase = str(task.get("expected_phase", ""))
+    expected_first = str(task.get("expected_first_file", ""))
+    anchor = parsed.get("skill_anchor", {}) if isinstance(parsed, dict) else {}
+    predicted_phase = str(anchor.get("phase", "")) if isinstance(anchor, dict) else ""
+    predicted_first = str(anchor.get("first_file", "")) if isinstance(anchor, dict) else ""
+    route_required = profile != "control"
+    skill_anchor_present = bool(predicted_phase.strip() and predicted_first.strip())
+    route_phase_ok = (not route_required) or (predicted_phase == expected_phase)
+    route_first_ok = (not route_required) or file_match(predicted_first, expected_first)
+    route_strict_ok = (not route_required) or (skill_anchor_present and route_phase_ok and route_first_ok)
+
     chain_required = bool(task.get("chain_required", False))
     chain_terms = [str(t).lower() for t in task.get("chain_terms", [])]
-    expected_chain_cwes = {normalize_cwe(str(e.get("cwe", ""))) for e in expected if normalize_cwe(str(e.get("cwe", "")))}
-    predicted_chain_cwes = {normalize_cwe(str(p.get("cwe", ""))) for p in cleaned if normalize_cwe(str(p.get("cwe", "")))}
+    expected_chain_cwes = (
+        {normalize_cwe(str(e.get("cwe", ""))) for e in expected if normalize_cwe(str(e.get("cwe", "")))}
+        if chain_required
+        else set()
+    )
+    predicted_chain_cwes = (
+        {normalize_cwe(str(p.get("cwe", ""))) for p in cleaned if normalize_cwe(str(p.get("cwe", "")))}
+        if chain_required
+        else set()
+    )
     chain_cwe_hits = len(expected_chain_cwes.intersection(predicted_chain_cwes))
     chain_coverage = (chain_cwe_hits / len(expected_chain_cwes)) if expected_chain_cwes else 1.0
     chain_linked = True
@@ -291,6 +339,7 @@ def score_task(task: dict, parsed: dict | None, error: str, returncode: int) -> 
         and fn_count == 0
         and fp_count <= allowed_fp
         and chain_success
+        and route_strict_ok
     )
 
     return {
@@ -306,6 +355,15 @@ def score_task(task: dict, parsed: dict | None, error: str, returncode: int) -> 
         "fp_count": fp_count,
         "fn_count": fn_count,
         "structured_ok": structured_ok,
+        "expected_phase": expected_phase,
+        "expected_first_file": expected_first,
+        "predicted_phase": predicted_phase,
+        "predicted_first_file": predicted_first,
+        "route_required": route_required,
+        "skill_anchor_present": skill_anchor_present,
+        "route_phase_ok": route_phase_ok,
+        "route_first_ok": route_first_ok,
+        "route_strict_ok": route_strict_ok,
         "chain_required": chain_required,
         "chain_cwe_hits": chain_cwe_hits,
         "chain_expected_cwes": len(expected_chain_cwes),
@@ -325,7 +383,7 @@ def main() -> int:
     parser.add_argument("--repo-root", default=str(Path(__file__).resolve().parents[2]), help="Repository root path")
     parser.add_argument("--tasks", default="tools/benchmarks/cursor_vuln_tasks.json", help="Task file path")
     parser.add_argument("--output", default="", help="Output report path")
-    parser.add_argument("--max-tasks", type=int, default=12, help="Maximum tasks to run (hard limit 15)")
+    parser.add_argument("--max-tasks", type=int, default=20, help="Maximum tasks to run (hard limit 20)")
     parser.add_argument("--timeout-sec", type=int, default=120, help="Timeout per task in seconds")
     parser.add_argument("--model", default=DEFAULT_MODEL, help=f"Model override (default: {DEFAULT_MODEL})")
     parser.add_argument(
@@ -339,10 +397,15 @@ def main() -> int:
         default=str(Path.home() / "AppData" / "Local" / "cursor-agent" / "agent.cmd"),
         help="Path to Cursor agent command",
     )
+    parser.add_argument(
+        "--store-raw-output",
+        action="store_true",
+        help="Store full model output/error text for manual grading",
+    )
     args = parser.parse_args()
 
-    if args.max_tasks > 15:
-        raise SystemExit("--max-tasks cannot exceed 15")
+    if args.max_tasks > 20:
+        raise SystemExit("--max-tasks cannot exceed 20")
 
     root = Path(args.repo_root).resolve()
     task_path = Path(args.tasks)
@@ -368,7 +431,7 @@ def main() -> int:
             approve_mcps=approve_mcps,
         )
         parsed = extract_json(stdout) if not error else None
-        scored = score_task(task, parsed, error, returncode)
+        scored = score_task(task, parsed, error, returncode, profile=args.profile)
         out_chars = len(stdout or "")
         prompt_chars = len(prompt)
         est_tokens = math.ceil((prompt_chars + out_chars) / 4)
@@ -394,6 +457,15 @@ def main() -> int:
                 "fp_count": scored["fp_count"],
                 "fn_count": scored["fn_count"],
                 "structured_ok": scored["structured_ok"],
+                "expected_phase": scored["expected_phase"],
+                "expected_first_file": scored["expected_first_file"],
+                "predicted_phase": scored["predicted_phase"],
+                "predicted_first_file": scored["predicted_first_file"],
+                "route_required": scored["route_required"],
+                "skill_anchor_present": scored["skill_anchor_present"],
+                "route_phase_ok": scored["route_phase_ok"],
+                "route_first_ok": scored["route_first_ok"],
+                "route_strict_ok": scored["route_strict_ok"],
                 "chain_required": scored["chain_required"],
                 "chain_cwe_hits": scored["chain_cwe_hits"],
                 "chain_expected_cwes": scored["chain_expected_cwes"],
@@ -403,6 +475,8 @@ def main() -> int:
                 "strict_pass": scored["strict_pass"],
                 "stdout_preview": stdout[:300] if stdout else "",
                 "stderr_preview": stderr[:300] if stderr else "",
+                "raw_output": stdout if args.store_raw_output else "",
+                "raw_error": stderr if args.store_raw_output else "",
             }
         )
 
@@ -423,6 +497,11 @@ def main() -> int:
     chain_successes = len([r for r in results if r["chain_required"] and r["chain_success"]])
     chain_linked_hits = len([r for r in results if r["chain_required"] and r["chain_linked"]])
     chain_coverage_sum = sum(r["chain_coverage"] for r in results if r["chain_required"])
+    route_tasks = len([r for r in results if r["route_required"]])
+    route_anchor_hits = len([r for r in results if r["route_required"] and r["skill_anchor_present"]])
+    route_phase_hits = len([r for r in results if r["route_required"] and r["route_phase_ok"]])
+    route_first_hits = len([r for r in results if r["route_required"] and r["route_first_ok"]])
+    route_strict_hits = len([r for r in results if r["route_required"] and r["route_strict_ok"]])
     avg_latency = round(sum(r["elapsed_sec"] for r in results) / attempted, 3) if attempted else 0.0
     avg_prompt_chars = round(sum(r["prompt_chars"] for r in results) / attempted, 1) if attempted else 0.0
     avg_output_chars = round(sum(r["output_chars"] for r in results) / attempted, 1) if attempted else 0.0
@@ -469,6 +548,10 @@ def main() -> int:
             "fp_per_task": round((fp_total / attempted), 4) if attempted else 0.0,
             "overreport_rate": round((fp_total / predicted_total), 4) if predicted_total else 0.0,
             "empty_output_task_rate": pct(len([r for r in results if r["predicted_count"] == 0]), attempted),
+            "skill_anchor_presence_rate": pct(route_anchor_hits, route_tasks) if route_tasks else None,
+            "skill_route_phase_accuracy": pct(route_phase_hits, route_tasks) if route_tasks else None,
+            "skill_route_first_file_accuracy": pct(route_first_hits, route_tasks) if route_tasks else None,
+            "skill_route_strict_accuracy": pct(route_strict_hits, route_tasks) if route_tasks else None,
             "chain_coverage_rate": round((chain_coverage_sum / chain_tasks), 4) if chain_tasks else 0.0,
             "chain_linked_rate": pct(chain_linked_hits, chain_tasks),
             "chain_success_rate": pct(chain_successes, chain_tasks),

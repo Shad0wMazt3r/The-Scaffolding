@@ -14,8 +14,14 @@
   "metric_deltas": {
     "chain_coverage_rate": {
       "baseline": 0.5,
-      "candidate": 1.0,
-      "delta": 0.5,
+      "candidate": 0.5,
+      "delta": 0.0,
+      "direction": "equal"
+    },
+    "chain_linked_rate": {
+      "baseline": 0.0,
+      "candidate": 100.0,
+      "delta": 100.0,
       "direction": "better"
     },
     "chain_success_rate": {
@@ -31,8 +37,8 @@
       "direction": "equal"
     },
     "empty_output_task_rate": {
-      "baseline": 16.67,
-      "candidate": 16.67,
+      "baseline": 8.33,
+      "candidate": 8.33,
       "delta": 0.0,
       "direction": "equal"
     },
@@ -43,10 +49,10 @@
       "direction": "equal"
     },
     "f1": {
-      "baseline": 0.72,
-      "candidate": 0.6923,
-      "delta": -0.0277,
-      "direction": "worse"
+      "baseline": 0.6667,
+      "candidate": 0.6667,
+      "delta": 0.0,
+      "direction": "equal"
     },
     "file_recall": {
       "baseline": 0.75,
@@ -55,10 +61,10 @@
       "direction": "equal"
     },
     "fp_per_task": {
-      "baseline": 0.3333,
-      "candidate": 0.4167,
-      "delta": 0.0834,
-      "direction": "worse"
+      "baseline": 0.5,
+      "candidate": 0.5,
+      "delta": 0.0,
+      "direction": "equal"
     },
     "line_recall": {
       "baseline": 0.75,
@@ -67,16 +73,16 @@
       "direction": "equal"
     },
     "overreport_rate": {
-      "baseline": 0.3077,
-      "candidate": 0.3571,
-      "delta": 0.0494,
-      "direction": "worse"
+      "baseline": 0.4,
+      "candidate": 0.4,
+      "delta": 0.0,
+      "direction": "equal"
     },
     "precision": {
-      "baseline": 0.6923,
-      "candidate": 0.6429,
-      "delta": -0.0494,
-      "direction": "worse"
+      "baseline": 0.6,
+      "candidate": 0.6,
+      "delta": 0.0,
+      "direction": "equal"
     },
     "recall": {
       "baseline": 0.75,
@@ -86,9 +92,9 @@
     },
     "strict_task_accuracy": {
       "baseline": 50.0,
-      "candidate": 33.33,
-      "delta": -16.67,
-      "direction": "worse"
+      "candidate": 50.0,
+      "delta": 0.0,
+      "direction": "equal"
     },
     "tp_per_task": {
       "baseline": 0.75,

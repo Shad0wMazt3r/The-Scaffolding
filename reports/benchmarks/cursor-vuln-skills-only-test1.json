@@ -1,0 +1,92 @@
+{
+  "config": {
+    "agent_cmd": "C:\\Users\\er123\\AppData\\Local\\cursor-agent\\agent.cmd",
+    "auto_mode_flags": {
+      "approve_mcps": false,
+      "force": true,
+      "mode": "ask",
+      "print": true,
+      "trust": true
+    },
+    "max_tasks": 1,
+    "model": "composer-2",
+    "profile": "skills-only",
+    "tasks_file": "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\tools\\benchmarks\\cursor_vuln_tasks.json",
+    "timeout_sec": 120
+  },
+  "results": [
+    {
+      "chain_coverage": 1.0,
+      "chain_cwe_hits": 1,
+      "chain_expected_cwes": 1,
+      "chain_linked": true,
+      "chain_required": false,
+      "chain_success": true,
+      "cwe_matches": 1,
+      "elapsed_sec": 23.369,
+      "error": "",
+      "estimated_tokens": 457,
+      "evidence_matches": 1,
+      "expected_count": 1,
+      "file_matches": 1,
+      "fn_count": 0,
+      "fp_count": 0,
+      "id": "v01-sqli-orderby",
+      "line_matches": 1,
+      "output_chars": 672,
+      "parsed_findings": [
+        {
+          "chain_steps": "Single-step: inject via `dir` on the same HTTP request that triggers `list_users`.",
+          "confidence": "0.88",
+          "cwe": "CWE-89",
+          "file": "app.py",
+          "impact": "Database contents can be leaked or altered depending on DB features, permissions, and driver behavior.",
+          "line_end": 7,
+          "line_start": 7,
+          "proof": "`direction` from `request.args` is concatenated into `q` alongside `ORDER BY {sort} {direction}`.",
+          "repro_steps": "Call the endpoint with `sort=name` and `dir` set to a SQL-injection payload that continues the statement after the sort keyword.",
+          "vuln_claim": "User-controlled `direction` is interpolated into the SQL `ORDER BY` clause without an allowlist."
+        }
+      ],
+      "predicted_count": 1,
+      "prompt_chars": 1154,
+      "returncode": 0,
+      "stderr_preview": "",
+      "stdout_preview": "{\"findings\":[{\"cwe\":\"CWE-89\",\"file\":\"app.py\",\"line_start\":7,\"line_end\":7,\"vuln_claim\":\"User-controlled `direction` is interpolated into the SQL `ORDER BY` clause without an allowlist.\",\"proof\":\"`direction` from `request.args` is concatenated into `q` alongside `ORDER BY {sort} {direction}`.\",\"repro_",
+      "strict_pass": true,
+      "structured_ok": true,
+      "valid_tp": 1,
+      "weak_matches": 0
+    }
+  ],
+  "summary": {
+    "attempted": 1,
+    "avg_estimated_tokens": 457.0,
+    "avg_latency_sec": 23.369,
+    "avg_output_chars": 672.0,
+    "avg_prompt_chars": 1154.0,
+    "chain_coverage_rate": 0.0,
+    "chain_linked_rate": 0.0,
+    "chain_success_rate": 0.0,
+    "completed": 1,
+    "cwe_recall": 1.0,
+    "empty_output_task_rate": 0.0,
+    "evidence_recall": 1.0,
+    "expected_findings_total": 1,
+    "f1": 1.0,
+    "file_recall": 1.0,
+    "fn_total": 0,
+    "fp_per_task": 0.0,
+    "fp_total": 0,
+    "line_recall": 1.0,
+    "overreport_rate": 0.0,
+    "precision": 1.0,
+    "predicted_findings_total": 1,
+    "recall": 1.0,
+    "strict_task_accuracy": 100.0,
+    "time_per_valid_tp_sec": 23.369,
+    "timeouts": 0,
+    "tp_per_task": 1.0,
+    "valid_tp_total": 1
+  }
+}

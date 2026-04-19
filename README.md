@@ -172,21 +172,25 @@ python tools/benchmarks/compare_cursor_benchmarks.py ^
 
 ### Vulnerability-finding benchmark (ground-truth quality)
 
-Run hard-but-low-cost vuln-finding benchmark (<=15 tasks) with strict JSON findings and TP/FP/FN scoring:
+Run hard-but-low-cost vuln-finding benchmark (up to 20 tasks) with strict JSON findings and TP/FP/FN scoring:
 
 ```bash
 python tools/benchmarks/run_cursor_vuln_benchmark.py ^
   --profile control ^
+  --model composer-2 ^
   --tasks tools/benchmarks/cursor_vuln_tasks.json ^
-  --max-tasks 12 ^
+  --max-tasks 20 ^
   --timeout-sec 120 ^
+  --store-raw-output ^
   --output reports/benchmarks/cursor-vuln-control.json
 
 python tools/benchmarks/run_cursor_vuln_benchmark.py ^
   --profile skills-only ^
+  --model composer-2 ^
   --tasks tools/benchmarks/cursor_vuln_tasks.json ^
-  --max-tasks 12 ^
+  --max-tasks 20 ^
   --timeout-sec 120 ^
+  --store-raw-output ^
   --output reports/benchmarks/cursor-vuln-skills-only.json
 ```
 
@@ -195,9 +199,11 @@ Later (after enabling MCPs):
 ```bash
 python tools/benchmarks/run_cursor_vuln_benchmark.py ^
   --profile mcp-enabled ^
+  --model composer-2 ^
   --tasks tools/benchmarks/cursor_vuln_tasks.json ^
-  --max-tasks 12 ^
+  --max-tasks 20 ^
   --timeout-sec 120 ^
+  --store-raw-output ^
   --output reports/benchmarks/cursor-vuln-mcp-enabled.json
 ```
 
@@ -210,8 +216,29 @@ python tools/benchmarks/compare_cursor_vuln_benchmarks.py ^
   --output reports/benchmarks/cursor-vuln-control-vs-skills.json
 ```
 
-By default, vuln comparison focuses on efficacy metrics (precision/recall/F1/FP behavior/localization).
-Add `--include-cost` only when you explicitly want latency/token deltas included.
+Run a 2-run experiment (control vs skills-only) and aggregate:
+
+```bash
+python tools/benchmarks/run_cursor_vuln_experiment.py ^
+  --profiles control skills-only ^
+  --runs 2 ^
+  --model composer-2 ^
+  --tasks tools/benchmarks/cursor_vuln_tasks.json ^
+  --max-tasks 20 ^
+  --timeout-sec 120 ^
+  --store-raw-output ^
+  --output reports/benchmarks/cursor-vuln-experiment-runs2.json
+```
+
+Generate objective + subjective grading from all run responses:
+
+```bash
+python tools/benchmarks/grade_cursor_vuln_responses.py ^
+  --experiment reports/benchmarks/cursor-vuln-experiment-runs2.json ^
+  --output reports/benchmarks/cursor-vuln-manual-grade.json
+```
+
+By default, vuln comparison focuses on efficacy metrics; add `--include-cost` only when you explicitly want latency/token deltas.
 
 ---
 
