@@ -122,6 +122,53 @@ python tools/skills/smoke_eval.py --output reports/skill-smoke-eval.json
 
 CI enforcement lives in `.github/workflows/skills-quality.yml`.
 
+### Low-cost Cursor auto benchmark (<=15 tasks)
+
+Use the phase-routing benchmark to sanity-check real agent behavior at low cost:
+
+```bash
+python tools/benchmarks/run_cursor_phase_benchmark.py ^
+  --tasks tools/benchmarks/cursor_phase_tasks.json ^
+  --max-tasks 10 ^
+  --timeout-sec 20 ^
+  --output reports/benchmarks/cursor-auto-phase-benchmark.json
+```
+
+Task set file: `tools/benchmarks/cursor_phase_tasks.json` (10 tasks by default; hard max 15).
+
+### Security benchmark (skills-only now, MCP comparison later)
+
+Run the richer security benchmark with skills-only profile first:
+
+```bash
+python tools/benchmarks/run_cursor_security_benchmark.py ^
+  --profile skills-only ^
+  --tasks tools/benchmarks/cursor_security_tasks.json ^
+  --max-tasks 12 ^
+  --timeout-sec 20 ^
+  --output reports/benchmarks/cursor-security-skills-only.json
+```
+
+Later, after enabling Kali/Lattice MCP, run:
+
+```bash
+python tools/benchmarks/run_cursor_security_benchmark.py ^
+  --profile mcp-enabled ^
+  --tasks tools/benchmarks/cursor_security_tasks.json ^
+  --max-tasks 12 ^
+  --timeout-sec 20 ^
+  --output reports/benchmarks/cursor-security-mcp-enabled.json
+```
+
+Then compare:
+
+```bash
+python tools/benchmarks/compare_cursor_benchmarks.py ^
+  --baseline reports/benchmarks/cursor-security-skills-only.json ^
+  --candidate reports/benchmarks/cursor-security-mcp-enabled.json ^
+  --output reports/benchmarks/cursor-security-comparison.json
+```
+
 ---
 
 ## Design Philosophy
