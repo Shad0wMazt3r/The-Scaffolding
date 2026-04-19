@@ -11,7 +11,6 @@ import subprocess
 import time
 from pathlib import Path
 
-JSON_BLOCK_RE = re.compile(r"\{[\s\S]*\}")
 FENCED_BLOCK_RE = re.compile(r"```(?:json)?\s*([\s\S]*?)\s*```", re.IGNORECASE)
 DEFAULT_MODEL = "composer-2"
 PHASE_TO_FIRST_FILE = {
@@ -46,7 +45,6 @@ def extract_json(text: str | None) -> dict | None:
     if not text:
         return None
     decoder = json.JSONDecoder()
-    findings_regex = re.compile(r'\{[^{}]*"cwe"[^{}]*\}')
 
     for candidate in _json_candidates(text):
         # 1) strict JSON parse of whole candidate
@@ -67,37 +65,17 @@ def extract_json(text: str | None) -> dict | None:
                     return parsed
             except json.JSONDecodeError:
                 continue
-
-        # 3) fallback extraction for partially broken JSON-like outputs
-        match = JSON_BLOCK_RE.search(candidate)
-        if not match:
-            continue
-        block_text = match.group(0).strip()
-        findings = []
-        for m in findings_regex.finditer(block_text):
-            block = m.group(0)
-
-            def g(key: str) -> str:
-                km = re.search(rf'"{key}"\s*:\s*"([^"]*)"', block)
-                return km.group(1) if km else ""
-
-            findings.append(
-                {
-                    "cwe": g("cwe"),
-                    "file": g("file"),
-                    "line_start": g("line_start"),
-                    "line_end": g("line_end"),
-                    "vuln_claim": g("vuln_claim"),
-                    "proof": g("proof"),
-                    "repro_steps": g("repro_steps"),
-                    "impact": g("impact"),
-                    "confidence": g("confidence"),
-                    "chain_steps": g("chain_steps"),
-                }
-            )
-        if findings:
-            return {"findings": findings}
     return None
+
+
+def build_repair_prompt(base_prompt: str) -> str:
+    return (
+        f"{base_prompt} "
+        "IMPORTANT: Previous output was malformed or incomplete. "
+        "Return ONLY one complete minified JSON object. "
+        "Keep fields compact (one short sentence each, no markdown, no lists). "
+        "Do not add commentary or markdown fences."
+    )
 
 
 def normalize_cwe(value: str) -> str:
@@ -141,6 +119,43 @@ def contains_any(text: str, terms: list[str]) -> bool:
     return any(t.lower() in lower for t in terms)
 
 
+def _balance_state(text: str) -> tuple[int, int, bool]:
+    braces = 0
+    brackets = 0
+    in_string = False
+    escaped = False
+    for ch in text:
+        if in_string:
+            if escaped:
+                escaped = False
+            elif ch == "\\":
+                escaped = True
+            elif ch == '"':
+                in_string = False
+            continue
+        if ch == '"':
+            in_string = True
+        elif ch == "{":
+            braces += 1
+        elif ch == "}":
+            braces -= 1
+        elif ch == "[":
+            brackets += 1
+        elif ch == "]":
+            brackets -= 1
+    return braces, brackets, in_string
+
+
+def looks_truncated_json_output(text: str) -> bool:
+    stripped = (text or "").strip()
+    if not stripped or "{" not in stripped:
+        return False
+    braces, brackets, in_string = _balance_state(stripped)
+    if in_string or braces > 0 or brackets > 0:
+        return True
+    return stripped.endswith(("\\", ",", ":", "("))
+
+
 def build_prompt(task: dict, profile: str) -> str:
     mode_hint = {
         "control": "Control mode: analyze only the provided snippet; do not rely on skill files or MCP tooling.",
@@ -178,7 +193,8 @@ def build_prompt(task: dict, profile: str) -> str:
         f"Return only minified JSON with this exact shape: {output_shape}. "
         f"Output at most {max_findings} findings. "
         f"{no_findings_hint}"
-        "Use exact file and line numbers from the snippet. Keep each text field to one concise sentence. "
+        "Use exact file and line numbers from the snippet. "
+        "Keep each text field to one concise sentence and keep it short (roughly <= 180 chars). "
         f"Scenario: {scenario_inline}"
     )
 
@@ -319,8 +335,9 @@ def score_task(task: dict, parsed: dict | None, error: str, returncode: int, pro
     )
     chain_cwe_hits = len(expected_chain_cwes.intersection(predicted_chain_cwes))
     chain_coverage = (chain_cwe_hits / len(expected_chain_cwes)) if expected_chain_cwes else 1.0
-    chain_linked = True
-    chain_success = True
+    chain_linked: bool | None = None
+    chain_success: bool | None = None
+    strict_chain_ok = True
     if chain_required:
         joined_chain_text = " ".join(
             " ".join([pred["chain_steps"], pred["vuln_claim"], pred["impact"]]) for pred in cleaned
@@ -330,6 +347,7 @@ def score_task(task: dict, parsed: dict | None, error: str, returncode: int, pro
         chain_linked = linked or term_hint
         # chain success is component coverage; linkage quality is tracked separately
         chain_success = chain_coverage >= 0.99
+        strict_chain_ok = chain_success
 
     allowed_fp = int(task.get("allowed_fp", 0))
     strict_pass = (
@@ -338,7 +356,7 @@ def score_task(task: dict, parsed: dict | None, error: str, returncode: int, pro
         and structured_ok
         and fn_count == 0
         and fp_count <= allowed_fp
-        and chain_success
+        and strict_chain_ok
         and route_strict_ok
     )
 
@@ -400,7 +418,8 @@ def main() -> int:
     parser.add_argument(
         "--store-raw-output",
         action="store_true",
-        help="Store full model output/error text for manual grading",
+        default=True,
+        help="Store full model output/error text for manual grading (always enabled by default)",
     )
     args = parser.parse_args()
 
@@ -421,16 +440,40 @@ def main() -> int:
     approve_mcps = args.profile == "mcp-enabled"
 
     results: list[dict] = []
+    malformed_json_count = 0
+    truncated_output_count = 0
     for task in tasks:
-        prompt = build_prompt(task, profile=args.profile)
-        stdout, stderr, returncode, elapsed, error = run_agent(
-            agent_cmd=args.agent_cmd,
-            prompt=prompt,
-            timeout_sec=args.timeout_sec,
-            model=args.model,
-            approve_mcps=approve_mcps,
-        )
-        parsed = extract_json(stdout) if not error else None
+        base_prompt = build_prompt(task, profile=args.profile)
+        prompt = base_prompt
+        parsed = None
+        stdout = ""
+        stderr = ""
+        returncode = 0
+        elapsed = 0.0
+        error = ""
+
+        for attempt in range(3):
+            stdout, stderr, returncode, elapsed, error = run_agent(
+                agent_cmd=args.agent_cmd,
+                prompt=prompt,
+                timeout_sec=args.timeout_sec,
+                model=args.model,
+                approve_mcps=approve_mcps,
+            )
+            parsed = extract_json(stdout) if not error else None
+            if parsed is not None or error:
+                break
+            prompt = build_repair_prompt(base_prompt) if attempt == 0 else build_repair_prompt(prompt)
+
+        truncated_output = error == "" and returncode == 0 and parsed is None and looks_truncated_json_output(stdout)
+        malformed_json = error == "" and returncode == 0 and parsed is None and not truncated_output
+        if truncated_output:
+            truncated_output_count += 1
+            error = "truncated_output"
+        elif malformed_json:
+            malformed_json_count += 1
+            error = "malformed_json"
+
         scored = score_task(task, parsed, error, returncode, profile=args.profile)
         out_chars = len(stdout or "")
         prompt_chars = len(prompt)
@@ -475,8 +518,8 @@ def main() -> int:
                 "strict_pass": scored["strict_pass"],
                 "stdout_preview": stdout[:300] if stdout else "",
                 "stderr_preview": stderr[:300] if stderr else "",
-                "raw_output": stdout if args.store_raw_output else "",
-                "raw_error": stderr if args.store_raw_output else "",
+                "raw_output": stdout,
+                "raw_error": stderr,
             }
         )
 
@@ -556,6 +599,8 @@ def main() -> int:
             "chain_linked_rate": pct(chain_linked_hits, chain_tasks),
             "chain_success_rate": pct(chain_successes, chain_tasks),
             "strict_task_accuracy": pct(strict_ok, attempted),
+            "malformed_json_task_rate": pct(malformed_json_count, attempted),
+            "truncated_output_task_rate": pct(truncated_output_count, attempted),
             "avg_latency_sec": avg_latency,
             "time_per_valid_tp_sec": time_per_tp,
             "avg_prompt_chars": avg_prompt_chars,
