@@ -1,0 +1,106 @@
+{
+  "baseline": {
+    "attempted": 20,
+    "path": "reports\\benchmarks\\model-sweep\\gpt-5.4-nano-medium\\experiment-runs\\cursor-vuln-control-run1.json",
+    "profile": "control",
+    "timeouts": 0
+  },
+  "candidate": {
+    "attempted": 20,
+    "path": "reports\\benchmarks\\model-sweep\\gpt-5.4-nano-medium\\experiment-runs\\cursor-vuln-skills-only-run1.json",
+    "profile": "skills-only",
+    "timeouts": 0
+  },
+  "metric_deltas": {
+    "chain_coverage_rate": {
+      "baseline": 0.5,
+      "candidate": 1.0,
+      "delta": 0.5,
+      "direction": "better"
+    },
+    "chain_linked_rate": {
+      "baseline": 0.0,
+      "candidate": 0.0,
+      "delta": 0.0,
+      "direction": "equal"
+    },
+    "chain_success_rate": {
+      "baseline": 0.0,
+      "candidate": 100.0,
+      "delta": 100.0,
+      "direction": "better"
+    },
+    "cwe_recall": {
+      "baseline": 0.7,
+      "candidate": 0.75,
+      "delta": 0.05,
+      "direction": "better"
+    },
+    "empty_output_task_rate": {
+      "baseline": 5.0,
+      "candidate": 5.0,
+      "delta": 0.0,
+      "direction": "equal"
+    },
+    "evidence_recall": {
+      "baseline": 0.7,
+      "candidate": 0.75,
+      "delta": 0.05,
+      "direction": "better"
+    },
+    "f1": {
+      "baseline": 0.6364,
+      "candidate": 0.6087,
+      "delta": -0.0277,
+      "direction": "worse"
+    },
+    "file_recall": {
+      "baseline": 0.7,
+      "candidate": 0.75,
+      "delta": 0.05,
+      "direction": "better"
+    },
+    "fp_per_task": {
+      "baseline": 0.5,
+      "candidate": 0.6,
+      "delta": 0.1,
+      "direction": "worse"
+    },
+    "line_recall": {
+      "baseline": 0.7,
+      "candidate": 0.75,
+      "delta": 0.05,
+      "direction": "better"
+    },
+    "overreport_rate": {
+      "baseline": 0.4167,
+      "candidate": 0.4615,
+      "delta": 0.0448,
+      "direction": "worse"
+    },
+    "precision": {
+      "baseline": 0.5833,
+      "candidate": 0.5385,
+      "delta": -0.0448,
+      "direction": "worse"
+    },
+    "recall": {
+      "baseline": 0.7,
+      "candidate": 0.7,
+      "delta": 0.0,
+      "direction": "equal"
+    },
+    "strict_task_accuracy": {
+      "baseline": 50.0,
+      "candidate": 50.0,
+      "delta": 0.0,
+      "direction": "equal"
+    },
+    "tp_per_task": {
+      "baseline": 0.7,
+      "candidate": 0.7,
+      "delta": 0.0,
+      "direction": "equal"
+    }
+  }
+}

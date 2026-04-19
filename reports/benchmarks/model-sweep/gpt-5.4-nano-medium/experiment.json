@@ -9,9 +9,9 @@
           "stddev": 0.0
         },
         "chain_linked_rate": {
-          "max": 100.0,
-          "mean": 100.0,
-          "min": 100.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
           "stddev": 0.0
         },
         "chain_success_rate": {
@@ -21,9 +21,9 @@
           "stddev": 0.0
         },
         "cwe_recall": {
-          "max": 0.6,
-          "mean": 0.6,
-          "min": 0.6,
+          "max": 0.7,
+          "mean": 0.7,
+          "min": 0.7,
           "stddev": 0.0
         },
         "empty_output_task_rate": {
@@ -33,51 +33,51 @@
           "stddev": 0.0
         },
         "evidence_recall": {
-          "max": 0.6,
-          "mean": 0.6,
-          "min": 0.6,
+          "max": 0.7,
+          "mean": 0.7,
+          "min": 0.7,
           "stddev": 0.0
         },
         "f1": {
-          "max": 0.5106,
-          "mean": 0.5106,
-          "min": 0.5106,
+          "max": 0.6364,
+          "mean": 0.6364,
+          "min": 0.6364,
           "stddev": 0.0
         },
         "file_recall": {
-          "max": 0.6,
-          "mean": 0.6,
-          "min": 0.6,
+          "max": 0.7,
+          "mean": 0.7,
+          "min": 0.7,
           "stddev": 0.0
         },
         "fp_per_task": {
-          "max": 0.75,
-          "mean": 0.75,
-          "min": 0.75,
+          "max": 0.5,
+          "mean": 0.5,
+          "min": 0.5,
           "stddev": 0.0
         },
         "line_recall": {
-          "max": 0.6,
-          "mean": 0.6,
-          "min": 0.6,
+          "max": 0.7,
+          "mean": 0.7,
+          "min": 0.7,
           "stddev": 0.0
         },
         "overreport_rate": {
-          "max": 0.5556,
-          "mean": 0.5556,
-          "min": 0.5556,
+          "max": 0.4167,
+          "mean": 0.4167,
+          "min": 0.4167,
           "stddev": 0.0
         },
         "precision": {
-          "max": 0.4444,
-          "mean": 0.4444,
-          "min": 0.4444,
+          "max": 0.5833,
+          "mean": 0.5833,
+          "min": 0.5833,
           "stddev": 0.0
         },
         "recall": {
-          "max": 0.6,
-          "mean": 0.6,
-          "min": 0.6,
+          "max": 0.7,
+          "mean": 0.7,
+          "min": 0.7,
           "stddev": 0.0
         },
         "skill_anchor_presence_rate": {
@@ -105,15 +105,15 @@
           "stddev": null
         },
         "strict_task_accuracy": {
-          "max": 30.0,
-          "mean": 30.0,
-          "min": 30.0,
+          "max": 50.0,
+          "mean": 50.0,
+          "min": 50.0,
           "stddev": 0.0
         },
         "tp_per_task": {
-          "max": 0.6,
-          "mean": 0.6,
-          "min": 0.6,
+          "max": 0.7,
+          "mean": 0.7,
+          "min": 0.7,
           "stddev": 0.0
         }
       },
@@ -122,34 +122,34 @@
         "attempted": 20,
         "completed": 20,
         "expected_findings_total": 20,
-        "f1_from_totals": 0.5106,
-        "fn_total": 8,
-        "fp_total": 15,
-        "precision_from_totals": 0.4444,
-        "predicted_findings_total": 27,
-        "recall_from_totals": 0.6,
+        "f1_from_totals": 0.6364,
+        "fn_total": 6,
+        "fp_total": 10,
+        "precision_from_totals": 0.5833,
+        "predicted_findings_total": 24,
+        "recall_from_totals": 0.7,
         "timeouts": 0,
-        "valid_tp_total": 12
+        "valid_tp_total": 14
       }
     },
     "skills-only": {
       "metric_stats": {
         "chain_coverage_rate": {
-          "max": 0.5,
-          "mean": 0.5,
-          "min": 0.5,
+          "max": 1.0,
+          "mean": 1.0,
+          "min": 1.0,
           "stddev": 0.0
         },
         "chain_linked_rate": {
-          "max": 100.0,
-          "mean": 100.0,
-          "min": 100.0,
-          "stddev": 0.0
-        },
-        "chain_success_rate": {
           "max": 0.0,
           "mean": 0.0,
           "min": 0.0,
+          "stddev": 0.0
+        },
+        "chain_success_rate": {
+          "max": 100.0,
+          "mean": 100.0,
+          "min": 100.0,
           "stddev": 0.0
         },
         "cwe_recall": {
@@ -159,9 +159,9 @@
           "stddev": 0.0
         },
         "empty_output_task_rate": {
-          "max": 0.0,
-          "mean": 0.0,
-          "min": 0.0,
+          "max": 5.0,
+          "mean": 5.0,
+          "min": 5.0,
           "stddev": 0.0
         },
         "evidence_recall": {
@@ -171,9 +171,9 @@
           "stddev": 0.0
         },
         "f1": {
-          "max": 0.6122,
-          "mean": 0.6122,
-          "min": 0.6122,
+          "max": 0.6087,
+          "mean": 0.6087,
+          "min": 0.6087,
           "stddev": 0.0
         },
         "file_recall": {
@@ -183,9 +183,9 @@
           "stddev": 0.0
         },
         "fp_per_task": {
-          "max": 0.7,
-          "mean": 0.7,
-          "min": 0.7,
+          "max": 0.6,
+          "mean": 0.6,
+          "min": 0.6,
           "stddev": 0.0
         },
         "line_recall": {
@@ -195,57 +195,57 @@
           "stddev": 0.0
         },
         "overreport_rate": {
-          "max": 0.4828,
-          "mean": 0.4828,
-          "min": 0.4828,
+          "max": 0.4615,
+          "mean": 0.4615,
+          "min": 0.4615,
           "stddev": 0.0
         },
         "precision": {
-          "max": 0.5172,
-          "mean": 0.5172,
-          "min": 0.5172,
+          "max": 0.5385,
+          "mean": 0.5385,
+          "min": 0.5385,
           "stddev": 0.0
         },
         "recall": {
-          "max": 0.75,
-          "mean": 0.75,
-          "min": 0.75,
+          "max": 0.7,
+          "mean": 0.7,
+          "min": 0.7,
           "stddev": 0.0
         },
         "skill_anchor_presence_rate": {
-          "max": 100.0,
-          "mean": 100.0,
-          "min": 100.0,
+          "max": 95.0,
+          "mean": 95.0,
+          "min": 95.0,
           "stddev": 0.0
         },
         "skill_route_first_file_accuracy": {
-          "max": 100.0,
-          "mean": 100.0,
-          "min": 100.0,
+          "max": 95.0,
+          "mean": 95.0,
+          "min": 95.0,
           "stddev": 0.0
         },
         "skill_route_phase_accuracy": {
-          "max": 100.0,
-          "mean": 100.0,
-          "min": 100.0,
+          "max": 95.0,
+          "mean": 95.0,
+          "min": 95.0,
           "stddev": 0.0
         },
         "skill_route_strict_accuracy": {
-          "max": 100.0,
-          "mean": 100.0,
-          "min": 100.0,
+          "max": 95.0,
+          "mean": 95.0,
+          "min": 95.0,
           "stddev": 0.0
         },
         "strict_task_accuracy": {
-          "max": 35.0,
-          "mean": 35.0,
-          "min": 35.0,
+          "max": 50.0,
+          "mean": 50.0,
+          "min": 50.0,
           "stddev": 0.0
         },
         "tp_per_task": {
-          "max": 0.75,
-          "mean": 0.75,
-          "min": 0.75,
+          "max": 0.7,
+          "mean": 0.7,
+          "min": 0.7,
           "stddev": 0.0
         }
       },
@@ -254,20 +254,20 @@
         "attempted": 20,
         "completed": 20,
         "expected_findings_total": 20,
-        "f1_from_totals": 0.6122,
-        "fn_total": 5,
-        "fp_total": 14,
-        "precision_from_totals": 0.5172,
-        "predicted_findings_total": 29,
-        "recall_from_totals": 0.75,
+        "f1_from_totals": 0.6087,
+        "fn_total": 6,
+        "fp_total": 12,
+        "precision_from_totals": 0.5385,
+        "predicted_findings_total": 26,
+        "recall_from_totals": 0.7,
         "timeouts": 0,
-        "valid_tp_total": 15
+        "valid_tp_total": 14
       }
     }
   },
   "config": {
     "max_tasks": 20,
-    "model": "gpt-5.4-nano-high",
+    "model": "gpt-5.4-nano-medium",
     "profiles": [
       "control",
       "skills-only"
@@ -279,107 +279,116 @@
     "timeout_sec": 120
   },
   "control_vs_skills_delta_mean": {
-    "chain_coverage_rate": 0.0,
+    "chain_coverage_rate": 0.5,
     "chain_linked_rate": 0.0,
-    "chain_success_rate": 0.0,
-    "cwe_recall": 0.15,
-    "empty_output_task_rate": -5.0,
-    "evidence_recall": 0.15,
-    "f1": 0.1016,
-    "file_recall": 0.15,
-    "fp_per_task": -0.05,
-    "line_recall": 0.15,
-    "overreport_rate": -0.0728,
-    "precision": 0.0728,
-    "recall": 0.15,
-    "strict_task_accuracy": 5.0,
-    "tp_per_task": 0.15
+    "chain_success_rate": 100.0,
+    "cwe_recall": 0.05,
+    "empty_output_task_rate": 0.0,
+    "evidence_recall": 0.05,
+    "f1": -0.0277,
+    "file_recall": 0.05,
+    "fp_per_task": 0.1,
+    "line_recall": 0.05,
+    "overreport_rate": 0.0448,
+    "precision": -0.0448,
+    "recall": 0.0,
+    "strict_task_accuracy": 0.0,
+    "tp_per_task": 0.0
   },
   "run_records": [
     {
       "profile": "control",
-      "report_path": "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\reports\\benchmarks\\model-sweep\\gpt-5.4-nano-high\\experiment-runs\\cursor-vuln-control-run1.json",
+      "report_path": "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\reports\\benchmarks\\model-sweep\\gpt-5.4-nano-medium\\experiment-runs\\cursor-vuln-control-run1.json",
       "run_index": 1,
       "summary": {
         "attempted": 20,
-        "avg_estimated_tokens": 558.8,
-        "avg_latency_sec": 20.132,
-        "avg_output_chars": 1066.9,
+        "avg_estimated_tokens": 534.1,
+        "avg_latency_sec": 17.046,
+        "avg_output_chars": 968.9,
         "avg_prompt_chars": 1166.7,
         "chain_coverage_rate": 0.5,
-        "chain_linked_rate": 100.0,
+        "chain_linked_rate": 0.0,
         "chain_success_rate": 0.0,
         "completed": 20,
-        "cwe_recall": 0.6,
+        "cwe_recall": 0.7,
         "empty_output_task_rate": 5.0,
-        "evidence_recall": 0.6,
+        "evidence_recall": 0.7,
         "expected_findings_total": 20,
-        "f1": 0.5106,
-        "file_recall": 0.6,
-        "fn_total": 8,
-        "fp_per_task": 0.75,
-        "fp_total": 15,
-        "line_recall": 0.6,
+        "f1": 0.6364,
+        "file_recall": 0.7,
+        "fn_total": 6,
+        "fp_per_task": 0.5,
+        "fp_total": 10,
+        "line_recall": 0.7,
         "malformed_json_task_rate": 0.0,
-        "overreport_rate": 0.5556,
-        "precision": 0.4444,
-        "predicted_findings_total": 27,
-        "recall": 0.6,
+        "overreport_rate": 0.4167,
+        "precision": 0.5833,
+        "predicted_findings_total": 24,
+        "recall": 0.7,
         "skill_anchor_presence_rate": null,
         "skill_route_first_file_accuracy": null,
         "skill_route_phase_accuracy": null,
         "skill_route_strict_accuracy": null,
-        "strict_task_accuracy": 30.0,
-        "time_per_valid_tp_sec": 33.553,
+        "strict_task_accuracy": 50.0,
+        "time_per_valid_tp_sec": 24.352,
         "timeouts": 0,
-        "tp_per_task": 0.6,
+        "tp_per_task": 0.7,
         "truncated_output_task_rate": 0.0,
-        "valid_tp_total": 12
+        "valid_tp_total": 14
       }
     },
     {
       "profile": "skills-only",
-      "report_path": "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\reports\\benchmarks\\model-sweep\\gpt-5.4-nano-high\\experiment-runs\\cursor-vuln-skills-only-run1.json",
+      "report_path": "C:\\Users\\er123\\OneDrive\\Desktop\\CTFs\\Tests\\bughunting\\The-Scaffolding\\reports\\benchmarks\\model-sweep\\gpt-5.4-nano-medium\\experiment-runs\\cursor-vuln-skills-only-run1.json",
       "run_index": 1,
       "summary": {
         "attempted": 20,
-        "avg_estimated_tokens": 733.6,
-        "avg_latency_sec": 20.78,
-        "avg_output_chars": 1183.5,
+        "avg_estimated_tokens": 735.1,
+        "avg_latency_sec": 18.483,
+        "avg_output_chars": 1189.1,
         "avg_prompt_chars": 1749.7,
-        "chain_coverage_rate": 0.5,
-        "chain_linked_rate": 100.0,
-        "chain_success_rate": 0.0,
+        "chain_coverage_rate": 1.0,
+        "chain_linked_rate": 0.0,
+        "chain_success_rate": 100.0,
         "completed": 20,
         "cwe_recall": 0.75,
-        "empty_output_task_rate": 0.0,
+        "empty_output_task_rate": 5.0,
         "evidence_recall": 0.75,
         "expected_findings_total": 20,
-        "f1": 0.6122,
+        "f1": 0.6087,
         "file_recall": 0.75,
-        "fn_total": 5,
-        "fp_per_task": 0.7,
-        "fp_total": 14,
+        "fn_total": 6,
+        "fp_per_task": 0.6,
+        "fp_total": 12,
         "line_recall": 0.75,
         "malformed_json_task_rate": 0.0,
-        "overreport_rate": 0.4828,
-        "precision": 0.5172,
-        "predicted_findings_total": 29,
-        "recall": 0.75,
-        "skill_anchor_presence_rate": 100.0,
-        "skill_route_first_file_accuracy": 100.0,
-        "skill_route_phase_accuracy": 100.0,
-        "skill_route_strict_accuracy": 100.0,
-        "strict_task_accuracy": 35.0,
-        "time_per_valid_tp_sec": 27.706,
+        "overreport_rate": 0.4615,
+        "precision": 0.5385,
+        "predicted_findings_total": 26,
+        "recall": 0.7,
+        "skill_anchor_presence_rate": 95.0,
+        "skill_route_first_file_accuracy": 95.0,
+        "skill_route_phase_accuracy": 95.0,
+        "skill_route_strict_accuracy": 95.0,
+        "strict_task_accuracy": 50.0,
+        "time_per_valid_tp_sec": 26.404,
         "timeouts": 0,
-        "tp_per_task": 0.75,
+        "tp_per_task": 0.7,
         "truncated_output_task_rate": 0.0,
-        "valid_tp_total": 15
+        "valid_tp_total": 14
       }
     }
   ],
-  "skills_route_failures": [],
+  "skills_route_failures": [
+    {
+      "expected_first_file": "01-prerequisites-and-environment.md",
+      "expected_phase": "web",
+      "predicted_first_file": "",
+      "predicted_phase": "",
+      "profile": "skills-only",
+      "task_id": "v09-race-condition-wallet-transfer"
+    }
+  ],
   "task_stability": {
     "control": {
       "v01-sqli-orderby": {
@@ -391,14 +400,14 @@
       },
       "v02-ssrf-allowlist-bypass": {
         "fn_mean": 0.0,
-        "fp_mean": 1.0,
+        "fp_mean": 0.0,
         "runs": 1,
-        "strict_pass_rate": 0.0,
+        "strict_pass_rate": 1.0,
         "tp_mean": 1.0
       },
       "v03-idor-object-access": {
         "fn_mean": 1.0,
-        "fp_mean": 0.0,
+        "fp_mean": 2.0,
         "runs": 1,
         "strict_pass_rate": 0.0,
         "tp_mean": 0.0
@@ -426,9 +435,9 @@
       },
       "v07-command-injection-archive": {
         "fn_mean": 0.0,
-        "fp_mean": 1.0,
+        "fp_mean": 0.0,
         "runs": 1,
-        "strict_pass_rate": 0.0,
+        "strict_pass_rate": 1.0,
         "tp_mean": 1.0
       },
       "v08-stored-xss-markdown-html": {
@@ -439,11 +448,11 @@
         "tp_mean": 1.0
       },
       "v09-race-condition-wallet-transfer": {
-        "fn_mean": 1.0,
-        "fp_mean": 1.0,
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
         "runs": 1,
-        "strict_pass_rate": 0.0,
-        "tp_mean": 1.0
+        "strict_pass_rate": 1.0,
+        "tp_mean": 2.0
       },
       "v10-jwt-debug-bypass": {
         "fn_mean": 1.0,
@@ -475,14 +484,14 @@
       },
       "v14-xxe-parser-entities": {
         "fn_mean": 0.0,
-        "fp_mean": 1.0,
+        "fp_mean": 0.0,
         "runs": 1,
-        "strict_pass_rate": 0.0,
+        "strict_pass_rate": 1.0,
         "tp_mean": 1.0
       },
       "v15-nosqli-operator-injection": {
         "fn_mean": 1.0,
-        "fp_mean": 2.0,
+        "fp_mean": 0.0,
         "runs": 1,
         "strict_pass_rate": 0.0,
         "tp_mean": 0.0
@@ -509,11 +518,11 @@
         "tp_mean": 0.0
       },
       "v19-crypto-hardcoded-key": {
-        "fn_mean": 1.0,
-        "fp_mean": 2.0,
+        "fn_mean": 0.0,
+        "fp_mean": 1.0,
         "runs": 1,
         "strict_pass_rate": 0.0,
-        "tp_mean": 0.0
+        "tp_mean": 1.0
       },
       "v20-pwn-safe-copy-control": {
         "fn_mean": 0.0,
@@ -533,9 +542,9 @@
       },
       "v02-ssrf-allowlist-bypass": {
         "fn_mean": 0.0,
-        "fp_mean": 1.0,
+        "fp_mean": 0.0,
         "runs": 1,
-        "strict_pass_rate": 0.0,
+        "strict_pass_rate": 1.0,
         "tp_mean": 1.0
       },
       "v03-idor-object-access": {
@@ -547,9 +556,9 @@
       },
       "v04-path-traversal-sanitize-bypass": {
         "fn_mean": 0.0,
-        "fp_mean": 1.0,
+        "fp_mean": 0.0,
         "runs": 1,
-        "strict_pass_rate": 0.0,
+        "strict_pass_rate": 1.0,
         "tp_mean": 1.0
       },
       "v05-insecure-deserialization": {
@@ -560,11 +569,11 @@
         "tp_mean": 1.0
       },
       "v06-idor-plus-mass-assignment-chain": {
-        "fn_mean": 1.0,
+        "fn_mean": 0.0,
         "fp_mean": 0.0,
         "runs": 1,
-        "strict_pass_rate": 0.0,
-        "tp_mean": 1.0
+        "strict_pass_rate": 1.0,
+        "tp_mean": 2.0
       },
       "v07-command-injection-archive": {
         "fn_mean": 0.0,
@@ -581,17 +590,17 @@
         "tp_mean": 1.0
       },
       "v09-race-condition-wallet-transfer": {
-        "fn_mean": 1.0,
-        "fp_mean": 1.0,
+        "fn_mean": 2.0,
+        "fp_mean": 0.0,
         "runs": 1,
         "strict_pass_rate": 0.0,
-        "tp_mean": 1.0
+        "tp_mean": 0.0
       },
       "v10-jwt-debug-bypass": {
         "fn_mean": 0.0,
-        "fp_mean": 0.0,
+        "fp_mean": 1.0,
         "runs": 1,
-        "strict_pass_rate": 1.0,
+        "strict_pass_rate": 0.0,
         "tp_mean": 1.0
       },
       "v11-safe-authz-control": {
@@ -609,17 +618,17 @@
         "tp_mean": 1.0
       },
       "v13-open-redirect-double-slash": {
+        "fn_mean": 1.0,
+        "fp_mean": 1.0,
+        "runs": 1,
+        "strict_pass_rate": 0.0,
+        "tp_mean": 0.0
+      },
+      "v14-xxe-parser-entities": {
         "fn_mean": 0.0,
         "fp_mean": 0.0,
         "runs": 1,
         "strict_pass_rate": 1.0,
-        "tp_mean": 1.0
-      },
-      "v14-xxe-parser-entities": {
-        "fn_mean": 0.0,
-        "fp_mean": 1.0,
-        "runs": 1,
-        "strict_pass_rate": 0.0,
         "tp_mean": 1.0
       },
       "v15-nosqli-operator-injection": {
@@ -644,18 +653,18 @@
         "tp_mean": 1.0
       },
       "v18-mobile-plaintext-token-storage": {
+        "fn_mean": 0.0,
+        "fp_mean": 0.0,
+        "runs": 1,
+        "strict_pass_rate": 1.0,
+        "tp_mean": 1.0
+      },
+      "v19-crypto-hardcoded-key": {
         "fn_mean": 1.0,
-        "fp_mean": 1.0,
+        "fp_mean": 2.0,
         "runs": 1,
         "strict_pass_rate": 0.0,
         "tp_mean": 0.0
-      },
-      "v19-crypto-hardcoded-key": {
-        "fn_mean": 0.0,
-        "fp_mean": 1.0,
-        "runs": 1,
-        "strict_pass_rate": 0.0,
-        "tp_mean": 1.0
       },
       "v20-pwn-safe-copy-control": {
         "fn_mean": 0.0,
