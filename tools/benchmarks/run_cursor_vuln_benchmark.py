@@ -12,24 +12,61 @@ import time
 from pathlib import Path
 
 JSON_BLOCK_RE = re.compile(r"\{[\s\S]*\}")
+FENCED_BLOCK_RE = re.compile(r"```(?:json)?\s*([\s\S]*?)\s*```", re.IGNORECASE)
+DEFAULT_MODEL = "composer-2"
 
 
 def read_json(path: Path) -> list[dict]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def extract_json(text: str) -> dict | None:
-    match = JSON_BLOCK_RE.search(text.strip())
-    if not match:
+def _json_candidates(text: str) -> list[str]:
+    stripped = text.strip()
+    candidates: list[str] = []
+    for m in FENCED_BLOCK_RE.finditer(stripped):
+        block = m.group(1).strip()
+        if block:
+            candidates.append(block)
+    if stripped:
+        candidates.append(stripped)
+    return candidates
+
+
+def extract_json(text: str | None) -> dict | None:
+    if not text:
         return None
-    candidate = match.group(0).strip()
-    try:
-        parsed = json.loads(candidate)
-        return parsed if isinstance(parsed, dict) else None
-    except json.JSONDecodeError:
+    decoder = json.JSONDecoder()
+    findings_regex = re.compile(r'\{[^{}]*"cwe"[^{}]*\}')
+
+    for candidate in _json_candidates(text):
+        # 1) strict JSON parse of whole candidate
+        try:
+            parsed = json.loads(candidate)
+            if isinstance(parsed, dict):
+                return parsed
+        except json.JSONDecodeError:
+            pass
+
+        # 2) decode first JSON object inside candidate (handles pre/post text)
+        for idx, ch in enumerate(candidate):
+            if ch != "{":
+                continue
+            try:
+                parsed, _end = decoder.raw_decode(candidate[idx:])
+                if isinstance(parsed, dict):
+                    return parsed
+            except json.JSONDecodeError:
+                continue
+
+        # 3) fallback extraction for partially broken JSON-like outputs
+        match = JSON_BLOCK_RE.search(candidate)
+        if not match:
+            continue
+        block_text = match.group(0).strip()
         findings = []
-        for m in re.finditer(r'\{[^{}]*"cwe"[^{}]*\}', candidate):
+        for m in findings_regex.finditer(block_text):
             block = m.group(0)
+
             def g(key: str) -> str:
                 km = re.search(rf'"{key}"\s*:\s*"([^"]*)"', block)
                 return km.group(1) if km else ""
@@ -48,7 +85,9 @@ def extract_json(text: str) -> dict | None:
                     "chain_steps": g("chain_steps"),
                 }
             )
-        return {"findings": findings} if findings else None
+        if findings:
+            return {"findings": findings}
+    return None
 
 
 def normalize_cwe(value: str) -> str:
@@ -99,18 +138,19 @@ def build_prompt(task: dict, profile: str) -> str:
         "mcp-enabled": "MCP-enabled mode: skills plus MCP-assisted pivots are allowed.",
     }[profile]
     max_findings = int(task.get("max_findings", 2))
+    scenario_text = str(task["scenario"]).strip()
     return (
         f"{mode_hint} "
-        "This is an authorized synthetic benchmark with compact code-review snippets. "
-        "Most tasks contain at least one real vulnerability, but some are clean controls. "
-        "Do not default to empty findings; use [] only if code is clearly non-exploitable. "
-        "Identify likely, reproducible vulnerabilities with concrete code evidence. "
+        "Analyze ONLY the snippet text provided in this prompt. "
+        "Do not inspect repository files, tooling code, or any external context. "
+        "This is an authorized synthetic benchmark; some tasks are intentionally clean controls. "
+        "Do not default to empty findings unless the snippet is clearly non-exploitable. "
         f"Return only minified JSON with this exact shape: "
         '{"findings":[{"cwe":"CWE-...","file":"","line_start":0,"line_end":0,"vuln_claim":"","proof":"","repro_steps":"","impact":"","confidence":0.0,"chain_steps":""}]}. '
         f"Output at most {max_findings} findings. "
         'If no valid vulnerability exists, return {"findings":[]}. '
         "Use exact file and line numbers from the snippet. Keep each text field to one concise sentence. "
-        f"Scenario:\n{task['scenario']}"
+        f"Scenario:\n{scenario_text}"
     )
 
 
@@ -124,7 +164,15 @@ def run_agent(agent_cmd: str, prompt: str, timeout_sec: int, model: str, approve
 
     start = time.perf_counter()
     try:
-        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout_sec, check=False)
+        proc = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=timeout_sec,
+            check=False,
+        )
         elapsed = time.perf_counter() - start
         return proc.stdout, proc.stderr, proc.returncode, elapsed, ""
     except subprocess.TimeoutExpired:
@@ -159,6 +207,10 @@ def score_task(task: dict, parsed: dict | None, error: str, returncode: int) -> 
     used_pred = set()
     valid_tp = 0
     weak_matches = 0
+    cwe_matches = 0
+    file_matches = 0
+    line_matches = 0
+    evidence_matches = 0
     expected_count = len(expected)
     predicted_count = len(cleaned)
 
@@ -186,15 +238,23 @@ def score_task(task: dict, parsed: dict | None, error: str, returncode: int) -> 
         if best_idx >= 0:
             used_pred.add(best_idx)
             pred = cleaned[best_idx]
+            cwe_matches += 1
             file_ok = file_match(pred["file"], exp_file)
             line_ok = line_match(pred["line_start"], pred["line_end"], exp_s, exp_e)
             text_blob = " ".join([pred["vuln_claim"], pred["proof"], pred["repro_steps"], pred["impact"]])
+            evidence_ok = contains_any(text_blob, exp.get("evidence_terms", []))
+            if file_ok:
+                file_matches += 1
+            if line_ok:
+                line_matches += 1
+            if evidence_ok:
+                evidence_matches += 1
             quality_ok = (
                 len(pred["vuln_claim"]) >= 16
                 and len(pred["proof"]) >= 24
                 and len(pred["repro_steps"]) >= 18
                 and len(pred["impact"]) >= 12
-                and contains_any(text_blob, exp.get("evidence_terms", []))
+                and evidence_ok
             )
             if file_ok and line_ok and quality_ok:
                 valid_tp += 1
@@ -207,15 +267,21 @@ def score_task(task: dict, parsed: dict | None, error: str, returncode: int) -> 
 
     chain_required = bool(task.get("chain_required", False))
     chain_terms = [str(t).lower() for t in task.get("chain_terms", [])]
+    expected_chain_cwes = {normalize_cwe(str(e.get("cwe", ""))) for e in expected if normalize_cwe(str(e.get("cwe", "")))}
+    predicted_chain_cwes = {normalize_cwe(str(p.get("cwe", ""))) for p in cleaned if normalize_cwe(str(p.get("cwe", "")))}
+    chain_cwe_hits = len(expected_chain_cwes.intersection(predicted_chain_cwes))
+    chain_coverage = (chain_cwe_hits / len(expected_chain_cwes)) if expected_chain_cwes else 1.0
+    chain_linked = True
     chain_success = True
     if chain_required:
-        chain_success = False
-        for pred in cleaned:
-            chain_blob = " ".join([pred["chain_steps"], pred["vuln_claim"], pred["impact"]]).lower()
-            linked = ("->" in chain_blob) or ("=>" in chain_blob) or (" then " in chain_blob)
-            if linked and all(term in chain_blob for term in chain_terms):
-                chain_success = True
-                break
+        joined_chain_text = " ".join(
+            " ".join([pred["chain_steps"], pred["vuln_claim"], pred["impact"]]) for pred in cleaned
+        ).lower()
+        linked = ("->" in joined_chain_text) or ("=>" in joined_chain_text) or (" then " in joined_chain_text)
+        term_hint = all(term in joined_chain_text for term in chain_terms) if chain_terms else True
+        chain_linked = linked or term_hint
+        # chain success is component coverage; linkage quality is tracked separately
+        chain_success = chain_coverage >= 0.99
 
     allowed_fp = int(task.get("allowed_fp", 0))
     strict_pass = (
@@ -232,10 +298,19 @@ def score_task(task: dict, parsed: dict | None, error: str, returncode: int) -> 
         "predicted_count": predicted_count,
         "valid_tp": valid_tp,
         "weak_matches": weak_matches,
+        "cwe_matches": cwe_matches,
+        "file_matches": file_matches,
+        "line_matches": line_matches,
+        "evidence_matches": evidence_matches,
+        "parsed_findings": cleaned,
         "fp_count": fp_count,
         "fn_count": fn_count,
         "structured_ok": structured_ok,
         "chain_required": chain_required,
+        "chain_cwe_hits": chain_cwe_hits,
+        "chain_expected_cwes": len(expected_chain_cwes),
+        "chain_coverage": round(chain_coverage, 4),
+        "chain_linked": chain_linked,
         "chain_success": chain_success,
         "strict_pass": strict_pass,
     }
@@ -251,8 +326,8 @@ def main() -> int:
     parser.add_argument("--tasks", default="tools/benchmarks/cursor_vuln_tasks.json", help="Task file path")
     parser.add_argument("--output", default="", help="Output report path")
     parser.add_argument("--max-tasks", type=int, default=12, help="Maximum tasks to run (hard limit 15)")
-    parser.add_argument("--timeout-sec", type=int, default=25, help="Timeout per task in seconds")
-    parser.add_argument("--model", default="", help="Optional model override (empty = default)")
+    parser.add_argument("--timeout-sec", type=int, default=120, help="Timeout per task in seconds")
+    parser.add_argument("--model", default=DEFAULT_MODEL, help=f"Model override (default: {DEFAULT_MODEL})")
     parser.add_argument(
         "--profile",
         choices=["control", "skills-only", "mcp-enabled"],
@@ -311,10 +386,19 @@ def main() -> int:
                 "predicted_count": scored["predicted_count"],
                 "valid_tp": scored["valid_tp"],
                 "weak_matches": scored["weak_matches"],
+                "cwe_matches": scored["cwe_matches"],
+                "file_matches": scored["file_matches"],
+                "line_matches": scored["line_matches"],
+                "evidence_matches": scored["evidence_matches"],
+                "parsed_findings": scored["parsed_findings"],
                 "fp_count": scored["fp_count"],
                 "fn_count": scored["fn_count"],
                 "structured_ok": scored["structured_ok"],
                 "chain_required": scored["chain_required"],
+                "chain_cwe_hits": scored["chain_cwe_hits"],
+                "chain_expected_cwes": scored["chain_expected_cwes"],
+                "chain_coverage": scored["chain_coverage"],
+                "chain_linked": scored["chain_linked"],
                 "chain_success": scored["chain_success"],
                 "strict_pass": scored["strict_pass"],
                 "stdout_preview": stdout[:300] if stdout else "",
@@ -327,12 +411,18 @@ def main() -> int:
     timeouts = len([r for r in results if r["error"] == "timeout"])
     strict_ok = len([r for r in results if r["strict_pass"]])
     tp_total = sum(r["valid_tp"] for r in results)
+    cwe_match_total = sum(r["cwe_matches"] for r in results)
+    file_match_total = sum(r["file_matches"] for r in results)
+    line_match_total = sum(r["line_matches"] for r in results)
+    evidence_match_total = sum(r["evidence_matches"] for r in results)
     fp_total = sum(r["fp_count"] for r in results)
     fn_total = sum(r["fn_count"] for r in results)
     expected_total = sum(r["expected_count"] for r in results)
     predicted_total = sum(r["predicted_count"] for r in results)
     chain_tasks = len([r for r in results if r["chain_required"]])
     chain_successes = len([r for r in results if r["chain_required"] and r["chain_success"]])
+    chain_linked_hits = len([r for r in results if r["chain_required"] and r["chain_linked"]])
+    chain_coverage_sum = sum(r["chain_coverage"] for r in results if r["chain_required"])
     avg_latency = round(sum(r["elapsed_sec"] for r in results) / attempted, 3) if attempted else 0.0
     avg_prompt_chars = round(sum(r["prompt_chars"] for r in results) / attempted, 1) if attempted else 0.0
     avg_output_chars = round(sum(r["output_chars"] for r in results) / attempted, 1) if attempted else 0.0
@@ -349,7 +439,7 @@ def main() -> int:
             "tasks_file": str(task_path),
             "max_tasks": args.max_tasks,
             "timeout_sec": args.timeout_sec,
-            "model": args.model or "default",
+            "model": args.model,
             "agent_cmd": args.agent_cmd,
             "auto_mode_flags": {
                 "print": True,
@@ -371,8 +461,16 @@ def main() -> int:
             "precision": round(precision, 4),
             "recall": round(recall, 4),
             "f1": round(f1, 4),
+            "cwe_recall": round((cwe_match_total / expected_total), 4) if expected_total else 0.0,
+            "file_recall": round((file_match_total / expected_total), 4) if expected_total else 0.0,
+            "line_recall": round((line_match_total / expected_total), 4) if expected_total else 0.0,
+            "evidence_recall": round((evidence_match_total / expected_total), 4) if expected_total else 0.0,
             "tp_per_task": round((tp_total / attempted), 4) if attempted else 0.0,
             "fp_per_task": round((fp_total / attempted), 4) if attempted else 0.0,
+            "overreport_rate": round((fp_total / predicted_total), 4) if predicted_total else 0.0,
+            "empty_output_task_rate": pct(len([r for r in results if r["predicted_count"] == 0]), attempted),
+            "chain_coverage_rate": round((chain_coverage_sum / chain_tasks), 4) if chain_tasks else 0.0,
+            "chain_linked_rate": pct(chain_linked_hits, chain_tasks),
             "chain_success_rate": pct(chain_successes, chain_tasks),
             "strict_task_accuracy": pct(strict_ok, attempted),
             "avg_latency_sec": avg_latency,

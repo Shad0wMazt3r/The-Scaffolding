@@ -125,6 +125,7 @@ CI enforcement lives in `.github/workflows/skills-quality.yml`.
 ### Low-cost Cursor auto benchmark (<=15 tasks)
 
 Use the phase-routing benchmark to sanity-check real agent behavior at low cost:
+All benchmark runners default to `--model composer-2` for consistent A/B comparisons.
 
 ```bash
 python tools/benchmarks/run_cursor_phase_benchmark.py ^
@@ -178,14 +179,14 @@ python tools/benchmarks/run_cursor_vuln_benchmark.py ^
   --profile control ^
   --tasks tools/benchmarks/cursor_vuln_tasks.json ^
   --max-tasks 12 ^
-  --timeout-sec 25 ^
+  --timeout-sec 120 ^
   --output reports/benchmarks/cursor-vuln-control.json
 
 python tools/benchmarks/run_cursor_vuln_benchmark.py ^
   --profile skills-only ^
   --tasks tools/benchmarks/cursor_vuln_tasks.json ^
   --max-tasks 12 ^
-  --timeout-sec 25 ^
+  --timeout-sec 120 ^
   --output reports/benchmarks/cursor-vuln-skills-only.json
 ```
 
@@ -196,7 +197,7 @@ python tools/benchmarks/run_cursor_vuln_benchmark.py ^
   --profile mcp-enabled ^
   --tasks tools/benchmarks/cursor_vuln_tasks.json ^
   --max-tasks 12 ^
-  --timeout-sec 25 ^
+  --timeout-sec 120 ^
   --output reports/benchmarks/cursor-vuln-mcp-enabled.json
 ```
 
@@ -208,6 +209,9 @@ python tools/benchmarks/compare_cursor_vuln_benchmarks.py ^
   --candidate reports/benchmarks/cursor-vuln-skills-only.json ^
   --output reports/benchmarks/cursor-vuln-control-vs-skills.json
 ```
+
+By default, vuln comparison focuses on efficacy metrics (precision/recall/F1/FP behavior/localization).
+Add `--include-cost` only when you explicitly want latency/token deltas included.
 
 ---
 

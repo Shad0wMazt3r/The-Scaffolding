@@ -12,6 +12,7 @@ import time
 from pathlib import Path
 
 JSON_BLOCK_RE = re.compile(r"\{[\s\S]*\}")
+DEFAULT_MODEL = "composer-2"
 PHASES = [
     "recon",
     "web",
@@ -169,8 +170,8 @@ def main() -> int:
     )
     parser.add_argument(
         "--model",
-        default="",
-        help="Optional model override (empty = default)",
+        default=DEFAULT_MODEL,
+        help=f"Model override (default: {DEFAULT_MODEL})",
     )
     parser.add_argument(
         "--profile",
@@ -290,7 +291,7 @@ def main() -> int:
             "tasks_file": str(task_path),
             "max_tasks": args.max_tasks,
             "timeout_sec": args.timeout_sec,
-            "model": args.model or "default",
+            "model": args.model,
             "agent_cmd": args.agent_cmd,
             "auto_mode_flags": {
                 "print": True,

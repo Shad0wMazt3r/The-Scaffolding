@@ -7,20 +7,38 @@ import argparse
 import json
 from pathlib import Path
 
-METRICS = [
+CORE_METRICS = [
     "precision",
     "recall",
     "f1",
+    "cwe_recall",
+    "file_recall",
+    "line_recall",
+    "evidence_recall",
     "tp_per_task",
     "fp_per_task",
+    "overreport_rate",
+    "empty_output_task_rate",
+    "chain_coverage_rate",
+    "chain_linked_rate",
     "chain_success_rate",
     "strict_task_accuracy",
+]
+
+COST_METRICS = [
     "avg_latency_sec",
     "time_per_valid_tp_sec",
     "avg_estimated_tokens",
 ]
 
-LOWER_IS_BETTER = {"fp_per_task", "avg_latency_sec", "time_per_valid_tp_sec", "avg_estimated_tokens"}
+LOWER_IS_BETTER = {
+    "fp_per_task",
+    "overreport_rate",
+    "empty_output_task_rate",
+    "avg_latency_sec",
+    "time_per_valid_tp_sec",
+    "avg_estimated_tokens",
+}
 
 
 def read_json(path: Path) -> dict:
@@ -50,6 +68,11 @@ def main() -> int:
         default="reports/benchmarks/cursor-vuln-comparison.json",
         help="Output comparison report path",
     )
+    parser.add_argument(
+        "--include-cost",
+        action="store_true",
+        help="Include latency/token metrics in comparison output",
+    )
     args = parser.parse_args()
 
     baseline = read_json(Path(args.baseline))
@@ -58,7 +81,8 @@ def main() -> int:
     csum = candidate.get("summary", {})
 
     deltas = {}
-    for metric in METRICS:
+    metrics = CORE_METRICS + (COST_METRICS if args.include_cost else [])
+    for metric in metrics:
         if metric not in bsum or metric not in csum:
             continue
         b = bsum[metric]
