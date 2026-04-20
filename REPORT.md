@@ -187,3 +187,49 @@ gpt-5-nano 0.40 < gemini-flash 1.50 < kimi-k2.5 1.72 < gpt-5-mini/codex-mini 2.0
 - Moonshot pricing landing page: `https://platform.moonshot.ai/pricing`
 - OpenRouter models API (model-level token pricing): `https://openrouter.ai/api/v1/models`
 
+---
+
+## MCP-enabled benchmark update (11 models, single run each)
+
+### Scope
+- Profile: `mcp-enabled`
+- Tasks: `tools/benchmarks/cursor_vuln_tasks.json` (20 tasks/model)
+- Verifier pass: enabled (`--verify-findings`)
+- Artifact root: `reports/benchmarks/model-sweep-mcp-enabled/`
+- Run log: `reports/benchmarks/model-sweep-mcp-enabled/run-log.json`
+
+### Environment state used for this run
+- Playwright MCP disabled for Cursor (`C:\Users\er123\.cursor\mcp.json`).
+- `lattice-mind` endpoint healthy on `http://localhost:8000/mcp`.
+- `kali-mcp-server` endpoint healthy on `http://localhost:8137/sse`.
+- `github-mcp` Docker image present and resolvable by scaffold health checks.
+- `ghidra-mcp` SSE bridge healthy on `http://127.0.0.1:8081/sse` (bridge up; Ghidra HTTP backend not active on `:8080` during this run).
+
+### Aggregate snapshot (macro over 11 model runs)
+- Macro F1: **0.6098**
+- Macro precision / recall: **0.6695 / 0.5818**
+- Macro strict task accuracy: **46.36%**
+- Macro FP per task: **0.3000**
+- Skill anchor presence / strict route accuracy: **98.18% / 98.18%**
+- Total wall-clock across all 11 runs: **5445.90s** (**1.51h**)
+
+### Per-model outcomes
+
+| Model | F1 | Strict task accuracy | Elapsed (s) | Output |
+|---|---:|---:|---:|---|
+| gpt-5.4-mini-high | 0.8000 | 65.00% | 546.36 | `reports/benchmarks/model-sweep-mcp-enabled/gpt-5.4-mini-high/cursor-vuln-mcp-enabled.json` |
+| gpt-5.4-mini-low | 0.7368 | 60.00% | 412.18 | `reports/benchmarks/model-sweep-mcp-enabled/gpt-5.4-mini-low/cursor-vuln-mcp-enabled.json` |
+| gemini-3-flash | 0.7317 | 60.00% | 780.53 | `reports/benchmarks/model-sweep-mcp-enabled/gemini-3-flash/cursor-vuln-mcp-enabled.json` |
+| gpt-5.4-mini-medium | 0.6842 | 50.00% | 447.31 | `reports/benchmarks/model-sweep-mcp-enabled/gpt-5.4-mini-medium/cursor-vuln-mcp-enabled.json` |
+| kimi-k2.5 | 0.6500 | 50.00% | 611.91 | `reports/benchmarks/model-sweep-mcp-enabled/kimi-k2.5/cursor-vuln-mcp-enabled.json` |
+| gpt-5.4-nano-low | 0.6111 | 55.00% | 346.30 | `reports/benchmarks/model-sweep-mcp-enabled/gpt-5.4-nano-low/cursor-vuln-mcp-enabled.json` |
+| claude-4.6-sonnet-medium | 0.5854 | 30.00% | 418.14 | `reports/benchmarks/model-sweep-mcp-enabled/claude-4.6-sonnet-medium/cursor-vuln-mcp-enabled.json` |
+| gpt-5.4-nano-medium | 0.5641 | 35.00% | 470.09 | `reports/benchmarks/model-sweep-mcp-enabled/gpt-5.4-nano-medium/cursor-vuln-mcp-enabled.json` |
+| gpt-5.4-nano-high | 0.4865 | 35.00% | 550.02 | `reports/benchmarks/model-sweep-mcp-enabled/gpt-5.4-nano-high/cursor-vuln-mcp-enabled.json` |
+| gpt-5.4-nano-none | 0.4737 | 40.00% | 320.59 | `reports/benchmarks/model-sweep-mcp-enabled/gpt-5.4-nano-none/cursor-vuln-mcp-enabled.json` |
+| gpt-5.1-codex-mini-low | 0.3846 | 30.00% | 542.47 | `reports/benchmarks/model-sweep-mcp-enabled/gpt-5.1-codex-mini-low/cursor-vuln-mcp-enabled.json` |
+
+### Notes
+- This MCP-enabled slice is a **single-run** view and should not be interpreted as a stability estimate.
+- For trend-level conclusions, compare against the existing 3-run `control` vs `skills-only` sections above.
+
