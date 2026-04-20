@@ -1,0 +1,10 @@
+services:
+  challenge:
+    build:
+      context: ${CTF_SOURCES_ROOT}/rootmeup/challenges/Blue-Team-Memory-Forensics
+      dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./report:/challenge/report
+

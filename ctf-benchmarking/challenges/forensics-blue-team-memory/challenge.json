@@ -1,0 +1,9 @@
+{
+  "id": "forensics-blue-team-memory",
+  "category": "forensics",
+  "title": "Blue-Team-Memory-Forensics",
+  "source": "Jacob-dot-bit/RootMeUp:challenges/Blue-Team-Memory-Forensics",
+  "compose_file": "ctf-benchmarking/challenges/forensics-blue-team-memory/docker-compose.yml",
+  "target": "container challenge shell"
+}
+

@@ -1,0 +1,9 @@
+{
+  "id": "rev-ilovecrackmes",
+  "category": "reverse-engineering",
+  "title": "ilovecrackmes",
+  "source": "google/google-ctf:2024/quals/rev-ilovecrackmes",
+  "compose_file": "ctf-benchmarking/challenges/rev-ilovecrackmes/docker-compose.yml",
+  "target": "127.0.0.1:18103"
+}
+

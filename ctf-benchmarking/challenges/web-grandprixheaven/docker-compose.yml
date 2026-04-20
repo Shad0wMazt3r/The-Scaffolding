@@ -1,0 +1,9 @@
+services:
+  challenge:
+    build:
+      context: ${CTF_SOURCES_ROOT}/google-ctf/2024/quals/web-grandprixheaven/challenge
+      dockerfile: Dockerfile
+    ports:
+      - "18100:1337"
+    restart: unless-stopped
+

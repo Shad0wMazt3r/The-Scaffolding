@@ -1,0 +1,9 @@
+{
+  "id": "pwn-knife",
+  "category": "pwn",
+  "title": "Knife",
+  "source": "google/google-ctf:2024/quals/pwn-knife",
+  "compose_file": "ctf-benchmarking/challenges/pwn-knife/docker-compose.yml",
+  "target": "127.0.0.1:18101"
+}
+

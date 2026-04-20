@@ -1,0 +1,9 @@
+{
+  "id": "web-grandprixheaven",
+  "category": "web",
+  "title": "Grand Prix Heaven",
+  "source": "google/google-ctf:2024/quals/web-grandprixheaven",
+  "compose_file": "ctf-benchmarking/challenges/web-grandprixheaven/docker-compose.yml",
+  "target": "http://127.0.0.1:18100"
+}
+

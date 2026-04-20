@@ -1,0 +1,9 @@
+services:
+  challenge:
+    build:
+      context: ${CTF_SOURCES_ROOT}/google-ctf/2024/quals/pwn-knife/challenge
+      dockerfile: Dockerfile
+    ports:
+      - "18101:1337"
+    restart: unless-stopped
+

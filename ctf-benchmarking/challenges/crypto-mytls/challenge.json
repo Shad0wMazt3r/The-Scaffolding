@@ -1,0 +1,9 @@
+{
+  "id": "crypto-mytls",
+  "category": "crypto",
+  "title": "myTLS",
+  "source": "google/google-ctf:2023/quals/crypto-mytls",
+  "compose_file": "ctf-benchmarking/challenges/crypto-mytls/docker-compose.yml",
+  "target": "127.0.0.1:18102"
+}
+

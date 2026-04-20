@@ -62,6 +62,7 @@ The bootstrap skill loads domain-specific knowledge at session start. Notes pers
 ├── .gemini/              # Gemini CLI configuration
 ├── .github/              # GitHub integration
 ├── .opencode/            # OpenCode agent configuration
+├── ctf-benchmarking/     # 5-challenge hard CTF benchmark manifests/templates
 ├── kali-mcp/             # Kali Linux MCP server integration
 ├── AGENTS.md             # Shared agent instructions
 ├── HUMAN.md              # Human-facing documentation
@@ -271,6 +272,40 @@ python tools/benchmarks/generate_vuln_leaderboard.py ^
 ```
 
 By default, vuln comparison focuses on efficacy metrics; add `--include-cost` only when you explicitly want latency/token deltas.
+
+---
+
+### Dockerized hard CTF benchmark (5 challenge testbench)
+
+The repository also includes a dockerized benchmark suite with one hard challenge per category (`web`, `pwn`, `crypto`, `forensics`, `reverse-engineering`) and mandatory end-of-run writeups for manual grading.
+
+Fetch sources:
+
+```bash
+python tools/benchmarks/fetch_ctf_sources.py ^
+  --manifest ctf-benchmarking/manifest.json ^
+  --source-root ctf-benchmarking/sources
+```
+
+Run the benchmark:
+
+```bash
+python tools/benchmarks/run_cursor_ctf_benchmark.py ^
+  --manifest ctf-benchmarking/manifest.json ^
+  --source-root ctf-benchmarking/sources ^
+  --model composer-2 ^
+  --output-dir reports/benchmarks/ctf-run-01
+```
+
+Generate grading worksheet artifacts:
+
+```bash
+python tools/benchmarks/grade_cursor_ctf_writeups.py ^
+  --run-report reports/benchmarks/ctf-run-01/run-report.json ^
+  --rubric ctf-benchmarking/grading/rubric.json ^
+  --output reports/benchmarks/ctf-run-01/manual-grade.json ^
+  --worksheet-md reports/benchmarks/ctf-run-01/manual-grade.md
+```
 
 ---
 

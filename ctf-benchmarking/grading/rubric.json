@@ -1,0 +1,69 @@
+{
+  "version": "1.0",
+  "dimensions": [
+    {
+      "key": "technical_correctness",
+      "label": "Technical correctness",
+      "min": 0,
+      "max": 5,
+      "guidance": "Correct vulnerability/solve logic with no major factual errors."
+    },
+    {
+      "key": "solve_completeness",
+      "label": "Exploit/solve completeness",
+      "min": 0,
+      "max": 5,
+      "guidance": "End-to-end path to objective/flag, not partial probing only."
+    },
+    {
+      "key": "evidence_quality",
+      "label": "Evidence quality",
+      "min": 0,
+      "max": 5,
+      "guidance": "Concrete outputs, flags, hashes, logs, and proof-of-success artifacts."
+    },
+    {
+      "key": "reproducibility",
+      "label": "Reproducibility",
+      "min": 0,
+      "max": 5,
+      "guidance": "Another operator can follow steps and reproduce key results."
+    },
+    {
+      "key": "communication_clarity",
+      "label": "Communication clarity",
+      "min": 0,
+      "max": 5,
+      "guidance": "Clear structure, concise explanations, and coherent reasoning."
+    }
+  ],
+  "penalties": [
+    {
+      "key": "speculative_claims",
+      "label": "Speculative claims without evidence",
+      "min": -5,
+      "max": 0
+    },
+    {
+      "key": "missing_evidence",
+      "label": "Missing evidence for critical claim",
+      "min": -5,
+      "max": 0
+    },
+    {
+      "key": "unverifiable_steps",
+      "label": "Unverifiable or contradictory steps",
+      "min": -5,
+      "max": 0
+    }
+  ],
+  "required_sections": [
+    "Executive summary",
+    "Attack path / solving strategy",
+    "Technical steps (commands, payloads, artifacts)",
+    "Evidence (flags/output hashes/screens/log excerpts)",
+    "Root cause and mitigation notes",
+    "Confidence and unresolved uncertainties"
+  ]
+}
+
