@@ -213,6 +213,38 @@ gpt-5-nano 0.40 < gemini-flash 1.50 < kimi-k2.5 1.72 < gpt-5-mini/codex-mini 2.0
 - Skill anchor presence / strict route accuracy: **98.18% / 98.18%**
 - Total wall-clock across all 11 runs: **5445.90s** (**1.51h**)
 
+### Comparison vs no-skills and skills-only baselines
+
+| Profile | Basis | Macro F1 | Macro strict task accuracy |
+|---|---|---:|---:|
+| control | 3-run mean | 0.6591 | 50.45% |
+| skills-only | 3-run mean | 0.6695 | 51.36% |
+| mcp-enabled | single run | 0.6098 | 46.36% |
+
+- **MCP vs control:** ΔF1 **-0.0492**, Δstrict **-4.09** pts.
+- **MCP vs skills-only:** ΔF1 **-0.0597**, Δstrict **-5.00** pts.
+- Model-level wins:
+  - MCP F1 > control on **3/11** models.
+  - MCP F1 > skills-only on **1/11** models.
+  - MCP strict > control on **2/11** models.
+  - MCP strict > skills-only on **2/11** models.
+
+### Per-model delta (MCP vs control/skills-only)
+
+| Model | Control F1 (3-run) | Skills F1 (3-run) | MCP F1 | ΔMCP-Control | ΔMCP-Skills |
+|---|---:|---:|---:|---:|---:|
+| gpt-5.1-codex-mini-low | 0.4774 | 0.5926 | 0.3846 | -0.0928 | -0.2080 |
+| gpt-5.4-nano-none | 0.4384 | 0.5011 | 0.4737 | +0.0353 | -0.0274 |
+| gpt-5.4-nano-low | 0.5137 | 0.5663 | 0.6111 | +0.0974 | +0.0448 |
+| gpt-5.4-nano-high | 0.5877 | 0.6197 | 0.4865 | -0.1012 | -0.1332 |
+| gpt-5.4-mini-low | 0.7409 | 0.7609 | 0.7368 | -0.0041 | -0.0241 |
+| gemini-3-flash | 0.7145 | 0.7329 | 0.7317 | +0.0172 | -0.0012 |
+| kimi-k2.5 | 0.6959 | 0.6803 | 0.6500 | -0.0459 | -0.0303 |
+| claude-4.6-sonnet-medium | 0.7875 | 0.7697 | 0.5854 | -0.2021 | -0.1843 |
+| gpt-5.4-mini-high | 0.8384 | 0.8035 | 0.8000 | -0.0384 | -0.0035 |
+| gpt-5.4-nano-medium | 0.6647 | 0.6088 | 0.5641 | -0.1006 | -0.0447 |
+| gpt-5.4-mini-medium | 0.7906 | 0.7286 | 0.6842 | -0.1064 | -0.0444 |
+
 ### Per-model outcomes
 
 | Model | F1 | Strict task accuracy | Elapsed (s) | Output |
