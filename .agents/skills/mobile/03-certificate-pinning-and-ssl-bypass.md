@@ -12,12 +12,3 @@
 Simple inline one-liner:
 `frida -U -f <package> -l /mobile/<target>/frida/common/ssl_bypass.js --no-pause`
 
-Script Definition Block — Custom Pinning Locator
-- Input Data: Decompiled classes, stack traces from failed TLS sessions, runtime-loaded class names.
-- Core Processing Logic:
-  - Search for trust manager, pinner, host verifier, or trust-evaluation wrappers.
-  - Match failure stack frames to candidate methods.
-  - Generate hook plan: method name, return type, bypass behavior, evidence path.
-- Dependencies: `jadx`, Frida, logcat or iOS device logs.
-- Expected Output Format: Markdown table with `class/method,platform,hook_strategy,expected_result,verification_step`.
-

@@ -17,13 +17,3 @@ Simple one-liners:
 - `python3 -c "import zlib,sys; print(hex(zlib.crc32(open('blob','rb').read()) & 0xffffffff))"`
 - `python3 -c "from pwn import *; print(hexdump(open('blob','rb').read()[:256]))"`
 
-Script Definition Block — constant-signature matcher
-- Input Data: immediates, tables, rotate counts, loop bounds, candidate round functions.
-- Core Processing Logic:
-  - Normalize constants by width and endianness.
-  - Match against a signature bank of common crypto/hash/checksum primitives.
-  - Score partial matches and annotate missing pieces.
-  - Emit a hypothesis list with validation probes.
-- Dependencies: Capstone or disassembler export, signature database, optional NumPy for table comparison.
-- Expected Output Format: ranked JSON list with `algorithm`, `score`, `evidence`, `next_probe`.
-

@@ -15,13 +15,3 @@
 
 angr’s published examples call out Unicorn-backed concrete execution as essential for some self-modifying challenges because symbolically simulating unpacking is too slow. [docs.angr](https://docs.angr.io/en/latest/examples.html)
 
-Script Definition Block — symbolic harness planner
-- Input Data: validator entry PC, success/fail PCs, initial memory/register snapshot, imported-function stubs, input buffer location.
-- Core Processing Logic:
-  - Build a minimal state from a post-unpack checkpoint.
-  - Symbolize only user-controlled bytes that taint decision points.
-  - Add library summaries and environment models.
-  - Run directed exploration to success while recording blocking predicates.
-- Dependencies: angr, Triton or PyVEX, Unicorn checkpoint, Z3.
-- Expected Output Format: `solution.bin`, `constraints.smt2`, `path_report.json`.
-

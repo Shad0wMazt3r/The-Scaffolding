@@ -17,13 +17,3 @@ Simple one-liners:
 - `python3 -c "import r2pipe; r=r2pipe.open('sample'); r.cmd('aaa'); print(r.cmd('/cj dispatch'))"`
 - `objdump -d sample | grep -E 'jmp\\*|call\\*'`
 
-Script Definition Block — VM ISA reconstructor
-- Input Data: native trace of dispatcher iterations, memory dumps of bytecode, candidate VM-context offsets.
-- Core Processing Logic:
-  - Segment traces into individual VM steps.
-  - Infer operand widths and addressing modes from bytecode consumption and state deltas.
-  - Assign provisional mnemonic classes from side effects.
-  - Validate by replaying traces in an offline emulator and diffing state after each step.
-- Dependencies: DBI trace source, Capstone, Python data model, optional Z3 for validation.
-- Expected Output Format: `opcode_map.yaml`, `context_layout.json`, `trace_replay_report.md`.
-

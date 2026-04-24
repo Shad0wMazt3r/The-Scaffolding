@@ -19,13 +19,3 @@ Simple one-liners:
 - `grep -RInaE 'password|secret|token|key|flag' firmware/binwalk/`
 - `find firmware/binwalk/ -type f -exec file {} + | grep -E 'ELF|script|archive'`
 
-Script Definition Block — firmware secret extractor
-- Input Data: extracted filesystem tree, emulated rootfs, syscall/ioctl trace, NVRAM key/value accesses.
-- Core Processing Logic:
-  - Instrument reads of config, NVRAM, and secure-storage abstractions.
-  - Correlate them with service startup and decrypt/validate routines.
-  - Capture derived secrets at API boundaries and on successful comparisons.
-  - Reconcile secrets with static constants to locate the root derivation path.
-- Dependencies: QEMU user/system mode, `strace`, optional custom syscall hook, disassembler export.
-- Expected Output Format: `secrets.json`, `callsites.csv`, `derivation_graph.dot`.
-

@@ -19,13 +19,3 @@ Simple one-liners:
 - `ltrace -f -s 256 -o dynamic/traces/ltrace.txt ./sample`
 - `gdb -q ./sample -ex 'catch syscall ptrace' -ex run`
 
-Script Definition Block — anti-analysis normalizer
-- Input Data: API/symbol hit list, timing call sites, debugger-detection branches, environment strings.
-- Core Processing Logic:
-  - Map anti-analysis primitives to hook points.
-  - Generate a patch/hook plan with minimal semantic disturbance.
-  - Prioritize boundary interception over deep inline patching.
-  - Emit per-platform debugger commands and Frida hook templates.
-- Dependencies: Capstone, Keystone, Frida templates, PE/ELF symbol parser.
-- Expected Output Format: YAML with `site`, `method`, `override`, `risk`, `rollback`.
-

@@ -12,12 +12,3 @@
 Simple inline one-liner:
 `frida-ps -Uai && objection -g <bundle_or_package> explore`
 
-Script Definition Block — JNI Secret Interceptor
-- Input Data: Suspect native library path, exported/native method list, Java/Swift call sites, runtime trigger sequence.
-- Core Processing Logic:
-  - Hook entry and return points of JNI/native functions tied to auth, pinning, or crypto.
-  - Log plaintext arguments, derived keys, and decoded endpoint values.
-  - Correlate outputs to network requests or local writes.
-- Dependencies: Frida, `nm`/`otool`, Ghidra notes.
-- Expected Output Format: JSON lines with `timestamp,function,args_preview,retval_preview,thread,trigger_screen,next_chain`.
-

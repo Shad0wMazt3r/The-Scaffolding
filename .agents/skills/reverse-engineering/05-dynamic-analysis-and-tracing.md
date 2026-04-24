@@ -19,13 +19,3 @@ Simple one-liners:
 - `rr record ./sample`
 - `perf record -e intel_pt//u -- ./sample`
 
-Script Definition Block — compare-sink interceptor
-- Input Data: addresses of compare calls or custom compare loops, register snapshots, relevant memory windows.
-- Core Processing Logic:
-  - Hook every compare sink and record both operands before evaluation.
-  - Correlate operands with call stack and prior decode routines.
-  - Cluster recurring transformed-input patterns.
-  - Emit candidate “expected” values and the routines that produced them.
-- Dependencies: Frida or DynamoRIO, symbol resolver, Capstone.
-- Expected Output Format: CSV/JSON rows with `ts`, `pc`, `lhs`, `rhs`, `stack`, `producer_chain`.
-

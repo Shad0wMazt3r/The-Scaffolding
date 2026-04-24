@@ -21,13 +21,3 @@ Simple one-liners:
 - `ghidraRun /re/<target>/ghidra/project`
 - `python3 -c "import r2pipe; r=r2pipe.open('sample'); r.cmd('aaa'); print(r.cmd('afl'))"`
 
-Script Definition Block — CFG repair helper
-- Input Data: function start candidates, basic block edges, indirect branch sites, disassembler export.
-- Core Processing Logic:
-  - Build a provisional CFG from known edges.
-  - Score blocks by inbound legitimacy, fall-through plausibility, and constant-state transitions.
-  - Collapse trampoline/junk nodes and re-emit a simplified graph.
-  - Export recovered switch tables and likely handler starts.
-- Dependencies: NetworkX, r2pipe or Ghidra headless export, optional Capstone.
-- Expected Output Format: JSON with `functions`, `blocks`, `edges`, `suspect_junk`, `indirect_targets`.
-

@@ -21,13 +21,3 @@ Simple one-liners:
 - `binwalk -Me firmware.bin -C firmware/binwalk/`
 - `python3 -c "from pwn import *; d=open('blob','rb').read(); print(xor(d,0x41)[:128])"`
 
-Script Definition Block — staged unpack monitor
-- Input Data: memory map events, page permissions, write traces, executed-address timeline.
-- Core Processing Logic:
-  - Track writes into non-image or newly RWX pages.
-  - Mark transitions where execution enters recently written regions.
-  - Snapshot memory and metadata at candidate OEPs.
-  - Rebuild PE/ELF headers if missing; emit import-rebuild candidates.
-- Dependencies: Frida or DynamoRIO, pefile/LIEF, Capstone.
-- Expected Output Format: directory per stage with `dump.bin`, `map.json`, `oep.txt`, `imports.json`.
-
