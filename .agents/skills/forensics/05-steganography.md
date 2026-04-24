@@ -2,7 +2,7 @@
 
 - Primary Probe
   - * -> [Condition: Carrier is an image or audio file] -> Action: start with `file`, `exiftool`, `binwalk`, `strings`, and `steghide info`; then inspect dimensions, channels, palette, compression, and metadata for contradictions. Steghide exposes `info` and `extract` for candidate stego files. [manpages.ubuntu](https://manpages.ubuntu.com/manpages/trusty/man1/steghide.1.html)
-  - * -> [Condition: Carrier is PNG or BMP] -> Action: run `zsteg -a` first, then inspect per-channel bit planes, alpha channel, palette ordering, and trailing bytes. `zsteg` is designed to detect hidden data in PNG and BMP, and installs via RubyGems. [github](https://github.com/zed-0xff/zsteg)
+  - * -> [Condition: Carrier is PNG or BMP] -> Action: run `zsteg -a` first, then inspect per-channel bit planes, alpha channel, palette ordering, and trailing bytes. `zsteg` is designed to detect hidden data in PNG and BMP, and installs via RubyGems.
   - * -> [Condition: Carrier is JPEG or audio] -> Action: favor metadata, binwalk, appended payload checks, quantization/DCT anomalies, and spectrogram analysis over naive LSB assumptions.
 
 - Dead End Pivots

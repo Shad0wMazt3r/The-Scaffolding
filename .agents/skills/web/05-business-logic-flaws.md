@@ -1,18 +1,15 @@
 ## Business Logic Flaws
 
-- `->` **[Primary Probe]** Map the full application workflow for multi-step processes (checkout, password reset, account upgrade); manually attempt to skip, reorder, or replay individual steps [ieeexplore.ieee](https://ieeexplore.ieee.org/document/11405427/)
-  - `->` **[Condition: One-shot workflow primitives]** → Identify endpoints that intentionally change global state on first use (`/api/password` style leak-once toggles, single-view secrets); treat restart/state reset as part of exploit design.
-  - `->` **[Condition: Skip-step accepted]** → Escalate: access step N+2 without completing N+1 (e.g., confirm order without payment)
-  - `->` **[Condition: Price manipulation]** → Intercept quantity/price fields:
-    - Negative quantity: `{"qty": -1}` → negative charge / credit addition
-    - Float truncation: `{"price": 0.001}` → rounds to 0 at payment
-    - Currency mismatch: submit price in low-value currency when backend assumes USD
-  - `->` **[Dead End: Server recalculates price server-side]** → Race condition: send concurrent requests to apply the same discount code simultaneously via Turbo Intruder `parallelism=50`
-    ```
-    engine.queue(target.req, gate='race'); [x50]; engine.openGate('race')
-    ```
-  - `->` **[Dead End: Race window too small]** → Apply Nagle's algorithm bypass: use HTTP/2 single-packet attack (all requests in one TCP segment)
-  - `->` **[Condition: Workflow depends on PRNG sequencing]** → Capture enough outputs to recover state, predict future values, then inject payloads that rely on predicted protocol artifacts (IDs, boundaries, nonces).
-  - `->` **[Data Chaining]** Duplicate coupon application → free credits → use credits to trigger premium SSRF-capable functionality
+- **[Primary Probe]** Map multi-step workflows (checkout, password reset, upgrade); attempt to skip, reorder, or replay steps
+  - **[Condition: One-shot endpoints]** Identify leak-once secrets and plan state resets before exploit chains
+  - **[Condition: Step skip accepted]** Access step N+2 without completing N+1 (confirm order without payment)
+  - **[Condition: Price manipulation]** Intercept quantity/price fields:
+    - Negative quantity: `{"qty": -1}` → negative charge / credit
+    - Float truncation: `{"price": 0.001}` → rounds to 0
+    - Currency mismatch: low-value currency when backend assumes USD
+  - **[Dead End: Server recalculates]** Race condition: concurrent requests to apply same discount via Turbo Intruder `parallelism=50`
+  - **[Dead End: Race window small]** HTTP/2 single-packet attack (all requests in one TCP segment)
+  - **[Condition: PRNG sequencing]** Capture outputs to recover state and predict protocol artifacts (IDs, boundaries, nonces)
+  - **[Data Chaining]** Duplicate coupon → free credits → premium SSRF functionality
 
 ***

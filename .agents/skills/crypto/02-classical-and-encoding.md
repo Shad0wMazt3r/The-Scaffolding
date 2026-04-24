@@ -1,21 +1,28 @@
 ## Classical & Encoding
-- Preconditions
-  - * -> [Condition: Artifact is short text, printable bytes, or challenge label hints at “warmup/encoding/classical”] -> Action: fingerprint alphabet size, byte entropy, character frequency, digraphs, repeated trigrams, and base-encoding validity before assuming encryption.
-  - * -> [Condition: Mixed alphabet plus `=`/URL-safe symbols] -> Action: test Base64/Base32/Base58/Base85 normalization first; many “crypto” CTFs are actually layered encoding plus light obfuscation.
-  - * -> [Condition: Low entropy with preserved spacing/punctuation] -> Action: prioritize substitution, Caesar-family, affine, Vigenère, rail-fence, and transposition.
-- Parameter fingerprinting
-  - * -> [Condition: Single-byte domain or hex pairs] -> Action: score for XOR, nibble substitution, and bytewise affine transforms.
-  - * -> [Condition: Repeating-key suspicion] -> Action: estimate key period from IoC/Kasiski/Hamming-distance minima.
-- State machine
-  - * -> [Condition: Frequency profile strongly matches a natural language] -> Action: run monoalphabetic/shift scoring as the **Primary Probe**.
-  - * -> [Condition: Primary Probe weak or inconsistent] -> Action: **Dead End Pivot 1** to periodic-key tests; **Dead End Pivot 2** to transposition heuristics; **Dead End Pivot 3** to layered decode ordering.
-  - * -> [Condition: One layer normalizes but output remains semi-structured] -> Action: preserve both raw and transformed artifacts in `evidence/` and recurse on the next layer.
-- Data chaining
-  - * -> [Condition: Recovered key period or substitution map is partial] -> Action: feed partial plaintext anchors into crib validation, then reuse recovered fragments to separate encoded wrapper from actual ciphertext.
-- Simple triage one-liners
-  - * -> [Condition: Need Base64 sanity check] -> Action: `import base64; base64.b64decode(s + '='*((4-len(s)%4)%4), validate=False)`
-  - * -> [Condition: Need XOR repetition hint] -> Action: `from math import gcd; periods=[i for i in range(1,41) if ct[:len(ct)-i]==bytes(a^b==0 and a or a for a,b in zip(ct[i:],ct[:-i]))]`
-- Complexity and tool choice
-  - * -> [Condition: Search space is tiny or scoring-driven] -> Action: stay in Python; classical-cipher work is usually \(O(n)\) to \(O(kn)\) with small \(k\).
-  - * -> [Condition: Algebraic key recovery on polynomials/permutations appears] -> Action: move to SageMath for symbolic manipulation.
 
+- Preconditions
+  - [Condition: Short text, printable bytes, or "warmup/encoding/classical" hints] → Fingerprint alphabet size, entropy, character frequency, digraphs, repeated trigrams, base-encoding validity
+  - [Condition: Mixed alphabet + `=`/URL-safe symbols] → Test Base64/Base32/Base58/Base85 normalization; many CTF "crypto" are layered encoding + obfuscation
+  - [Condition: Low entropy with spacing/punctuation] → Prioritize substitution, Caesar, affine, Vigenère, rail-fence, transposition
+
+- Parameter fingerprinting
+  - [Condition: Single-byte domain or hex pairs] → Score XOR, nibble substitution, bytewise affine
+  - [Condition: Repeating-key suspicion] → Estimate key period via IoC/Kasiski/Hamming-distance minima
+
+- State machine
+  - [Condition: Frequency profile matches natural language] → **Primary Probe:** monoalphabetic/shift scoring
+  - [Condition: Primary Probe weak/inconsistent] → **Pivot 1:** periodic-key tests; **Pivot 2:** transposition; **Pivot 3:** layered decode ordering
+  - [Condition: One layer normalizes, output semi-structured] → Preserve both raw and transformed in evidence/; recurse next layer
+
+- Data chaining
+  - [Condition: Partial key period or substitution map] → Feed partial plaintext anchors into crib validation, reuse fragments to separate wrapper from actual ciphertext
+
+- Triage one-liners
+  - Base64 sanity: `import base64; base64.b64decode(s + '='*((4-len(s)%4)%4), validate=False)`
+  - XOR repetition: `from math import gcd; periods=[i for i in range(1,41) if ct[:len(ct)-i]==bytes(a^b==0 and a or a for a,b in zip(ct[i:],ct[:-i]))]`
+
+- Tool choice
+  - [Condition: Tiny search space or scoring-driven] → Python (usually O(n) to O(kn) with small k)
+  - [Condition: Algebraic key recovery on polynomials/permutations] → SageMath for symbolic manipulation
+
+***

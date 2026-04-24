@@ -36,11 +36,11 @@ Use this fixed workspace so artifacts, hooks, traffic, and evidence stay correla
 ```
 
 - Baseline host stack: Android Studio emulator, `adb`, `jadx`, `apktool`, `burp`, `frida-tools`, `objection`, `mitmproxy`, `ghidra`, `radare2`, `sqlite3`, `libimobiledevice`, `ideviceinstaller`, `iproxy`, `class-dump`, `plutil`, `keychain_dumper`, `Cycript` or Frida-only iOS flow.
-- On Android, keep `adb` ready for both Activity Manager and content-provider entry points because `adb shell am` and `adb shell content` expose those attack surfaces directly from shell. [stackoverflow](https://stackoverflow.com/questions/27988069/query-android-content-provider-from-command-line-adb-shell)
+- On Android, keep `adb` ready for both Activity Manager and content-provider entry points because `adb shell am` and `adb shell content` expose those attack surfaces directly from shell.
 - For TLS interception, assume Android trusts system CAs by default, and note that apps targeting API 23 or lower also trust user-added CAs by default unless app configuration changes that trust behavior. [developer.android](https://developer.android.com/privacy-and-security/security-config)
 - For Android backup review, check whether the target targets and runs on Android 6.0+ because Auto Backup applies there and can expose app data selection rules. [developer.android](https://developer.android.com/identity/data/autobackup)
 - For iOS, treat Keychain, app container files, URL-scheme handlers, and pasteboard as first-class data sources because Keychain stores small secrets in an encrypted database, `canOpenURL` reveals whether a scheme handler exists, and `UIPasteboard` is a cross-app data-sharing primitive. [developer.apple](https://developer.apple.com/documentation/security/keychain-services)
-- On jailbroken iOS, deploy Frida through the Frida repository package path, and on non-jailbroken devices prefer `objection patchipa` / `patchapk` with Frida Gadget when the assessment allows repackaging. [appsecsanta](https://appsecsanta.com/objection)
+- On jailbroken iOS, deploy Frida through the Frida repository package path, and on non-jailbroken devices prefer `objection patchipa` / `patchapk` with Frida Gadget when the assessment allows repackaging.
 
 - Android setup:
   - `adb devices -l && adb shell getprop ro.build.version.release`

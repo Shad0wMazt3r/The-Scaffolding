@@ -1,6 +1,6 @@
 ## Static Disassembly & Decompilation
 
-Ghidra is suitable as the cross-platform baseline because it supports scripting and automated modes in addition to interactive disassembly/decompilation, while Binary Ninja is strongest when you want API-driven MLIL/HLIL transformations and headless automation. [mintlify](https://www.mintlify.com/Vector35/binaryninja-api/api/python/overview)
+Ghidra is suitable as the cross-platform baseline because it supports scripting and automated modes in addition to interactive disassembly/decompilation, while Binary Ninja is strongest when you want API-driven MLIL/HLIL transformations and headless automation.
 
 - Primary Probe
   - * -> [Condition: Normal native binary] -> Action: perform a first-pass Ghidra/IDA/Binja auto-analysis, then manually validate entry, imports, TLS callbacks, exception handlers, constructor arrays, and dispatch-heavy basic blocks before trusting recovered functions.

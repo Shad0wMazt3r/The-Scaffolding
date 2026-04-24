@@ -1,25 +1,27 @@
 ## Cross-Class Data Chaining Map
 
 ```
-JS Recon (secrets) ──────────────────────────────► API Auth Bypass
-     │                                                     │
-     ▼                                                     ▼
-SSRF (IMDSv1 creds) ────────────────────────────► AWS Lateral Movement
+JS Recon (secrets) ──────► API Auth Bypass
+     │                          │
+     ▼                          ▼
+SSRF (IMDSv1 creds) ──────► AWS Lateral Movement
      │
      ▼
-Internal hostname leak ──► New IDOR surface ──► Privilege Escalation
+Internal hostname → New IDOR → Privilege Escalation
      │
      ▼
-GraphQL Introspection ──► Admin mutation ──► RCE via file upload
+GraphQL Introspection → Admin mutation → RCE via upload
      │
      ▼
-JWT kid traversal ──► Algorithm confusion ──► Auth bypass ──► Business Logic
+JWT kid traversal → Algorithm confusion → Auth bypass → Business Logic
      │
      ▼
-PRNG state leak ──► Predict protocol artifact (boundary/nonce/id) ──► MIME confusion ──► XSS ──► Token abuse
+PRNG state leak → Protocol artifact prediction → MIME confusion → XSS → Token abuse
      │
      ▼
-Actuator heapdump exposure ──► Credential artifacts (user + transmitted hash) ──► Admin route access ──► Flag/secret extraction
+Actuator heapdump → Credential artifacts → Admin route → Flag/secret
 ```
 
-Every finding should be triaged through this chain — a low-severity information leak from JS files or a headers-based hostname disclosure frequently unlocks critical-severity vulnerabilities when cross-class chaining is applied methodically. [sprocketsecurity](https://www.sprocketsecurity.com/blog/pentesting-standards-2025)
+Every finding should triage through this chain — low-severity info leaks frequently unlock critical vulnerabilities when cross-class chaining is applied systematically.
+
+***

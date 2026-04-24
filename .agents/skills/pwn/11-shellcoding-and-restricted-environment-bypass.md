@@ -1,7 +1,7 @@
 ## Shellcoding & Restricted Environment Bypass
 
 - Primary Probe:
-  - * -> [Condition: You control RIP but environment is constrained] -> Action: fingerprint NX, PIE, seccomp, and available syscalls first, then choose native shellcode, staged shellcode, ROP-only syscalls, or SROP. [linuxcommandlibrary](https://linuxcommandlibrary.com/man/checksec)
+  - * -> [Condition: You control RIP but environment is constrained] -> Action: fingerprint NX, PIE, seccomp, and available syscalls first, then choose native shellcode, staged shellcode, ROP-only syscalls, or SROP.
 - Dead End Pivots:
   - * -> [Condition: NX enabled] -> Action: pivot to ret2libc, mprotect/mmap ROP, or `read`-to-RWX staging if an executable mapping can be created.
   - * -> [Condition: seccomp blocks `execve`] -> Action: switch goal to open/read/write exfiltration, ORW ROP, `dup2` + allowed helper abuse, or SROP to reach an allowed syscall shape.

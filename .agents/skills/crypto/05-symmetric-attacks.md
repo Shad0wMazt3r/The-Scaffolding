@@ -1,22 +1,29 @@
 ## Symmetric Attacks
-- Preconditions
-  - * -> [Condition: Block size, IV/nonce behavior, and mode are unknown] -> Action: fingerprint by ciphertext length regularity, repeated-block structure, known headers, and API behavior under modified inputs.
-  - * -> [Condition: Oracle interaction exists] -> Action: classify it as decrypt, padding-validity, tag-validity, timing, or format oracle before doing anything else.
-- Parameter fingerprinting
-  - * -> [Condition: Repeated 16-byte blocks] -> Action: flag ECB.
-  - * -> [Condition: Stable IV or nonce reuse across same key] -> Action: flag CBC/GCM/CTR misuse immediately.
-  - * -> [Condition: Malleability without integrity] -> Action: flag bit-flip or block-splice validation path.
-- State machine
-  - * -> [Condition: Static ciphertext set available] -> Action: run block/nonce/length analysis as the **Primary Probe**.
-  - * -> [Condition: Static analysis is inconclusive] -> Action: **Dead End Pivot 1** to differential chosen-input testing; **Dead End Pivot 2** to error-channel classification; **Dead End Pivot 3** to metadata correlation across sessions.
-  - * -> [Condition: Oracle exists but rate-limited] -> Action: optimize for minimal distinguishing queries and cache every response class.
-- Data chaining
-  - * -> [Condition: Reused nonce or keystream segment identified] -> Action: align affected records, isolate the overlap window, and pass only validated keystream relations to the next parser.
-  - * -> [Condition: Padding-validity signal exists] -> Action: map response classes, confirm blockwise dependency, and then treat each validated byte inference as evidence rather than plaintext until rechecked.
-- Simple triage one-liners
-  - * -> [Condition: Need ECB repeated-block scan] -> Action: `from collections import Counter; reps=[b for b,c in Counter(ct[i:i+16] for i in range(0,len(ct),16)).items() if c>1]`
-  - * -> [Condition: Need nonce-reuse detection] -> Action: `reuse = len(nonces) != len(set(nonces))`
-- Complexity and tool choice
-  - * -> [Condition: Parsing traffic, comparing blocks, and driving APIs dominate] -> Action: Python.
-  - * -> [Condition: Differential trail search or algebraic fault modeling appears] -> Action: SageMath for the model, Python for the harness.
 
+- Preconditions
+  - [Condition: Block size, IV/nonce behavior, mode unknown] → Fingerprint by ciphertext length, repeated blocks, known headers, API behavior under modified inputs
+  - [Condition: Oracle interaction exists] → Classify as decrypt, padding-validity, tag-validity, timing, or format oracle
+
+- Parameter fingerprinting
+  - [Condition: Repeated 16-byte blocks] → Flag ECB
+  - [Condition: Stable IV or nonce reuse with same key] → Flag CBC/GCM/CTR misuse
+  - [Condition: Malleability without integrity] → Flag bit-flip or block-splice path
+
+- State machine
+  - [Condition: Static ciphertext set available] → **Primary Probe:** block/nonce/length analysis
+  - [Condition: Static analysis inconclusive] → **Pivot 1:** differential chosen-input; **Pivot 2:** error-channel classification; **Pivot 3:** metadata correlation
+  - [Condition: Oracle rate-limited] → Optimize for minimal distinguishing queries; cache response classes
+
+- Data chaining
+  - [Condition: Reused nonce or keystream segment identified] → Align records, isolate overlap window, pass validated keystream relations
+  - [Condition: Padding-validity signal exists] → Map response classes, confirm blockwise dependency, treat each byte as evidence until rechecked
+
+- Triage one-liners
+  - ECB repeated blocks: `from collections import Counter; reps=[b for b,c in Counter(ct[i:i+16] for i in range(0,len(ct),16)).items() if c>1]`
+  - Nonce-reuse detection: `reuse = len(nonces) != len(set(nonces))`
+
+- Tool choice
+  - [Condition: Parsing, comparing blocks, driving APIs dominate] → Python
+  - [Condition: Differential trail search or algebraic fault modeling] → SageMath model + Python harness
+
+***

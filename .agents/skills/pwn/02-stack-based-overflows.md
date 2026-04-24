@@ -8,7 +8,7 @@
   - * -> [Condition: Gadget density is poor] -> Action: switch to SROP, ret2csu, or stack pivoting into a writable segment followed by a short second-stage ROP chain.
 - Data Chaining:
   - * -> [Condition: Offset confirmed and one code/libc leak obtained] -> Action: compute PIE/libc base, resolve `system` or syscall gadgets, then choose `ret2libc` for normal gadget availability, full ROP for complex register setup, or SROP when gadgets are severely constrained.
-  - * -> [Condition: NX disabled] -> Action: prefer direct shellcode on stack/heap only after proving the region is executable; otherwise keep code-reuse as the default because NX is commonly enabled. [linuxcommandlibrary](https://linuxcommandlibrary.com/man/checksec)
+  - * -> [Condition: NX disabled] -> Action: prefer direct shellcode on stack/heap only after proving the region is executable; otherwise keep code-reuse as the default because NX is commonly enabled.
   - * -> [Condition: Remote differs from local] -> Action: branch exploit transport through pwntools tubes so the same logic runs against `process()` locally and `remote()` remotely, but keep loader/libc addresses separate per environment. [docs.pwntools](https://docs.pwntools.com/en/stable/tubes.html)
 - Mitigation branches:
   - * -> [Condition: PIE off, NX on] -> Action: favor fixed-binary ROP or ret2plt for leaks, then ret2libc.

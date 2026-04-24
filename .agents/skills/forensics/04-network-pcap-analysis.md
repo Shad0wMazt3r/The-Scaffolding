@@ -1,7 +1,7 @@
 ## Network PCAP Analysis
 
 - Primary Probe
-  - * -> [Condition: Capture is large or noisy] -> Action: begin with protocol hierarchy, endpoints, conversations, DNS, HTTP, TLS, SMB2, FTP, and ICMP; reduce to suspected time windows and client IPs first. TShark supports protocol analysis and uses the same display-filter syntax as Wireshark, with `-Y` for display filters. [wireshark](https://www.wireshark.org/docs/man-pages/wireshark-filter.html)
+  - * -> [Condition: Capture is large or noisy] -> Action: begin with protocol hierarchy, endpoints, conversations, DNS, HTTP, TLS, SMB2, FTP, and ICMP; reduce to suspected time windows and client IPs first. TShark supports protocol analysis and uses the same display-filter syntax as Wireshark, with `-Y` for display filters.
   - * -> [Condition: Application protocols are present] -> Action: reconstruct streams, export files/objects, and inspect hostnames, user agents, cookies, POST bodies, uploads, DNS TXT, and tunneled content.
   - * -> [Condition: Lateral movement or file transfer is likely] -> Action: reassemble SMB2, HTTP, FTP, or email attachments; look for staged binaries, scripts, archives, or screenshot exfiltration.
 

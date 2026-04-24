@@ -10,7 +10,7 @@ Microsoft recommends monitoring sensitive AD objects, preventing powerful accoun
 - SMB & Windows Protocol Attacks
   - * -> [Condition: SMB or RPC services exist] -> Action: Primary validation — verify SMB dialects, signing requirements, guest access, admin share exposure, spooler posture, and NTLM fallback paths.
   - * -> [Condition: Baseline looks clean] -> Action: Dead-end pivots — review file-server GPOs, compare endpoint exceptions, and inspect backup or print infrastructure for inherited legacy settings.
-  - * -> [Condition: Legacy SMB or NTLM dependency is found] -> Action: Data chaining — link the host list to patching, admin tiering, and service-account ownership for remediation prioritization. [semperis](https://www.semperis.com/blog/active-directory-security/active-directory-security-best-practices-checklist/)
+  - * -> [Condition: Legacy SMB or NTLM dependency is found] -> Action: Data chaining — link the host list to patching, admin tiering, and service-account ownership for remediation prioritization.
 
 - Active Directory Enumeration & Privilege Escalation
   - * -> [Condition: Domain assets are in scope] -> Action: Primary validation — review privileged groups, trusts, delegation types, admin workstation separation, replication rights, and high-risk account flags such as “Account is sensitive and cannot be delegated.” [learn.microsoft](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/best-practices-for-securing-active-directory)

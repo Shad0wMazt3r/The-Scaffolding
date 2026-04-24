@@ -7,4 +7,3 @@ files:
 ---
 
 Load files sequentially on activation: see `files` list above.
-Only load the next file when the current file's steps are complete or explicitly requested. Do not preload all files at once.

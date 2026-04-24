@@ -1,7 +1,7 @@
 ## Memory Forensics
 
 - Primary Probe
-  - * -> [Condition: Image type is uncertain] -> Action: identify OS family first, then run `windows.pslist`/`windows.pstree` for Windows, `linux.pslist` plus `linux.bash` for Linux, or the macOS equivalents; use the first pass only to establish process graph, parent-child anomalies, and analyst targets. [arxiv](https://arxiv.org/pdf/1908.08269.pdf)
+  - * -> [Condition: Image type is uncertain] -> Action: identify OS family first, then run `windows.pslist`/`windows.pstree` for Windows, `linux.pslist` plus `linux.bash` for Linux, or the macOS equivalents; use the first pass only to establish process graph, parent-child anomalies, and analyst targets.
   - * -> [Condition: Suspicious process tree exists] -> Action: collect `cmdline`, loaded modules, handles, network connections, environment strings, and VAD ranges; then dump only high-value processes.
   - * -> [Condition: Userland malware is suspected] -> Action: walk `windows.vadinfo` and compare mapped regions against PE headers, RX/RWX permissions, private executable pages, and unbacked regions indicative of reflective DLL injection or shellcode staging.
 

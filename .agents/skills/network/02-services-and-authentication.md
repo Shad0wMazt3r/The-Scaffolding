@@ -8,7 +8,7 @@ NIST groups technical assessment work into review techniques, target identificat
   - * -> [Condition: Legacy or unmanaged service is confirmed] -> Action: Data chaining — feed host, port, owner, and version into patch review, credential exposure review, and segmentation validation.
 
 - Authentication Attacks (Brute Force, Pass-the-Hash, Kerberoasting, AS-REP Roasting)
-  - * -> [Condition: Kerberos, NTLM, LDAP, RDP, SMB, SSH, or VPN auth is present] -> Action: Primary validation — review lockout policy, password policy, SPN inventory, preauthentication settings, delegation settings, NTLM usage, and privileged account placement. [semperis](https://www.semperis.com/blog/active-directory-security/active-directory-security-best-practices-checklist/)
+  - * -> [Condition: Kerberos, NTLM, LDAP, RDP, SMB, SSH, or VPN auth is present] -> Action: Primary validation — review lockout policy, password policy, SPN inventory, preauthentication settings, delegation settings, NTLM usage, and privileged account placement.
   - * -> [Condition: No obvious auth weakness appears] -> Action: Dead-end pivots — inspect GPO drift, compare interactive logon rights against admin tiering, and review service account lifecycle and rotation evidence.
   - * -> [Condition: Weak service-account hygiene or delegation exposure is found] -> Action: Data chaining — move into privilege review, secure-admin-host coverage, and tier boundary validation rather than credential replay.
 

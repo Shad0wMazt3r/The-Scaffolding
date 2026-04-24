@@ -28,9 +28,9 @@ while read ip; do while read host; do curl -sk --max-time 5 -H "Host: $host" htt
 ```
 
 - `S2 -> [Condition: host resolves] -> Action: probe for live web services`
-    - Primary Vector: `httpx -l subdomains/promoted.txt -silent -threads 200 -follow-host-redirects -title -tech-detect -status-code -content-length -server -ip -cname -asn -json -o hosts/httpx/httpx.jsonl`; httpx is built for high-volume HTTP probing, multiple probes, and pipeline transitions from asset identification into technology enrichment. [projectdiscovery](https://docs.projectdiscovery.io/tools/httpx/overview)
+    - Primary Vector: `httpx -l subdomains/promoted.txt -silent -threads 200 -follow-host-redirects -title -tech-detect -status-code -content-length -server -ip -cname -asn -json -o hosts/httpx/httpx.jsonl`; httpx is built for high-volume HTTP probing, multiple probes, and pipeline transitions from asset identification into technology enrichment.
     - Dead End Pivot:
-        - If `httpx` yields little, probe by CIDR and raw IP because httpx supports hosts, URLs, and CIDR inputs. [projectdiscovery](https://docs.projectdiscovery.io/tools/httpx/usage)
+        - If `httpx` yields little, probe by CIDR and raw IP because httpx supports hosts, URLs, and CIDR inputs.
         - Retry with nonstandard schemes and ports: 81, 3000, 5000, 7001, 8080, 8443, 9000.
         - Reprobe using HEAD, GET, and randomized JA3/TLS fingerprints to shake loose WAF-biased behavior.
     - Data Chaining:

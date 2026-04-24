@@ -11,7 +11,7 @@
   - * -> [Condition: Web UI or management daemon feeds a native helper] -> Action: treat the helper binary as the real pwn target and use the web stack only as the delivery vehicle.
   - * -> [Condition: Persistence or boot trust is weak] -> Action: a one-time code-exec may be less valuable than config, init script, or update-chain control.
 - Emulation note:
-  - AFL++ QEMU mode supports instrumented binary-only fuzzing, and its persistent mode is available for x86/x86_64, arm, and aarch64, which is useful when source is absent and fork overhead dominates. [github](https://github.com/AFLplusplus/AFLplusplus/blob/stable/qemu_mode/README.md)
+  - AFL++ QEMU mode supports instrumented binary-only fuzzing, and its persistent mode is available for x86/x86_64, arm, and aarch64, which is useful when source is absent and fork overhead dominates.
 - Simple automation:
   - `qemu-arm -L ./squashfs-root ./usr/bin/httpd`
   - `AFL_QEMU_PERSISTENT_ADDR=0x401234 afl-fuzz -Q -i seeds -o findings -- ./target @@`

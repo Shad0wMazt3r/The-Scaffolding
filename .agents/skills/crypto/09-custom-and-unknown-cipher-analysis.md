@@ -1,26 +1,30 @@
 ## Custom & Unknown Cipher Analysis
-- Preconditions
-  - * -> [Condition: No algorithm ID, challenge author hints “homemade,” or code artifact is available] -> Action: separate serialization, compression, padding, checksum, and encryption layers before naming the primitive.
-  - * -> [Condition: Binary or source available] -> Action: treat implementation review as first-class evidence, not a later step.
-- Parameter fingerprinting
-  - * -> [Condition: Block regularity, S-box tables, Feistel/SPN round constants, or rotate-xor-add patterns appear] -> Action: classify structure before attempting any cryptanalysis.
-  - * -> [Condition: Mixed symbolic conditions and opaque control flow appear] -> Action: prepare angr/Z3 for path and constraint recovery. `angr` is documented for Python 3.10+ and is intended for use inside a Python environment, while Z3’s Python bindings are installed via `pip install z3-solver`. [docs.angr](https://docs.angr.io/en/latest/getting-started/installing.html)
-- State machine
-  - * -> [Condition: Source or decompilation available] -> Action: start with round-function and key-schedule extraction as the **Primary Probe**.
-  - * -> [Condition: No source-level clarity] -> Action: **Dead End Pivot 1** to known-plaintext differential behavior; **Dead End Pivot 2** to symbolic execution over reduced rounds; **Dead End Pivot 3** to black-box distinguishers on avalanche and linearity.
-- Data chaining
-  - * -> [Condition: Round constants or subkeys are partially exposed] -> Action: feed them into a reduced-round model, validate against test vectors, then extend only if the model keeps matching.
-  - * -> [Condition: Serialization wrapper is stripped] -> Action: hand the normalized core ciphertext to the correct downstream family state machine.
-- Script Definition Block
-  - Input Data: binary/source, sample plaintext-ciphertext pairs, challenge wrapper format, any provided keys or constants.
-  - Core Processing Logic:
-    - Parse container and remove framing layers.
-    - Recover block size, endianness, and round boundaries.
-    - Identify substitutions, permutations, rotations, modular additions, and key-schedule dependencies.
-    - Build a reduced-round symbolic model and test consistency against known vectors.
-  - Dependencies: Python, angr, z3-solver, optional SageMath for algebraic components.
-  - Expected Output Format: JSON with `family_guess`, `block_size`, `round_count_estimate`, `key_schedule_notes`, `candidate_invariants`, `validated_test_vectors`.
-- Complexity and tool choice
-  - * -> [Condition: Reverse engineering and harnessing dominate] -> Action: Python plus angr.
-  - * -> [Condition: algebraic invariants, Gröbner-style reasoning, or lattice structure dominates] -> Action: SageMath.
 
+- Preconditions
+  - [Condition: No algorithm ID, "homemade" hints, or code available] → Separate serialization, compression, padding, checksum, encryption before naming primitive
+  - [Condition: Binary or source available] → Treat implementation review as first-class evidence
+
+- Parameter fingerprinting
+  - [Condition: Block regularity, S-boxes, Feistel/SPN constants, rotate-xor-add patterns appear] → Classify structure before cryptanalysis
+  - [Condition: Mixed symbolic conditions and opaque control flow] → Prepare angr/Z3 for path and constraint recovery
+
+- State machine
+  - [Condition: Source or decompilation available] → **Primary Probe:** round-function and key-schedule extraction
+  - [Condition: No source-level clarity] → **Pivot 1:** known-plaintext differential behavior; **Pivot 2:** symbolic execution over reduced rounds; **Pivot 3:** black-box distinguishers (avalanche, linearity)
+
+- Data chaining
+  - [Condition: Round constants/subkeys partially exposed] → Feed into reduced-round model, validate against test vectors, extend if matches
+  - [Condition: Serialization wrapper stripped] → Hand normalized ciphertext to correct downstream state machine
+
+- Analysis Pipeline
+  - Parse container, remove framing layers
+  - Recover block size, endianness, round boundaries
+  - Identify substitutions, permutations, rotations, modular additions, key-schedule dependencies
+  - Build reduced-round symbolic model; test consistency against known vectors
+  - Output: `family_guess`, `block_size`, `round_count_estimate`, `key_schedule_notes`, `test_vector_validation`
+
+- Tool choice
+  - [Condition: Reverse engineering and harnessing dominate] → Python + angr
+  - [Condition: Algebraic invariants or Gröbner reasoning dominate] → SageMath
+
+***
