@@ -3,6 +3,7 @@ Notes/
 *.pyc
 .env
 my-ctf/*
+CRIT.md
 __pycache__/
 *.pyo
 *.pyd
